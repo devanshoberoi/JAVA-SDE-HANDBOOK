@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volume 1 — Core Java Foundations</title>
+  <link rel="stylesheet" href="../css/handbook.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="../js/theme.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+    function toggleTheme() {
+      const root = document.documentElement;
+      root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('java-handbook-theme', root.dataset.theme);
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('java-handbook-theme');
+      if (saved) document.documentElement.dataset.theme = saved;
+    });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="topbar">
+        <div class="badge">Volume 1 · Core Java Foundations · Interview Handbook</div>
+        <button class="theme-btn" onclick="toggleTheme()">Toggle theme</button>
+      </div>
+      <h1>Core Java Foundations</h1>
+      <p class="subtitle">
+        A premium, ADHD-friendly reference for SDE interviews, backend development, and low-level design prep.
+        This volume covers JVM architecture, JDK/JRE, bytecode and compilation, memory areas, object-oriented fundamentals,
+        interfaces, static/final/Object, and strings — from intuition to interview depth.
+      </p>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="k">Format</div><div class="v">Collapsible HTML handbook</div></div>
+        <div class="meta-card"><div class="k">Learning flow</div><div class="v">Intuition → Theory → Code</div></div>
+        <div class="meta-card"><div class="k">Interview depth</div><div class="v">Junior to senior level</div></div>
+        <div class="meta-card"><div class="k">Diagrams</div><div class="v">Mermaid + ASCII + memory views</div></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside>
+        <div class="toc-title">Table of contents</div>
+        <nav class="toc">
+          <a href="#how-to-use">How to use this handbook</a>
+          <a href="#jvm">1. JVM, JDK, JRE, Bytecode</a>
+          <a href="#compilation">2. Compilation & Execution Flow</a>
+          <a href="#memory">3. Java Memory Areas</a>
+          <a href="#oop">4. OOP Fundamentals</a>
+          <a href="#interfaces">5. Interfaces & Abstract Classes</a>
+          <a href="#static-final-object">6. static, final & Object class</a>
+          <a href="#strings">7. Strings</a>
+          <a href="#revision">Revision sheet & interview set</a>
+        </nav>
+      </aside>
+
+      <main>
+        <section id="how-to-use">
+          <div class="section-head">
+            <h2>How to use this handbook</h2>
+            <p>Read one collapsible section at a time. First understand the intuition, then the mechanics, then the implementation details.</p>
+          </div>
+          <div class="content">
+            <div class="callout intuit">
+              <b>Study pattern</b>
+              <div>1) Read the intuition. 2) Study the diagram. 3) Trace the code. 4) Answer the interview questions out loud. 5) Revisit the senior notes.</div>
+            </div>
+            <div class="callout analogy">
+              <b>Why this format works</b>
+              <div>Many Java concepts are not hard because of syntax; they are hard because they are invisible. This guide makes invisible runtime behavior visible.</div>
+            </div>
+            <div class="tagrow">
+              <span class="tag">Beginner-friendly</span>
+              <span class="tag">Interview-focused</span>
+              <span class="tag">Backend-oriented</span>
+              <span class="tag">LLD-ready foundations</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="jvm">
+          <div class="section-head">
+            <h2>1. JVM, JDK, JRE, Bytecode</h2>
+            <p>The foundation of Java: what you write, what gets compiled, and what runs.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>Intuition: what problem Java solves</summary>
+              <div class="inner">
+                Java was designed around the idea of <b>“write once, run anywhere”</b>. You write source code in <code>.java</code> files, the compiler turns it into platform-neutral <code>.class</code> bytecode, and the JVM on each operating system executes that bytecode.
+                <div class="callout analogy">
+                  <b>Analogy</b>
+                  Think of Java source code as a recipe written in a universal language, bytecode as a standardized cooking instruction set, and the JVM as the local kitchen that knows how to execute it on your machine.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Core definitions</summary>
+              <div class="inner">
+                <table>
+                  <thead><tr><th>Term</th><th>Meaning</th><th>Interview line</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>JDK</b></td><td>Java Development Kit: tools for developing Java apps. Contains compiler, debugger, runtime, and more.</td><td>Use this to <i>develop</i> Java programs.</td></tr>
+                    <tr><td><b>JRE</b></td><td>Java Runtime Environment: the runtime pieces needed to execute Java programs.</td><td>Use this to <i>run</i> Java programs.</td></tr>
+                    <tr><td><b>JVM</b></td><td>Java Virtual Machine: the engine that executes bytecode.</td><td>It abstracts the underlying OS and hardware.</td></tr>
+                    <tr><td><b>Bytecode</b></td><td>Intermediate, platform-independent instruction set stored in <code>.class</code> files.</td><td>Bytecode is what the JVM reads.</td></tr>
+                  </tbody>
+                </table>
+                <div class="callout senior">
+                  <b>Senior-level point</b>
+                  Modern Java developers often talk about the JVM as a runtime platform, but in practice the JVM is also a specification, with multiple implementations such as HotSpot, OpenJ9, and GraalVM.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Diagram: how the stack fits together</summary>
+              <div class="inner">
+                <div class="diagram mermaid">
+flowchart LR
+  A[.java source file] --> B[javac compiler]
+  B --> C[.class bytecode]
+  C --> D[JVM]
+  D --> E[OS / Hardware]
+  subgraph JDK[Java Development Kit]
+    B
+    C
+    D
+  end
+  subgraph JRE[Java Runtime Environment]
+    C
+    D
+  end
+                </div>
+                <div class="small">The compiler is part of the JDK. The JVM executes bytecode. The JRE provides what is needed to run Java programs.</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Compilation and execution flow</summary>
+              <div class="inner">
+                <ol>
+                  <li>You write Java source code in <code>.java</code>.</li>
+                  <li><code>javac</code> compiles it into <code>.class</code> bytecode.</li>
+                  <li>The class loader loads the bytecode into the JVM.</li>
+                  <li>The bytecode verifier checks safety and correctness.</li>
+                  <li>The execution engine interprets or JIT-compiles hot code paths into native machine code.</li>
+                  <li>The program runs using memory areas such as stack and heap.</li>
+                </ol>
+                <div class="callout intuit">
+                  <b>Important intuition</b>
+                  Java is not “slow because it is interpreted.” Modern JVMs are heavily optimized. Hot code is compiled just-in-time into native instructions.
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="compilation">
+          <div class="section-head">
+            <h2>2. Compilation & Execution Details</h2>
+            <p>What happens between source code and a running process.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>Intuition: the JVM is a managed execution platform</summary>
+              <div class="inner">
+                Java does not expose raw pointers in the same way as C/C++. Instead, the JVM manages class loading, memory, execution, and garbage collection. This makes Java safer and more portable.
+              </div>
+            </details>
+
+            <details>
+              <summary>Compilation pipeline</summary>
+              <div class="inner">
+                <pre><code class="language-java">// Hello.java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java");
+    }
+}</code></pre>
+                <pre><code class="language-bash">javac Hello.java   # creates Hello.class
+java Hello         # launches JVM and runs main()</code></pre>
+                <div class="diagram mermaid">
+sequenceDiagram
+  participant Dev as Developer
+  participant J as javac
+  participant VM as JVM
+  participant OS as Operating System
+  Dev->>J: Hello.java
+  J-->>Dev: Hello.class
+  Dev->>VM: java Hello
+  VM->>OS: request process memory + threads
+  VM-->>Dev: program output
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Bytecode: why it matters</summary>
+              <div class="inner">
+                Bytecode is an abstraction layer. It is not tied to a specific CPU architecture. That is why the same compiled <code>.class</code> file can run on Linux, macOS, and Windows as long as a compatible JVM exists.
+                <div class="callout mistake">
+                  <b>Common misconception</b>
+                  “Java code runs directly on the OS.” No. Java source becomes bytecode, and the JVM executes the bytecode. The OS sees a JVM process.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Class loading and runtime phases</summary>
+              <div class="inner">
+                A class in Java is usually processed in these broad stages:
+                <ul>
+                  <li><b>Loading:</b> the class loader reads the bytecode.</li>
+                  <li><b>Linking:</b> verification, preparation, and resolution.</li>
+                  <li><b>Initialization:</b> static variables and static blocks are initialized.</li>
+                </ul>
+                <div class="callout senior">
+                  <b>Senior-level point</b>
+                  Class loading is lazy by default. A class is typically loaded when first actively used, not when compiled.
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="memory">
+          <div class="section-head">
+            <h2>3. Java Memory Areas</h2>
+            <p>One of the most asked Java interview topics. Understand each area with purpose, contents, and lifecycle.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>Big picture</summary>
+              <div class="inner">
+                The JVM divides memory into multiple logical areas. Some are shared across threads, and some are private to a thread. This distinction is central to understanding thread safety and object lifetime.
+                <div class="diagram mermaid">
+flowchart TB
+  subgraph JVM[JVM Memory Model]
+    MA[Method Area / Metaspace]
+    HEAP[Heap]
+    subgraph T1[Thread 1 private]
+      S1[Stack]
+      PC1[PC Register]
+      N1[Native Stack]
+    end
+    subgraph T2[Thread 2 private]
+      S2[Stack]
+      PC2[PC Register]
+      N2[Native Stack]
+    end
+  end
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Heap</summary>
+              <div class="inner">
+                <b>What it stores:</b> objects and arrays.<br>
+                <b>Shared?</b> Yes, across all threads.<br>
+                <b>Lifetime:</b> until garbage collected.
+                <div class="callout analogy">
+                  <b>Analogy</b>
+                  The heap is a shared storage room where all objects live. Threads can place and access objects there, but they must coordinate correctly.
+                </div>
+                <pre><code class="language-java">class Student {
+    String name;
+    int age;
+}
+
+public class Demo {
+    public static void main(String[] args) {
+        Student s = new Student(); // object on heap, reference on stack
+        s.name = "Devansh";
+        s.age = 22;
+    }
+}</code></pre>
+                <div class="diagram">
+Stack (main thread)
+┌───────────────┐
+│ s ───────┐    │
+└──────────┼────┘
+           │
+Heap       ▼
+┌──────────────────┐
+│ Student object    │
+│ name -> "Devansh" │
+│ age  -> 22        │
+└──────────────────┘</div>
+                <div class="callout mistake">
+                  <b>Common mistake</b>
+                  The reference variable is not the object itself. The variable usually lives on the stack; the object lives on the heap.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Stack</summary>
+              <div class="inner">
+                <b>What it stores:</b> method frames, local primitive variables, and object references.<br>
+                <b>Shared?</b> No, each thread has its own stack.<br>
+                <b>Lifetime:</b> until the method returns.
+                <div class="callout analogy">
+                  <b>Analogy</b>
+                  The stack is like a stack of trays: each method call adds a new tray, and when the method ends, the tray is removed.
+                </div>
+                <pre><code class="language-java">void a() {
+    int x = 10;
+    b();
+}
+
+void b() {
+    int y = 20;
+}</code></pre>
+                <div class="diagram">
+Call stack (top at bottom)
+┌──── b() frame ────┐
+│ y = 20            │
+└───────────────────┘
+┌──── a() frame ────┐
+│ x = 10            │
+└───────────────────┘</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Method Area / Metaspace</summary>
+              <div class="inner">
+                <b>What it stores:</b> class metadata, runtime constant pool, method data, static variables, and information about loaded classes.<br>
+                In modern Java, the implementation detail is commonly called <b>Metaspace</b> rather than PermGen.
+                <div class="callout senior">
+                  <b>Senior-level point</b>
+                  Metaspace lives in native memory, not on the Java heap. That is why class-loading pressure can cause native-memory issues even if heap looks healthy.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>PC Register</summary>
+              <div class="inner">
+                The Program Counter register tracks the address or next instruction to execute for the current thread. It is private to each thread.
+                <div class="callout intuit">
+                  <b>Why it exists</b>
+                  A thread must remember where it was when context switching happens. The PC register helps the JVM resume execution correctly.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Native Stack</summary>
+              <div class="inner">
+                Native methods, typically outside the Java language runtime, may use a native stack. The JVM also needs to interact with native code via JNI or OS-level calls.
+              </div>
+            </details>
+
+            <details>
+              <summary>Memory diagram: object, reference, and metadata</summary>
+              <div class="inner">
+                <div class="diagram">
+Thread Stack                  Heap                      Metaspace
+┌──────────────┐        ┌──────────────────┐       ┌────────────────────┐
+│ ref s ───────┼──────► │ Student object    │       │ Student class info  │
+└──────────────┘        │ name = "A"       │       │ fields/methods      │
+                         │ age = 21         │       │ static data         │
+                         └──────────────────┘       └────────────────────┘</div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="oop">
+          <div class="section-head">
+            <h2>4. Object-Oriented Programming</h2>
+            <p>Classes, objects, constructors, this/super, and the four pillars of OOP.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>Class vs object</summary>
+              <div class="inner">
+                <b>Class</b> is a blueprint. <b>Object</b> is an actual runtime instance of that blueprint.
+                <pre><code class="language-java">class Car {
+    String brand;
+    int speed;
+
+    void accelerate() {
+        speed += 10;
+    }
+}
+
+Car c1 = new Car();
+Car c2 = new Car();</code></pre>
+                Two objects created from the same class have separate state but share the same behavior definition.
+              </div>
+            </details>
+
+            <details>
+              <summary>Constructors</summary>
+              <div class="inner">
+                Constructors initialize objects. They have the same name as the class and no return type.
+                <pre><code class="language-java">class Student {
+    String name;
+    int age;
+
+    Student() {
+        this("Unknown", 0);
+    }
+
+    Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}</code></pre>
+                <div class="callout intuit">
+                  <b>Constructor chaining</b>
+                  Using <code>this(...)</code> calls another constructor in the same class. It reduces duplication and keeps object initialization consistent.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>this keyword</summary>
+              <div class="inner">
+                <ul>
+                  <li>Refers to the current object.</li>
+                  <li>Disambiguates instance fields from parameters.</li>
+                  <li>Can call another constructor in the same class.</li>
+                  <li>Can pass the current object as an argument.</li>
+                </ul>
+                <pre><code class="language-java">class Account {
+    private double balance;
+
+    Account(double balance) {
+        this.balance = balance;
+    }
+}</code></pre>
+              </div>
+            </details>
+
+            <details>
+              <summary>super keyword</summary>
+              <div class="inner">
+                <ul>
+                  <li>Refers to the parent class object.</li>
+                  <li>Calls parent constructors.</li>
+                  <li>Accesses parent methods and fields when overridden or hidden.</li>
+                </ul>
+                <pre><code class="language-java">class Animal {
+    Animal() { System.out.println("Animal created"); }
+}
+class Dog extends Animal {
+    Dog() {
+        super();
+        System.out.println("Dog created");
+    }
+}</code></pre>
+                <div class="callout mistake">
+                  <b>Common mistake</b>
+                  <code>super()</code> must be the first statement in a constructor if used explicitly.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>The four pillars of OOP</summary>
+              <div class="inner">
+                <table>
+                  <thead><tr><th>Pillar</th><th>Meaning</th><th>Interview framing</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>Encapsulation</b></td><td>Bundling data and methods, and controlling access via access modifiers.</td><td>Hide internal state; expose behavior.</td></tr>
+                    <tr><td><b>Abstraction</b></td><td>Show essential behavior and hide implementation details.</td><td>Use interfaces or abstract classes to model capability.</td></tr>
+                    <tr><td><b>Inheritance</b></td><td>Reuse and specialize behavior from a parent class.</td><td>Use only when an “is-a” relationship is valid.</td></tr>
+                    <tr><td><b>Polymorphism</b></td><td>One interface, many implementations.</td><td>Same method call, different runtime behavior.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details>
+              <summary>Polymorphism: compile time vs runtime</summary>
+              <div class="inner">
+                <div class="grid-2">
+                  <div class="callout intuit">
+                    <b>Compile-time polymorphism</b>
+                    Achieved through method overloading. The method is selected by the compiler based on parameter types and count.
+                  </div>
+                  <div class="callout intuit">
+                    <b>Runtime polymorphism</b>
+                    Achieved through method overriding. The method to execute is decided at runtime using the actual object type.
+                  </div>
+                </div>
+                <pre><code class="language-java">class Printer {
+    void print(int x) {}
+    void print(String s) {}
+}
+
+class Animal {
+    void sound() { System.out.println("Some sound"); }
+}
+class Dog extends Animal {
+    @Override void sound() { System.out.println("Bark"); }
+}
+
+Animal a = new Dog();
+a.sound(); // Bark</code></pre>
+                <div class="diagram">
+Reference type: Animal
+Actual object : Dog
+Method call   : sound()
+Dispatch      : runtime -> Dog.sound()</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Relationships: association, aggregation, composition</summary>
+              <div class="inner">
+                <table>
+                  <thead><tr><th>Relationship</th><th>Meaning</th><th>Ownership</th><th>Example</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>Association</b></td><td>General relationship between two classes.</td><td>Loose</td><td>Teacher and Student</td></tr>
+                    <tr><td><b>Aggregation</b></td><td>Weak whole-part relationship; part can live independently.</td><td>Shared</td><td>Department and Professor</td></tr>
+                    <tr><td><b>Composition</b></td><td>Strong whole-part relationship; part depends on whole.</td><td>Strong</td><td>House and Room</td></tr>
+                  </tbody>
+                </table>
+                <div class="callout senior">
+                  <b>Practical design guidance</b>
+                  Prefer composition over inheritance when behavior can be delegated. This makes systems more flexible and easier to test.
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="interfaces">
+          <div class="section-head">
+            <h2>5. Interfaces & Abstract Classes</h2>
+            <p>Java’s abstraction tools and the multiple inheritance story.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>Interface: intuition and purpose</summary>
+              <div class="inner">
+                An interface defines a contract. It tells clients <i>what</i> can be done, not necessarily <i>how</i> it is done.
+                <pre><code class="language-java">interface PaymentGateway {
+    void pay(double amount);
+}
+
+class UpiGateway implements PaymentGateway {
+    public void pay(double amount) {
+        System.out.println("Paid via UPI: " + amount);
+    }
+}</code></pre>
+              </div>
+            </details>
+
+            <details>
+              <summary>Abstract class: when to use it</summary>
+              <div class="inner">
+                Abstract classes are useful when related classes share common state or partial implementation.
+                <pre><code class="language-java">abstract class Shape {
+    abstract double area();
+
+    void printArea() {
+        System.out.println(area());
+    }
+}</code></pre>
+                Use an abstract class when you want a base class with shared code and fields. Use an interface when you want a capability contract.
+              </div>
+            </details>
+
+            <details>
+              <summary>Multiple inheritance using interfaces</summary>
+              <div class="inner">
+                Java does not support multiple inheritance of classes because it can create ambiguity such as the diamond problem. It <b>does</b> support multiple inheritance of type through interfaces.
+                <pre><code class="language-java">interface Flyable { void fly(); }
+interface Swimmable { void swim(); }
+
+class Duck implements Flyable, Swimmable {
+    public void fly() {}
+    public void swim() {}
+}</code></pre>
+                <div class="callout mistake">
+                  <b>Diamond problem</b>
+                  If two parent classes define the same method, the child may not know which one to inherit. Interfaces avoid much of this by requiring explicit implementation.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Default and static methods in interfaces</summary>
+              <div class="inner">
+                Default methods allow interface evolution without breaking existing implementations.
+                <pre><code class="language-java">interface Logger {
+    default void log(String msg) {
+        System.out.println(msg);
+    }
+
+    static Logger create() {
+        return new ConsoleLogger();
+    }
+}
+class ConsoleLogger implements Logger {}</code></pre>
+              </div>
+            </details>
+
+            <details>
+              <summary>Functional interfaces</summary>
+              <div class="inner">
+                A functional interface has exactly one abstract method and is used with lambdas and method references.
+                <pre><code class="language-java">@FunctionalInterface
+interface Calculator {
+    int add(int a, int b);
+}
+
+Calculator c = (a, b) -> a + b;</code></pre>
+                <div class="callout senior">
+                  <b>Interview angle</b>
+                  Functional interfaces are the bridge to modern Java functional programming, streams, and concurrency APIs like <code>Callable</code> and <code>CompletableFuture</code>.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Comparison table</summary>
+              <div class="inner">
+                <table>
+                  <thead><tr><th>Feature</th><th>Interface</th><th>Abstract class</th></tr></thead>
+                  <tbody>
+                    <tr><td>Multiple inheritance</td><td>Yes, multiple interfaces</td><td>No, single class inheritance</td></tr>
+                    <tr><td>State</td><td>Limited, mostly constants</td><td>Yes, instance variables allowed</td></tr>
+                    <tr><td>Methods</td><td>Abstract, default, static, private helper methods</td><td>Abstract and concrete methods</td></tr>
+                    <tr><td>Constructor</td><td>No</td><td>Yes</td></tr>
+                    <tr><td>Use case</td><td>Capability/contract</td><td>Shared base behavior</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="static-final-object">
+          <div class="section-head">
+            <h2>6. static, final & Object class</h2>
+            <p>Language fundamentals that are heavily tested in interviews.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>static: shared members and lifecycle</summary>
+              <div class="inner">
+                Static members belong to the class, not to individual objects.
+                <pre><code class="language-java">class Counter {
+    static int count = 0;
+
+    Counter() {
+        count++;
+    }
+}</code></pre>
+                <div class="callout intuit">
+                  <b>Why main() is static</b>
+                  The JVM needs an entry point before any object exists. Static allows the launcher to call <code>main</code> without creating an instance first.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>static block and static nested class</summary>
+              <div class="inner">
+                <pre><code class="language-java">class Demo {
+    static {
+        System.out.println("Executed once when class loads");
+    }
+
+    static class Helper {
+        void work() {}
+    }
+}</code></pre>
+                Static blocks run once during class initialization. Static nested classes do not require an outer object.
+              </div>
+            </details>
+
+            <details>
+              <summary>final variable, method, class</summary>
+              <div class="inner">
+                <ul>
+                  <li><b>final variable:</b> cannot be reassigned.</li>
+                  <li><b>final method:</b> cannot be overridden.</li>
+                  <li><b>final class:</b> cannot be extended.</li>
+                </ul>
+                <div class="callout senior">
+                  <b>Design interpretation</b>
+                  final is about restricting extension and mutation. It helps create safer APIs and clearer object invariants.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Object class essentials</summary>
+              <div class="inner">
+                Every Java class implicitly extends <code>Object</code>. The methods below are critical in interviews and production code.
+                <table>
+                  <thead><tr><th>Method</th><th>Purpose</th><th>Typical override?</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>toString()</code></td><td>Human-readable object representation</td><td>Yes</td></tr>
+                    <tr><td><code>equals()</code></td><td>Logical equality comparison</td><td>Yes</td></tr>
+                    <tr><td><code>hashCode()</code></td><td>Hash-based collections support</td><td>Yes with equals()</td></tr>
+                    <tr><td><code>getClass()</code></td><td>Runtime type discovery</td><td>No</td></tr>
+                  </tbody>
+                </table>
+                <pre><code class="language-java">class User {
+    private final int id;
+    private final String name;
+
+    User(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && java.util.Objects.equals(name, user.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", name='" + name + "'}";
+    }
+}</code></pre>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="strings">
+          <div class="section-head">
+            <h2>7. Strings</h2>
+            <p>Immutable behavior, string pool, and the difference between String, StringBuilder, and StringBuffer.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>String immutability</summary>
+              <div class="inner">
+                Strings are immutable in Java. Once created, their contents cannot be changed. Any operation that appears to modify a String actually creates a new String object.
+                <pre><code class="language-java">String s = "Java";
+s.concat(" Interview");
+System.out.println(s); // Java</code></pre>
+                <div class="callout analogy">
+                  <b>Analogy</b>
+                  A String is like a printed book. You cannot edit the book itself; you create a new edition instead.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>String pool</summary>
+              <div class="inner">
+                String literals may be stored in a special pool so identical literals can be reused.
+                <pre><code class="language-java">String a = "hello";
+String b = "hello";
+String c = new String("hello");
+
+System.out.println(a == b); // true
+System.out.println(a == c); // false
+System.out.println(a.equals(c)); // true</code></pre>
+                <div class="diagram">
+Heap / String Pool
+┌───────────────┐
+│ "hello"       │◄── a, b
+└───────────────┘
+
+Heap (new object)
+┌───────────────┐
+│ new String    │◄── c
+│ value="hello" │
+└───────────────┘</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>== vs equals()</summary>
+              <div class="inner">
+                <table>
+                  <thead><tr><th>Operator/method</th><th>What it checks</th><th>For Strings</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>==</code></td><td>Reference identity</td><td>Are both variables pointing to the same object?</td></tr>
+                    <tr><td><code>equals()</code></td><td>Logical/content equality</td><td>Do both strings contain the same characters?</td></tr>
+                  </tbody>
+                </table>
+                <div class="callout mistake">
+                  <b>Common mistake</b>
+                  Using <code>==</code> for logical string comparison is one of the most common beginner bugs.
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>StringBuilder vs StringBuffer</summary>
+              <div class="inner">
+                <table>
+                  <thead><tr><th>Type</th><th>Mutability</th><th>Thread safety</th><th>Use case</th></tr></thead>
+                  <tbody>
+                    <tr><td><b>String</b></td><td>Immutable</td><td>Safe by immutability</td><td>Most everyday text values</td></tr>
+                    <tr><td><b>StringBuilder</b></td><td>Mutable</td><td>No</td><td>Fast single-threaded string building</td></tr>
+                    <tr><td><b>StringBuffer</b></td><td>Mutable</td><td>Yes, synchronized</td><td>Legacy multi-threaded use</td></tr>
+                  </tbody>
+                </table>
+                <pre><code class="language-java">StringBuilder sb = new StringBuilder();
+sb.append("Hello");
+sb.append(" World");
+System.out.println(sb.toString());</code></pre>
+                <div class="callout senior">
+                  <b>Performance note</b>
+                  In modern Java, StringBuilder is preferred in most non-concurrent code because it avoids repeated object creation.
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="revision">
+          <div class="section-head">
+            <h2>Revision Sheet & Interview Set</h2>
+            <p>Use this section for fast recall before interviews.</p>
+          </div>
+          <div class="content">
+            <details open>
+              <summary>Top interview questions</summary>
+              <div class="inner">
+                <ol>
+                  <li>Differentiate JVM, JDK, and JRE.</li>
+                  <li>Explain the Java compilation and execution pipeline.</li>
+                  <li>What is bytecode and why is it platform independent?</li>
+                  <li>Describe heap, stack, method area, Metaspace, PC register, and native stack.</li>
+                  <li>Why is String immutable?</li>
+                  <li>Difference between String, StringBuilder, and StringBuffer?</li>
+                  <li>What is the difference between == and equals()?</li>
+                  <li>Explain constructor chaining using this().</li>
+                  <li>What is the purpose of super()?</li>
+                  <li>What is runtime polymorphism?</li>
+                  <li>Why are static methods not overridden?</li>
+                  <li>Why is main() static?</li>
+                  <li>Why must equals() and hashCode() be consistent?</li>
+                  <li>When would you prefer composition over inheritance?</li>
+                </ol>
+              </div>
+            </details>
+
+            <details>
+              <summary>Frequently tricky questions</summary>
+              <div class="inner">
+                <ul>
+                  <li>Can a class be loaded without being initialized? Yes; loading and initialization are separate stages.</li>
+                  <li>Does a reference always live on the stack? Usually as a local variable it does, but references can also be fields on the heap.</li>
+                  <li>Can an object move in memory? The GC may relocate objects depending on the collector.</li>
+                  <li>Can an interface have method bodies? Yes, via default and static methods.</li>
+                  <li>Can final fields be assigned later? Yes, but only once, and within constructor/initializer rules.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details>
+              <summary>Common mistakes</summary>
+              <div class="inner">
+                <ul>
+                  <li>Confusing stack with heap.</li>
+                  <li>Using <code>==</code> for String content comparison.</li>
+                  <li>Forgetting that method overloading is compile-time polymorphism.</li>
+                  <li>Overriding <code>equals()</code> without overriding <code>hashCode()</code>.</li>
+                  <li>Using inheritance when composition would be safer.</li>
+                  <li>Thinking <code>static</code> means “faster” rather than “class-level”.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details>
+              <summary>Senior-level discussion points</summary>
+              <div class="inner">
+                <ul>
+                  <li>How class loading and JIT optimization affect startup and warmup time.</li>
+                  <li>Why memory layout matters for GC behavior and latency-sensitive systems.</li>
+                  <li>How immutability helps in concurrency, caching, and safe API design.</li>
+                  <li>How equals/hashCode correctness affects production incidents in Maps and Sets.</li>
+                  <li>When abstraction should stop to avoid over-engineering and excessive indirection.</li>
+                </ul>
+                <div class="callout interview">
+                  <b>Interview answer pattern</b>
+                  Start with a one-line definition, then give a real example, then mention the edge case or trade-off. That structure reads as senior and controlled.
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <div class="footer">
+          End of Volume 1 · Core Java Foundations. Next volume can cover Collections, Exception Handling, and Multithreading in the same style.
+        </div>
+      </main>
+    </div>
+  </div>
+  <hr>
+
+<div class="book-navigation">
+
+    <a href="../index.html" class="nav-btn">
+        ← Home
+    </a>
+
+    <a href="volume2.html" class="nav-btn">
+        Volume 2 →
+    </a>
+
+</div>
+</body>
+</html>

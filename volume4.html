@@ -1,0 +1,16584 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+Volume 4 - SOLID Principles & Design Patterns Handbook
+</title>
+
+<link rel="stylesheet" href="../css/handbook.css">
+
+<script>
+function toggleTheme()
+{
+    const html = document.documentElement;
+
+    if(html.getAttribute("data-theme") === "dark")
+    {
+        html.setAttribute("data-theme","light");
+        localStorage.setItem("theme","light");
+    }
+    else
+    {
+        html.setAttribute("data-theme","dark");
+        localStorage.setItem("theme","dark");
+    }
+}
+
+window.onload = () =>
+{
+    const saved =
+    localStorage.getItem("theme");
+
+    if(saved)
+    {
+        document.documentElement
+        .setAttribute(
+            "data-theme",
+            saved
+        );
+    }
+};
+</script>
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header class="hero">
+
+<div class="topbar">
+
+<div class="badge">
+Volume 4 • SOLID & Design Patterns
+</div>
+
+<button
+class="theme-btn"
+onclick="toggleTheme()">
+Toggle Theme
+</button>
+
+</div>
+
+<h1>
+Software Design &
+Design Patterns Handbook
+</h1>
+
+<p class="subtitle">
+
+Master software design principles,
+SOLID principles,
+design patterns,
+clean architecture,
+object-oriented design,
+and interview preparation.
+
+This volume transforms you from a Java programmer
+into a software engineer capable of designing
+maintainable systems.
+
+</p>
+
+<div class="meta-grid">
+
+<div class="meta-card">
+<div class="k">Volume</div>
+<div class="v">4</div>
+</div>
+
+<div class="meta-card">
+<div class="k">Focus</div>
+<div class="v">
+SOLID + Patterns
+</div>
+</div>
+
+<div class="meta-card">
+<div class="k">Difficulty</div>
+<div class="v">
+Intermediate
+</div>
+</div>
+
+<div class="meta-card">
+<div class="k">Goal</div>
+<div class="v">
+Software Design
+</div>
+</div>
+
+</div>
+
+</header>
+
+<div class="layout">
+
+<aside>
+
+<h3 class="toc-title">
+Table Of Contents
+</h3>
+
+<nav class="toc">
+
+<a href="#software-design">
+Chapter 1
+Software Design Fundamentals
+</a>
+
+<a href="#srp">
+Chapter 2
+SRP
+</a>
+
+<a href="#ocp">
+Chapter 3
+OCP
+</a>
+
+<a href="#lsp">
+Chapter 4
+LSP
+</a>
+
+<a href="#isp">
+Chapter 5
+ISP
+</a>
+
+<a href="#dip">
+Chapter 6
+DIP
+</a>
+
+<a href="#solid-revision">
+Chapter 7
+SOLID Revision
+</a>
+
+<hr>
+
+<a href="#singleton">
+Chapter 8
+Singleton
+</a>
+
+<a href="#factory">
+Chapter 9
+Factory
+</a>
+
+<a href="#builder">
+Chapter 10
+Builder
+</a>
+
+<a href="#adapter">
+Chapter 11
+Adapter
+</a>
+
+<a href="#decorator">
+Chapter 12
+Decorator
+</a>
+
+<a href="#facade">
+Chapter 13
+Facade
+</a>
+
+<a href="#proxy">
+Chapter 14
+Proxy
+</a>
+
+<a href="#strategy">
+Chapter 15
+Strategy
+</a>
+
+<a href="#observer">
+Chapter 16
+Observer
+</a>
+
+<a href="#state">
+Chapter 17
+State
+</a>
+
+<a href="#command">
+Chapter 18
+Command
+</a>
+
+<a href="#template-method">
+Chapter 19
+Template Method
+</a>
+
+<a href="#patterns-revision">
+Chapter 20
+Pattern Revision
+</a>
+
+<hr>
+
+<a href="#pattern-selection">
+Chapter 21
+Pattern Selection Guide
+</a>
+
+<a href="#top-interview">
+Chapter 22
+Top Interview Questions
+</a>
+
+<a href="#senior-notes">
+Chapter 23
+Senior Engineer Notes
+</a>
+
+<a href="#volume4-revision">
+Chapter 24
+Master Revision Handbook
+</a>
+
+</nav>
+
+</aside>
+
+<main>
+
+<section>
+
+<div class="section-head">
+
+<h2>
+Volume 4 Learning Roadmap
+</h2>
+
+<p>
+How software engineers design systems.
+</p>
+
+</div>
+
+<div class="content">
+
+<div class="callout intuit">
+
+<b>
+Goal Of Volume 4
+</b>
+
+<pre>
+
+Good Code
+
+↓
+
+Maintainable Code
+
+↓
+
+SOLID Principles
+
+↓
+
+Design Patterns
+
+↓
+
+Low Level Design
+
+</pre>
+
+</div>
+
+<div class="callout analogy">
+
+<b>
+Think Of It Like This
+</b>
+
+Volume 1:
+How Java Works
+
+Volume 2:
+How Data Is Stored
+
+Volume 3:
+How Threads Work
+
+Volume 4:
+How Large Software Systems Are Designed
+
+</div>
+
+<div class="callout interview">
+
+<b>
+Interview Focus
+</b>
+
+Most LLD interviews are actually testing:
+
+<ul>
+
+<li>SOLID Principles</li>
+
+<li>Composition</li>
+
+<li>Coupling</li>
+
+<li>Cohesion</li>
+
+<li>Design Patterns</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ====================================== -->
+<!-- CHAPTERS START BELOW -->
+<!-- ====================================== -->
+
+<!-- Chapter 1 -->
+<section id="software-design">
+    <div class="section-head">
+
+<h2>
+Chapter 1: Software Design Fundamentals
+</h2>
+
+<p>
+
+Understanding Good Software Design,
+Coupling,
+Cohesion,
+Maintainability,
+Extensibility,
+Composition,
+Inheritance,
+Code Smells,
+and Engineering Mindset.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why Software Design Matters
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Imagine building a house.
+
+A house that works today
+but collapses when adding
+one more room is a bad design.
+
+Software is exactly the same.
+
+Good software should be:
+
+<ul>
+
+<li>Easy to understand</li>
+
+<li>Easy to modify</li>
+
+<li>Easy to test</li>
+
+<li>Easy to extend</li>
+
+<li>Hard to break</li>
+
+</ul>
+
+</div>
+
+<pre>
+
+Bad Design
+
+↓
+
+Difficult Maintenance
+
+↓
+
+More Bugs
+
+↓
+
+Slow Development
+
+↓
+
+Business Loss
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+2. What Is Software Design?
+</summary>
+
+<div class="inner">
+
+Definition:
+
+<pre>
+
+Software Design is the process
+of organizing classes,
+objects,
+relationships,
+and responsibilities
+to create maintainable software.
+
+</pre>
+
+Good software is not judged by:
+
+<pre>
+It Works
+</pre>
+
+Good software is judged by:
+
+<pre>
+
+Can It Continue Working
+
+After 100 Future Changes?
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+3. Real Industry Problem
+</summary>
+
+<div class="inner">
+
+Junior Developer:
+
+<pre>
+
+if(paymentType.equals("CARD"))
+{
+}
+else if(paymentType.equals("UPI"))
+{
+}
+else if(paymentType.equals("PAYPAL"))
+{
+}
+
+</pre>
+
+Works today.
+
+Business adds:
+
+<pre>
+
+APPLE PAY
+
+GOOGLE PAY
+
+CRYPTO
+
+NET BANKING
+
+</pre>
+
+Now code becomes:
+
+<pre>
+
+500 Line If Else Chain
+
+</pre>
+
+Hard to maintain.
+
+Poor design.
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+4. Characteristics Of Good Software
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Property</th>
+<th>Meaning</th>
+</tr>
+
+<tr>
+<td>Maintainable</td>
+<td>Easy To Modify</td>
+</tr>
+
+<tr>
+<td>Extensible</td>
+<td>Easy To Add Features</td>
+</tr>
+
+<tr>
+<td>Readable</td>
+<td>Easy To Understand</td>
+</tr>
+
+<tr>
+<td>Reusable</td>
+<td>Use Again</td>
+</tr>
+
+<tr>
+<td>Testable</td>
+<td>Easy To Test</td>
+</tr>
+
+<tr>
+<td>Scalable</td>
+<td>Handles Growth</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+5. Coupling (VERY IMPORTANT)
+</summary>
+
+<div class="inner">
+
+<h3>Definition</h3>
+
+<pre>
+
+Coupling
+
+=
+
+Dependency Between Classes
+
+</pre>
+
+Diagram:
+
+<pre>
+
+Class A
+
+↓
+
+Depends On
+
+↓
+
+Class B
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+6. Tight Coupling
+</summary>
+
+<div class="inner">
+
+Bad Example:
+
+<pre>
+class Engine
+{
+}
+
+class Car
+{
+   Engine engine =
+   new Engine();
+}
+</pre>
+
+Problem:
+
+<pre>
+
+Car directly creates Engine
+
+Cannot Replace Easily
+
+Hard To Test
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+7. Loose Coupling
+</summary>
+
+<div class="inner">
+
+Good Example:
+
+<pre>
+interface Engine
+{
+}
+
+class PetrolEngine
+implements Engine
+{
+}
+
+class Car
+{
+   private Engine engine;
+
+   public Car(
+   Engine engine)
+   {
+      this.engine = engine;
+   }
+}
+</pre>
+
+Benefits:
+
+<ul>
+
+<li>Flexible</li>
+
+<li>Testable</li>
+
+<li>Extensible</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+8. Tight vs Loose Coupling
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Tight Coupling</th>
+<th>Loose Coupling</th>
+</tr>
+
+<tr>
+<td>Rigid</td>
+<td>Flexible</td>
+</tr>
+
+<tr>
+<td>Hard Testing</td>
+<td>Easy Testing</td>
+</tr>
+
+<tr>
+<td>Hard Changes</td>
+<td>Easy Changes</td>
+</tr>
+
+<tr>
+<td>Many Dependencies</td>
+<td>Minimal Dependencies</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+9. Cohesion (VERY IMPORTANT)
+</summary>
+
+<div class="inner">
+
+Definition:
+
+<pre>
+
+How Related
+The Responsibilities
+Inside A Class Are
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+10. High Cohesion
+</summary>
+
+<div class="inner">
+
+Good Example:
+
+<pre>
+class UserService
+{
+   createUser();
+
+   updateUser();
+
+   deleteUser();
+}
+</pre>
+
+Everything relates to users.
+
+Good cohesion.
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+11. Low Cohesion
+</summary>
+
+<div class="inner">
+
+Bad Example:
+
+<pre>
+class Utility
+{
+   sendEmail();
+
+   calculateTax();
+
+   connectDatabase();
+
+   printInvoice();
+}
+</pre>
+
+Unrelated responsibilities.
+
+Bad cohesion.
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+12. Coupling vs Cohesion
+</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+<pre>
+
+Good Design
+
+=
+
+Low Coupling
+
++
+
+High Cohesion
+
+</pre>
+
+Remember:
+
+<pre>
+
+Coupling
+
+↓
+
+Between Classes
+
+Cohesion
+
+↓
+
+Inside Class
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+13. Maintainability
+</summary>
+
+<div class="inner">
+
+Question:
+
+<pre>
+
+Can Another Developer
+
+Understand This Code
+
+After 6 Months?
+
+</pre>
+
+If not:
+
+<pre>
+
+Bad Design
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+14. Extensibility
+</summary>
+
+<div class="inner">
+
+Question:
+
+<pre>
+
+Can We Add Features
+
+Without Breaking Existing Code?
+
+</pre>
+
+If yes:
+
+<pre>
+
+Good Design
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+15. Reusability
+</summary>
+
+<div class="inner">
+
+Good software:
+
+<pre>
+
+Write Once
+
+Reuse Many Times
+
+</pre>
+
+Example:
+
+<pre>
+PaymentValidator
+</pre>
+
+Can be reused across projects.
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+16. Code Smells
+</summary>
+
+<div class="inner">
+
+Code Smell:
+
+<pre>
+
+Warning Sign
+
+Not Necessarily Bug
+
+</pre>
+
+Examples:
+
+<ul>
+
+<li>Huge Classes</li>
+
+<li>Huge Methods</li>
+
+<li>Duplicate Code</li>
+
+<li>Long Parameter Lists</li>
+
+<li>Too Many if-else</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+17. God Class Anti Pattern
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+
+UserManager
+
+5000 Lines
+
+Everything Inside
+
+</pre>
+
+Problems:
+
+<ul>
+
+<li>Hard To Read</li>
+
+<li>Hard To Test</li>
+
+<li>Hard To Modify</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+18. Composition vs Inheritance
+</summary>
+
+<div class="inner">
+
+Inheritance:
+
+<pre>
+
+IS-A
+
+</pre>
+
+Example:
+
+<pre>
+
+Dog IS-A Animal
+
+</pre>
+
+Composition:
+
+<pre>
+
+HAS-A
+
+</pre>
+
+Example:
+
+<pre>
+
+Car HAS-A Engine
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+19. Why Composition Is Preferred
+</summary>
+
+<div class="inner">
+
+Composition provides:
+
+<ul>
+
+<li>Flexibility</li>
+
+<li>Loose Coupling</li>
+
+<li>Easy Testing</li>
+
+<li>Easy Extension</li>
+
+</ul>
+
+Modern design prefers:
+
+<pre>
+
+Composition
+
+Over
+
+Inheritance
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+20. UML Basics
+</summary>
+
+<div class="inner">
+
+Simple UML:
+
+<pre>
+
++----------------+
+| UserService |
++----------------+
+| createUser() |
+| updateUser() |
++----------------+
+
+</pre>
+
+Interviewers love UML.
+
+You will use it heavily in Volume 5.
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+21. Design Goals Of SOLID
+</summary>
+
+<div class="inner">
+
+SOLID tries to achieve:
+
+<pre>
+
+Low Coupling
+
+High Cohesion
+
+Maintainability
+
+Extensibility
+
+Testability
+
+</pre>
+
+Everything learned above
+will be used in the next chapters.
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+22. Top Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is coupling?</li>
+
+<li>What is cohesion?</li>
+
+<li>Difference between coupling and cohesion?</li>
+
+<li>Why low coupling is preferred?</li>
+
+<li>What is a code smell?</li>
+
+<li>What is a God class?</li>
+
+<li>What is maintainability?</li>
+
+<li>What is extensibility?</li>
+
+<li>Composition vs inheritance?</li>
+
+<li>Why composition is preferred?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ====================================== -->
+
+<details>
+
+<summary>
+23. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers ask:
+
+<pre>
+
+How Do I Make It Work?
+
+</pre>
+
+Senior Engineers ask:
+
+<pre>
+
+How Will This Look
+
+After 2 Years
+
+And 20 New Features?
+
+</pre>
+
+Software design is about
+optimizing for future change.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 2 -->
+<section id="srp">
+
+
+    <div class="section-head">
+
+<h2>
+Chapter 2: Single Responsibility Principle (SRP)
+</h2>
+
+<p>
+
+The Foundation Of Clean Architecture,
+Maintainable Software,
+High Cohesion,
+and Professional Object-Oriented Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is SRP?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+A class should have:
+
+<pre>
+
+ONE Responsibility
+
+ONE Reason To Change
+
+</pre>
+
+Nothing more.
+
+Nothing less.
+
+</div>
+
+<h3>Official Definition</h3>
+
+<pre>
+
+A class should have
+only one reason to change.
+
+</pre>
+
+Created by:
+
+<pre>
+Robert C. Martin
+(Uncle Bob)
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why SRP Exists
+</summary>
+
+<div class="inner">
+
+Imagine a restaurant employee.
+
+Bad design:
+
+<pre>
+
+Cook Food
+
+Take Orders
+
+Clean Tables
+
+Manage Payroll
+
+Handle Marketing
+
+</pre>
+
+One person doing everything.
+
+Disaster.
+
+Same thing happens in software.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Hospital Example:
+
+<pre>
+
+Doctor
+
+↓
+
+Treat Patients
+
+</pre>
+
+Accountant:
+
+<pre>
+
+Manage Finances
+
+</pre>
+
+Receptionist:
+
+<pre>
+
+Handle Appointments
+
+</pre>
+
+Each role has one responsibility.
+
+That is SRP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Bad Design Example
+</summary>
+
+<div class="inner">
+
+Suppose we create:
+
+<pre>
+class UserManager
+{
+   createUser();
+
+   saveToDatabase();
+
+   sendEmail();
+
+   generateReport();
+}
+</pre>
+
+Looks fine initially.
+
+But actually:
+
+<pre>
+
+User Logic
+
+Database Logic
+
+Email Logic
+
+Reporting Logic
+
+</pre>
+
+All mixed together.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Why This Is Dangerous
+</summary>
+
+<div class="inner">
+
+Possible changes:
+
+<pre>
+
+Database Changes
+
+↓
+
+Email Changes
+
+↓
+
+Report Changes
+
+</pre>
+
+Every change modifies:
+
+<pre>
+UserManager
+</pre>
+
+Many reasons to change.
+
+SRP violated.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Visual Diagram
+</summary>
+
+<div class="inner">
+
+Bad Design:
+
+<pre>
+
+UserManager
+
+|
++-- User Logic
+
+|
++-- Database Logic
+
+|
++-- Email Logic
+
+|
++-- Report Logic
+
+</pre>
+
+Too many responsibilities.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Refactoring Using SRP
+</summary>
+
+<div class="inner">
+
+Split responsibilities.
+
+<pre>
+
+UserService
+
+DatabaseService
+
+EmailService
+
+ReportService
+
+</pre>
+
+Now each class has one job.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Good Design Example
+</summary>
+
+<div class="inner">
+
+<pre>
+class UserService
+{
+   createUser();
+}
+
+class EmailService
+{
+   sendEmail();
+}
+
+class ReportService
+{
+   generateReport();
+}
+
+class DatabaseService
+{
+   saveUser();
+}
+</pre>
+
+Each class has one reason to change.
+
+SRP achieved.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. UML Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
++----------------+
+| UserService |
++----------------+
+| createUser() |
++----------------+
+
++----------------+
+| EmailService |
++----------------+
+| sendEmail() |
++----------------+
+
++----------------+
+| ReportService |
++----------------+
+| generateReport() |
++----------------+
+
++----------------+
+| DatabaseService |
++----------------+
+| saveUser() |
++----------------+
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. High Cohesion Connection
+</summary>
+
+<div class="inner">
+
+SRP creates:
+
+<pre>
+
+High Cohesion
+
+</pre>
+
+Good Example:
+
+<pre>
+UserService
+</pre>
+
+contains:
+
+<pre>
+
+createUser()
+
+deleteUser()
+
+updateUser()
+
+</pre>
+
+All related.
+
+High cohesion.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Low Cohesion Example
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+UtilityClass
+{
+   sendEmail();
+
+   calculateTax();
+
+   saveFile();
+
+   printInvoice();
+}
+</pre>
+
+Unrelated responsibilities.
+
+Low cohesion.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. SRP And Testing
+</summary>
+
+<div class="inner">
+
+Bad Design:
+
+<pre>
+
+Test User Logic
+
+↓
+
+Database Starts Failing
+
+</pre>
+
+Tests become difficult.
+
+Good Design:
+
+<pre>
+
+Test UserService
+
+Only User Logic
+
+</pre>
+
+Easy testing.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. SRP And Maintenance
+</summary>
+
+<div class="inner">
+
+Suppose email provider changes.
+
+Bad Design:
+
+<pre>
+
+Modify Huge Class
+
+Risk Breaking Everything
+
+</pre>
+
+Good Design:
+
+<pre>
+
+Modify EmailService Only
+
+</pre>
+
+Much safer.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. SRP And Teams
+</summary>
+
+<div class="inner">
+
+Large companies:
+
+<pre>
+
+Backend Team
+
+Database Team
+
+Analytics Team
+
+</pre>
+
+Separate responsibilities.
+
+Classes should follow same idea.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Common Beginner Mistake
+</summary>
+
+<div class="inner">
+
+Mistake:
+
+<pre>
+
+One Class
+
+↓
+
+Everything Inside
+
+</pre>
+
+Called:
+
+<pre>
+
+God Class
+
+</pre>
+
+Usually:
+
+<pre>
+
+2000+
+
+Lines
+
+</pre>
+
+Very difficult to maintain.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. God Class Example
+</summary>
+
+<div class="inner">
+
+<pre>
+class ApplicationManager
+{
+   login();
+
+   register();
+
+   sendEmail();
+
+   saveData();
+
+   exportPDF();
+
+   printReport();
+
+   processPayment();
+
+   generateInvoice();
+}
+</pre>
+
+Too many jobs.
+
+SRP violated.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Memory Trick
+</summary>
+
+<div class="inner">
+
+Remember:
+
+<pre>
+
+SRP
+
+↓
+
+Single Responsibility Principle
+
+↓
+
+Single Reason To Change
+
+</pre>
+
+Interview keyword:
+
+<pre>
+
+Reason To Change
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Industry Example
+</summary>
+
+<div class="inner">
+
+E-Commerce System:
+
+<pre>
+
+OrderService
+
+↓
+
+Order Logic
+
+</pre>
+
+<pre>
+
+PaymentService
+
+↓
+
+Payment Logic
+
+</pre>
+
+<pre>
+
+NotificationService
+
+↓
+
+Emails & SMS
+
+</pre>
+
+Each service follows SRP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. When SRP Is Violated
+</summary>
+
+<div class="inner">
+
+Warning Signs:
+
+<ul>
+
+<li>Huge Class</li>
+
+<li>Huge Method</li>
+
+<li>Many Unrelated Functions</li>
+
+<li>Multiple Teams Editing Same Class</li>
+
+<li>Frequent Merge Conflicts</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Advantages Of SRP
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Easy Testing</li>
+
+<li>Easy Maintenance</li>
+
+<li>Easy Extension</li>
+
+<li>High Cohesion</li>
+
+<li>Cleaner Code</li>
+
+<li>Lower Bugs</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is SRP?</li>
+
+<li>What is meant by one reason to change?</li>
+
+<li>How does SRP improve maintainability?</li>
+
+<li>What is a God class?</li>
+
+<li>How does SRP affect testing?</li>
+
+<li>How is SRP related to cohesion?</li>
+
+<li>Can a class have two responsibilities?</li>
+
+<li>What are signs SRP is violated?</li>
+
+<li>Give a real-world example of SRP.</li>
+
+<li>How does SRP help large teams?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers:
+
+<pre>
+
+Can I Put It In This Class?
+
+</pre>
+
+Senior Developers:
+
+<pre>
+
+Should It Belong In This Class?
+
+</pre>
+
+That question is the essence of SRP.
+
+Good design is not about
+making classes bigger.
+
+It is about assigning
+responsibilities correctly.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. SRP Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+SRP
+
+↓
+
+One Responsibility
+
+↓
+
+One Reason To Change
+
+↓
+
+High Cohesion
+
+↓
+
+Easy Testing
+
+↓
+
+Easy Maintenance
+
+</pre>
+
+Remember:
+
+<pre>
+
+Low Coupling
+
++
+
+High Cohesion
+
+=
+
+Good Design
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+
+
+</section>
+
+<!-- Chapter 3 -->
+<section id="ocp">
+
+    <div class="section-head">
+
+<h2>
+Chapter 3: Open Closed Principle (OCP)
+</h2>
+
+<p>
+
+Extensible Software Design,
+Avoiding Giant if-else Chains,
+Polymorphism,
+and Designing Systems That Grow Without Breaking.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is OCP?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Software should be:
+
+<pre>
+
+OPEN
+
+For Extension
+
+CLOSED
+
+For Modification
+
+</pre>
+
+Meaning:
+
+<pre>
+
+Add New Features
+
+Without Changing
+
+Existing Working Code
+
+</pre>
+
+</div>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why OCP Exists
+</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+
+Feature Works
+
+↓
+
+New Requirement Comes
+
+↓
+
+Modify Existing Code
+
+↓
+
+Old Feature Breaks
+
+</pre>
+
+This happens constantly.
+
+OCP tries to prevent this.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Phone Charger.
+
+You can connect:
+
+<pre>
+
+Samsung
+
+iPhone
+
+Tablet
+
+Power Bank
+
+</pre>
+
+without redesigning electricity.
+
+System is:
+
+<pre>
+
+Closed For Modification
+
+Open For Extension
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Bad Design Example
+</summary>
+
+<div class="inner">
+
+Suppose we build payment processing.
+
+<pre>
+class PaymentProcessor
+{
+    public void pay(String type)
+    {
+        if(type.equals("CARD"))
+        {
+            System.out.println("Card");
+        }
+        else if(type.equals("UPI"))
+        {
+            System.out.println("UPI");
+        }
+    }
+}
+</pre>
+
+Works today.
+
+Looks fine.
+
+But wait.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. New Requirement Arrives
+</summary>
+
+<div class="inner">
+
+Business says:
+
+<pre>
+
+Add PayPal
+
+</pre>
+
+Now modify:
+
+<pre>
+else if(type.equals("PAYPAL"))
+{
+}
+</pre>
+
+Next month:
+
+<pre>
+
+Add Crypto
+
+</pre>
+
+Modify again.
+
+Next month:
+
+<pre>
+
+Add Apple Pay
+
+</pre>
+
+Modify again.
+
+OCP violated.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Why This Is Dangerous
+</summary>
+
+<div class="inner">
+
+Every change:
+
+<pre>
+
+Touch Existing Code
+
+↓
+
+Risk New Bugs
+
+↓
+
+Retesting Required
+
+</pre>
+
+Large systems become fragile.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Better Design Using Polymorphism
+</summary>
+
+<div class="inner">
+
+Create abstraction.
+
+<pre>
+interface PaymentMethod
+{
+    void pay();
+}
+</pre>
+
+Implementations:
+
+<pre>
+class CardPayment
+implements PaymentMethod
+{
+    public void pay()
+    {
+        System.out.println("Card");
+    }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. UPI Implementation
+</summary>
+
+<div class="inner">
+
+<pre>
+class UpiPayment
+implements PaymentMethod
+{
+    public void pay()
+    {
+        System.out.println("UPI");
+    }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Processor Class
+</summary>
+
+<div class="inner">
+
+<pre>
+class PaymentProcessor
+{
+    public void process(
+    PaymentMethod payment)
+    {
+        payment.pay();
+    }
+}
+</pre>
+
+Notice:
+
+<pre>
+
+No if
+
+No switch
+
+No modification
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Add PayPal Later
+</summary>
+
+<div class="inner">
+
+New Feature:
+
+<pre>
+class PaypalPayment
+implements PaymentMethod
+{
+    public void pay()
+    {
+        System.out.println(
+        "Paypal"
+        );
+    }
+}
+</pre>
+
+Existing code unchanged.
+
+OCP achieved.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Visual Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+PaymentMethod
+
+|
+
++------------------+
+
+|        |         |
+
+Card UPI Paypal
+
+</pre>
+
+New payment methods:
+
+<pre>
+
+GooglePay
+
+Crypto
+
+ApplePay
+
+</pre>
+
+Add classes.
+
+No modification.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. OCP Through Inheritance
+</summary>
+
+<div class="inner">
+
+Base class:
+
+<pre>
+abstract class Shape
+{
+   abstract double area();
+}
+</pre>
+
+Extensions:
+
+<pre>
+Circle
+
+Rectangle
+
+Triangle
+</pre>
+
+New shapes can be added later.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Shape Calculator Problem
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+if(shape.equals("Circle"))
+{
+}
+else if(shape.equals("Rectangle"))
+{
+}
+</pre>
+
+Every new shape requires modification.
+
+OCP violation.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Shape Calculator Solution
+</summary>
+
+<div class="inner">
+
+<pre>
+abstract class Shape
+{
+   abstract double area();
+}
+</pre>
+
+Usage:
+
+<pre>
+shape.area();
+</pre>
+
+No condition checks.
+
+Polymorphism handles behavior.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. OCP And Polymorphism
+</summary>
+
+<div class="inner">
+
+OCP depends heavily on:
+
+<pre>
+
+Interfaces
+
+Abstract Classes
+
+Method Overriding
+
+Dynamic Dispatch
+
+</pre>
+
+This is why OOP matters.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. OCP And Strategy Pattern
+</summary>
+
+<div class="inner">
+
+Future Chapter:
+
+<pre>
+
+Strategy Pattern
+
+</pre>
+
+is one of the best examples of OCP.
+
+Behavior changes.
+
+Existing code stays untouched.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. OCP And Factory Pattern
+</summary>
+
+<div class="inner">
+
+Factory Pattern also supports:
+
+<pre>
+
+Open For Extension
+
+Closed For Modification
+
+</pre>
+
+New object types added easily.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Benefits Of OCP
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Fewer Bugs</li>
+
+<li>Less Retesting</li>
+
+<li>Cleaner Design</li>
+
+<li>Easy Features</li>
+
+<li>Scalable Codebase</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Common Beginner Mistakes
+</summary>
+
+<div class="inner">
+
+Mistake:
+
+<pre>
+
+Huge if-else Chains
+
+</pre>
+
+Mistake:
+
+<pre>
+
+Large switch Statements
+
+</pre>
+
+Mistake:
+
+<pre>
+
+Modifying Working Code
+
+Every Sprint
+
+</pre>
+
+These usually indicate
+OCP violations.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Interview Example
+</summary>
+
+<div class="inner">
+
+Question:
+
+<pre>
+
+Design Notification System
+
+Email
+
+SMS
+
+Push Notification
+
+</pre>
+
+Bad:
+
+<pre>
+
+if(type=="EMAIL")
+
+if(type=="SMS")
+
+if(type=="PUSH")
+
+</pre>
+
+Good:
+
+<pre>
+
+Notification
+
+↓
+
+EmailNotification
+
+SMSNotification
+
+PushNotification
+
+</pre>
+
+OCP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. OCP Memory Trick
+</summary>
+
+<div class="inner">
+
+Remember:
+
+<pre>
+
+OPEN
+
+For Extension
+
+CLOSED
+
+For Modification
+
+</pre>
+
+Interview keyword:
+
+<pre>
+
+Add Features
+
+Without Editing
+
+Working Code
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Top Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is OCP?</li>
+
+<li>Why do giant if-else chains violate OCP?</li>
+
+<li>How does polymorphism help OCP?</li>
+
+<li>How do interfaces support OCP?</li>
+
+<li>How does Factory Pattern support OCP?</li>
+
+<li>How does Strategy Pattern support OCP?</li>
+
+<li>Can inheritance help OCP?</li>
+
+<li>What are signs OCP is violated?</li>
+
+<li>Difference between SRP and OCP?</li>
+
+<li>Give a real-world OCP example.</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers:
+
+<pre>
+
+How Do I Add Feature X?
+
+</pre>
+
+Senior Developers:
+
+<pre>
+
+How Do I Design This
+
+So Future Features
+
+Need Minimal Changes?
+
+</pre>
+
+That mindset is OCP.
+
+Large companies release:
+
+<pre>
+
+Hundreds Of Features
+
+Every Year
+
+</pre>
+
+Without constantly rewriting
+existing systems.
+
+That is only possible because
+their architecture follows OCP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. OCP Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+OCP
+
+↓
+
+Open For Extension
+
+↓
+
+Closed For Modification
+
+↓
+
+Interfaces
+
+↓
+
+Polymorphism
+
+↓
+
+Strategy Pattern
+
+↓
+
+Factory Pattern
+
+</pre>
+
+Avoid:
+
+<pre>
+
+Huge if-else
+
+Huge switch
+
+Repeated Modifications
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 4 -->
+<section id="lsp">
+
+<div class="section-head">
+
+<h2>
+Chapter 4: Liskov Substitution Principle (LSP)
+</h2>
+
+<p>
+
+Correct Inheritance Design,
+Behavioral Compatibility,
+Composition vs Inheritance,
+and Avoiding Broken Hierarchies.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is LSP?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+If class B extends class A,
+
+then class B should be usable
+everywhere class A is expected.
+
+Without breaking the program.
+
+</div>
+
+<h3>Official Definition</h3>
+
+<pre>
+
+Objects of a subclass
+
+should replace
+
+objects of the superclass
+
+without affecting correctness.
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why LSP Exists
+</summary>
+
+<div class="inner">
+
+Inheritance often looks correct.
+
+But behavior may become incorrect.
+
+Example:
+
+<pre>
+
+Animal
+
+↓
+
+Bird
+
+↓
+
+Penguin
+
+</pre>
+
+Looks reasonable.
+
+But:
+
+<pre>
+
+Bird Can Fly
+
+Penguin Cannot Fly
+
+</pre>
+
+Problem.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+
+Employee
+
+↓
+
+Manager
+
+</pre>
+
+If the company software expects:
+
+<pre>
+
+Any Employee
+
+Can Work
+
+</pre>
+
+then every Manager should also
+be able to work correctly.
+
+Otherwise inheritance is broken.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Simple Valid Example
+</summary>
+
+<div class="inner">
+
+<pre>
+class Animal
+{
+   void eat()
+   {
+   }
+}
+
+class Dog
+extends Animal
+{
+}
+</pre>
+
+Anywhere:
+
+<pre>
+Animal
+</pre>
+
+is expected,
+
+<pre>
+Dog
+</pre>
+
+works correctly.
+
+LSP satisfied.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. First Broken Example
+</summary>
+
+<div class="inner">
+
+<pre>
+class Bird
+{
+   void fly()
+   {
+   }
+}
+
+class Penguin
+extends Bird
+{
+}
+</pre>
+
+Problem:
+
+<pre>
+
+Penguins
+
+Cannot Fly
+
+</pre>
+
+Bad inheritance design.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Why This Violates LSP
+</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+void makeBirdFly(
+Bird bird)
+{
+   bird.fly();
+}
+</pre>
+
+Now:
+
+<pre>
+Penguin penguin =
+new Penguin();
+
+makeBirdFly(
+penguin
+);
+</pre>
+
+Behavior is incorrect.
+
+LSP violated.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. The Famous Rectangle-Square Problem
+</summary>
+
+<div class="inner">
+
+Most famous LSP interview question.
+
+Many people design:
+
+<pre>
+
+Rectangle
+
+↓
+
+Square
+
+</pre>
+
+Looks logical.
+
+Actually problematic.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Rectangle Class
+</summary>
+
+<div class="inner">
+
+<pre>
+class Rectangle
+{
+   void setWidth(int w)
+   {
+   }
+
+   void setHeight(int h)
+   {
+   }
+}
+</pre>
+
+Expected:
+
+<pre>
+
+Width
+
+Height
+
+Independent
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Square Class
+</summary>
+
+<div class="inner">
+
+<pre>
+class Square
+extends Rectangle
+{
+}
+</pre>
+
+But square requires:
+
+<pre>
+
+Width = Height
+
+Always
+
+</pre>
+
+Behavior changes.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. The Problem
+</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+Rectangle rect =
+new Square();
+</pre>
+
+Now:
+
+<pre>
+rect.setWidth(10);
+
+rect.setHeight(5);
+</pre>
+
+Expected:
+
+<pre>
+
+Area = 50
+
+</pre>
+
+Square behavior:
+
+<pre>
+
+Area = 25
+
+</pre>
+
+Unexpected result.
+
+LSP broken.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Key Idea Of LSP
+</summary>
+
+<div class="inner">
+
+Inheritance is not about:
+
+<pre>
+
+Looks Like
+
+</pre>
+
+Inheritance is about:
+
+<pre>
+
+Behaves Like
+
+</pre>
+
+Interview Keyword.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Behavioral Compatibility
+</summary>
+
+<div class="inner">
+
+LSP focuses on behavior.
+
+Question:
+
+<pre>
+
+Can Child Replace Parent
+
+Without Surprises?
+
+</pre>
+
+If yes:
+
+<pre>
+
+Good Design
+
+</pre>
+
+If no:
+
+<pre>
+
+LSP Violation
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Another Example
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+
+Vehicle
+
+↓
+
+Car
+
+↓
+
+ElectricCar
+
+</pre>
+
+Suppose parent requires:
+
+<pre>
+
+fillFuel()
+</pre>
+
+Electric car:
+
+<pre>
+
+Cannot Use Fuel
+
+</pre>
+
+Inheritance may be wrong.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Better Design
+</summary>
+
+<div class="inner">
+
+Use interfaces.
+
+<pre>
+
+Vehicle
+
+↓
+
+Driveable
+
+FuelPowered
+
+Chargeable
+
+</pre>
+
+More flexible.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. LSP And OCP
+</summary>
+
+<div class="inner">
+
+OCP depends on polymorphism.
+
+Polymorphism depends on:
+
+<pre>
+
+LSP
+
+</pre>
+
+If subclasses behave incorrectly:
+
+<pre>
+
+OCP Fails
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. LSP And Design Patterns
+</summary>
+
+<div class="inner">
+
+Patterns relying on LSP:
+
+<ul>
+
+<li>Strategy</li>
+
+<li>Factory</li>
+
+<li>Observer</li>
+
+<li>State</li>
+
+<li>Template Method</li>
+
+</ul>
+
+Subclasses must behave correctly.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Signs Of LSP Violation
+</summary>
+
+<div class="inner">
+
+Warning Signs:
+
+<ul>
+
+<li>Overridden method throws UnsupportedOperationException</li>
+
+<li>Empty implementation</li>
+
+<li>Behavior changes unexpectedly</li>
+
+<li>Special-case checks everywhere</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. UnsupportedOperationException Example
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+class Bird
+{
+   void fly()
+   {
+   }
+}
+
+class Penguin
+extends Bird
+{
+   void fly()
+   {
+      throw new
+      UnsupportedOperationException();
+   }
+}
+</pre>
+
+Huge red flag.
+
+LSP violation.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Composition Instead Of Inheritance
+</summary>
+
+<div class="inner">
+
+Many LSP violations disappear using:
+
+<pre>
+
+Composition
+
+</pre>
+
+Example:
+
+<pre>
+
+Bird
+
+HAS-A
+
+FlyingBehavior
+
+</pre>
+
+Instead of forcing all birds
+to fly.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Composition Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Bird
+
+|
+
++----------------+
+
+| |
+
+Fly NoFly
+
+</pre>
+
+More flexible.
+
+Follows LSP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Benefits Of LSP
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Correct Polymorphism</li>
+
+<li>Predictable Behavior</li>
+
+<li>Cleaner Design</li>
+
+<li>Better Reuse</li>
+
+<li>Fewer Bugs</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. LSP Memory Trick
+</summary>
+
+<div class="inner">
+
+Remember:
+
+<pre>
+
+Child
+
+Must Behave Like
+
+Parent
+
+</pre>
+
+Not:
+
+<pre>
+
+Looks Like Parent
+
+</pre>
+
+Behavior matters.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is LSP?</li>
+
+<li>Why is Square-Rectangle famous?</li>
+
+<li>Why is Penguin-Bird problematic?</li>
+
+<li>What is behavioral compatibility?</li>
+
+<li>How does LSP affect polymorphism?</li>
+
+<li>How does LSP support OCP?</li>
+
+<li>What are signs of LSP violation?</li>
+
+<li>Why is UnsupportedOperationException a red flag?</li>
+
+<li>When should composition replace inheritance?</li>
+
+<li>How do design patterns rely on LSP?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers ask:
+
+<pre>
+
+Can I Reuse This Parent Class?
+
+</pre>
+
+Senior Developers ask:
+
+<pre>
+
+Will The Child
+
+Behave Correctly
+
+Everywhere The Parent
+
+Is Expected?
+
+</pre>
+
+That question is LSP.
+
+Most bad inheritance hierarchies
+in production violate LSP.
+
+The best engineers often choose:
+
+<pre>
+
+Composition
+
+Over
+
+Inheritance
+
+</pre>
+
+because it avoids many LSP issues.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. LSP Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+LSP
+
+↓
+
+Child Replaces Parent
+
+↓
+
+Without Breaking Behavior
+
+↓
+
+Correct Polymorphism
+
+↓
+
+Supports OCP
+
+↓
+
+Prefer Composition
+
+When Behavior Differs
+
+</pre>
+
+Remember:
+
+<pre>
+
+Inheritance
+
+Requires
+
+Behavioral Compatibility
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 5 -->
+<section id="isp">
+
+    <div class="section-head">
+
+<h2>
+Chapter 5: Interface Segregation Principle (ISP)
+</h2>
+
+<p>
+
+Small Focused Interfaces,
+Avoiding Fat Interfaces,
+Better Abstraction,
+Flexible Design,
+and Enterprise Software Architecture.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is ISP?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Clients should not be forced
+to depend upon methods
+they do not use.
+
+</div>
+
+<h3>Simple Definition</h3>
+
+<pre>
+
+Large Interfaces
+
+↓
+
+Bad
+
+Small Focused Interfaces
+
+↓
+
+Good
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why ISP Exists
+</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+
+TV Remote
+
+</pre>
+
+with:
+
+<pre>
+
+500 Buttons
+
+</pre>
+
+You only use:
+
+<pre>
+
+Power
+
+Volume
+
+Channel
+
+</pre>
+
+The rest are useless.
+
+That is exactly what happens
+with bad interfaces.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Think of a student.
+
+A student should not be forced to:
+
+<pre>
+
+Drive A Bus
+
+Perform Surgery
+
+Pilot A Plane
+
+</pre>
+
+Those responsibilities
+belong to different roles.
+
+Same idea in software.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Bad Interface Example
+</summary>
+
+<div class="inner">
+
+Suppose we create:
+
+<pre>
+interface Worker
+{
+    void work();
+
+    void eat();
+
+    void sleep();
+}
+</pre>
+
+Looks okay initially.
+
+But wait.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. The Robot Problem
+</summary>
+
+<div class="inner">
+
+Now create:
+
+<pre>
+class Robot
+implements Worker
+{
+}
+</pre>
+
+Robot can:
+
+<pre>
+
+work()
+
+</pre>
+
+But cannot:
+
+<pre>
+
+eat()
+
+sleep()
+
+</pre>
+
+Problem.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Bad Implementation
+</summary>
+
+<div class="inner">
+
+Developers often write:
+
+<pre>
+class Robot
+implements Worker
+{
+   public void work()
+   {
+   }
+
+   public void eat()
+   {
+      throw new
+      UnsupportedOperationException();
+   }
+
+   public void sleep()
+   {
+      throw new
+      UnsupportedOperationException();
+   }
+}
+</pre>
+
+Huge red flag.
+
+ISP violation.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Why This Is Bad
+</summary>
+
+<div class="inner">
+
+Robot is forced to implement:
+
+<pre>
+
+eat()
+
+sleep()
+
+</pre>
+
+methods it doesn't need.
+
+This means:
+
+<pre>
+
+Bad Abstraction
+
+Bad Design
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. ISP Solution
+</summary>
+
+<div class="inner">
+
+Break large interface into smaller ones.
+
+<pre>
+interface Workable
+{
+    void work();
+}
+</pre>
+
+<pre>
+interface Eatable
+{
+    void eat();
+}
+</pre>
+
+<pre>
+interface Sleepable
+{
+    void sleep();
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Human Implementation
+</summary>
+
+<div class="inner">
+
+<pre>
+class Human
+implements
+Workable,
+Eatable,
+Sleepable
+{
+}
+</pre>
+
+Human uses all methods.
+
+Perfect.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Robot Implementation
+</summary>
+
+<div class="inner">
+
+<pre>
+class Robot
+implements Workable
+{
+}
+</pre>
+
+Robot only implements
+what it needs.
+
+ISP achieved.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Visual Diagram
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+
+Worker
+
+|
+
++-- work()
+
++-- eat()
+
++-- sleep()
+
+</pre>
+
+Good:
+
+<pre>
+
+Workable
+
+Eatable
+
+Sleepable
+
+</pre>
+
+Small focused interfaces.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. ISP And Java Collections
+</summary>
+
+<div class="inner">
+
+Java itself follows ISP.
+
+Instead of:
+
+<pre>
+
+One Huge Collection Interface
+
+</pre>
+
+Java provides:
+
+<pre>
+
+List
+
+Set
+
+Queue
+
+Deque
+
+Map
+
+</pre>
+
+Each serves a specific purpose.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. ISP And Comparable
+</summary>
+
+<div class="inner">
+
+Java could have created:
+
+<pre>
+
+Huge Utility Interface
+
+</pre>
+
+Instead:
+
+<pre>
+Comparable
+</pre>
+
+only contains:
+
+<pre>
+compareTo()
+</pre>
+
+Focused responsibility.
+
+ISP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. ISP And Runnable
+</summary>
+
+<div class="inner">
+
+Runnable contains:
+
+<pre>
+run()
+</pre>
+
+Only one method.
+
+Perfect ISP example.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. ISP In Spring Boot
+</summary>
+
+<div class="inner">
+
+Spring heavily uses:
+
+<pre>
+
+Small Interfaces
+
+</pre>
+
+Examples:
+
+<pre>
+
+CrudRepository
+
+JpaRepository
+
+UserDetailsService
+
+HandlerInterceptor
+
+</pre>
+
+Focused contracts.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. Benefits Of ISP
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Cleaner APIs</li>
+
+<li>Flexible Design</li>
+
+<li>Easy Testing</li>
+
+<li>Better Reuse</li>
+
+<li>Reduced Coupling</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Fat Interface Smell
+</summary>
+
+<div class="inner">
+
+Warning signs:
+
+<pre>
+
+Interface
+
+↓
+
+20+
+
+Methods
+
+</pre>
+
+Usually indicates:
+
+<pre>
+
+ISP Violation
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Enterprise Example
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+interface Employee
+{
+   code();
+
+   test();
+
+   deploy();
+
+   design();
+
+   recruit();
+
+   manageBudget();
+}
+</pre>
+
+Nobody performs all tasks.
+
+Bad interface.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Better Enterprise Design
+</summary>
+
+<div class="inner">
+
+Create:
+
+<pre>
+
+Developer
+
+Tester
+
+Architect
+
+Manager
+
+</pre>
+
+specific interfaces.
+
+Each role gets only
+required methods.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. ISP And Coupling
+</summary>
+
+<div class="inner">
+
+Large interfaces create:
+
+<pre>
+
+High Coupling
+
+</pre>
+
+Small interfaces create:
+
+<pre>
+
+Loose Coupling
+
+</pre>
+
+which is desired.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. ISP Memory Trick
+</summary>
+
+<div class="inner">
+
+Remember:
+
+<pre>
+
+Don't Force
+
+Methods
+
+Clients Don't Need
+
+</pre>
+
+Interview Keyword:
+
+<pre>
+
+Fat Interface
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Common Beginner Mistakes
+</summary>
+
+<div class="inner">
+
+❌ Huge interfaces
+
+❌ Many unrelated methods
+
+❌ UnsupportedOperationException
+
+❌ Copy-paste implementations
+
+❌ Empty methods
+
+These often indicate
+ISP violations.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Top Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is ISP?</li>
+
+<li>Why are large interfaces bad?</li>
+
+<li>What is a fat interface?</li>
+
+<li>How does ISP reduce coupling?</li>
+
+<li>Why is UnsupportedOperationException a red flag?</li>
+
+<li>How does Java Collections follow ISP?</li>
+
+<li>How does Runnable follow ISP?</li>
+
+<li>Difference between SRP and ISP?</li>
+
+<li>How does ISP improve maintainability?</li>
+
+<li>Give a real-world ISP example.</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers often create:
+
+<pre>
+
+One Big Interface
+
+For Everything
+
+</pre>
+
+Senior Developers create:
+
+<pre>
+
+Small Contracts
+
+For Specific Roles
+
+</pre>
+
+Large systems become easier
+to evolve because changes remain
+localized.
+
+Good software architecture is often
+a collection of many small,
+well-defined interfaces.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. ISP Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+ISP
+
+↓
+
+Small Interfaces
+
+↓
+
+Focused Contracts
+
+↓
+
+No Forced Methods
+
+↓
+
+Loose Coupling
+
+↓
+
+Better Design
+
+</pre>
+
+Avoid:
+
+<pre>
+
+Fat Interfaces
+
+UnsupportedOperationException
+
+Unused Methods
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+
+    
+
+</section>
+
+<!-- Chapter 6 -->
+<section id="dip">
+
+<div class="section-head">
+
+<h2>
+Chapter 6: Dependency Inversion Principle (DIP)
+</h2>
+
+<p>
+
+The Foundation Of Dependency Injection,
+Spring Framework,
+Clean Architecture,
+Loose Coupling,
+and Enterprise Software Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is DIP?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+High-level modules should not depend
+on low-level modules.
+
+Both should depend on abstractions.
+
+</div>
+
+<pre>
+
+Business Logic
+
+↓
+
+Interface
+
+↓
+
+Implementation
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Why DIP Exists</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+
+Car
+
+↓
+
+Depends Directly
+
+↓
+
+Petrol Engine
+
+</pre>
+
+Now business wants:
+
+<pre>
+
+Electric Engine
+
+</pre>
+
+Need to modify Car.
+
+Bad design.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Bad Design Example</summary>
+
+<div class="inner">
+
+<pre>
+class MySQLDatabase
+{
+   public void save()
+   {
+      System.out.println("Saved");
+   }
+}
+
+class UserService
+{
+   private MySQLDatabase db =
+       new MySQLDatabase();
+
+   public void createUser()
+   {
+      db.save();
+   }
+}
+</pre>
+
+Problem:
+
+<pre>
+
+UserService
+
+↓
+
+Tightly Coupled
+
+↓
+
+MySQLDatabase
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Problems With This Design</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Hard To Test</li>
+<li>Hard To Replace Database</li>
+<li>High Coupling</li>
+<li>Violates DIP</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. DIP Solution</summary>
+
+<div class="inner">
+
+Create abstraction.
+
+<pre>
+interface Database
+{
+   void save();
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Implementations</summary>
+
+<div class="inner">
+
+<pre>
+class MySQLDatabase
+implements Database
+{
+   public void save()
+   {
+      System.out.println(
+      "MySQL Save"
+      );
+   }
+}
+
+class PostgreSQLDatabase
+implements Database
+{
+   public void save()
+   {
+      System.out.println(
+      "Postgres Save"
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. High-Level Module</summary>
+
+<div class="inner">
+
+<pre>
+class UserService
+{
+   private Database db;
+
+   public UserService(
+   Database db)
+   {
+      this.db = db;
+   }
+
+   public void createUser()
+   {
+      db.save();
+   }
+}
+</pre>
+
+Now UserService depends on:
+
+<pre>
+
+Database Interface
+
+</pre>
+
+not implementation.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Visual Diagram</summary>
+
+<div class="inner">
+
+<pre>
+
+UserService
+
+|
+
+Database
+
+|
+
++----------------+
+
+| |
+
+MySQL PostgreSQL
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. Dependency Injection</summary>
+
+<div class="inner">
+
+DIP enables:
+
+<pre>
+
+Dependency Injection
+
+</pre>
+
+Example:
+
+<pre>
+Database db =
+new MySQLDatabase();
+
+UserService service =
+new UserService(db);
+</pre>
+
+Object supplied externally.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. Spring Connection</summary>
+
+<div class="inner">
+
+Spring Boot is heavily built on:
+
+<pre>
+
+DIP
+
++
+
+Dependency Injection
+
+</pre>
+
+Example:
+
+<pre>
+
+@Autowired
+
+</pre>
+
+exists because of DIP.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. Testing Benefits</summary>
+
+<div class="inner">
+
+Mock Database:
+
+<pre>
+class FakeDatabase
+implements Database
+{
+}
+</pre>
+
+Easy testing.
+
+No real database required.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+12. Benefits Of DIP</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Loose Coupling</li>
+
+<li>Easy Testing</li>
+
+<li>Easy Replacement</li>
+
+<li>Cleaner Architecture</li>
+
+<li>Framework Friendly</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+13. DIP Memory Trick</summary>
+
+<div class="inner">
+
+<pre>
+
+Depend On
+
+Interfaces
+
+Not Implementations
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+14. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is DIP?</li>
+
+<li>Why depend on abstractions?</li>
+
+<li>How does DIP reduce coupling?</li>
+
+<li>How does Spring use DIP?</li>
+
+<li>What is Dependency Injection?</li>
+
+<li>DIP vs DI?</li>
+
+<li>How does DIP improve testing?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+15. DIP Revision Sheet</summary>
+
+<div class="inner">
+
+<pre>
+
+DIP
+
+↓
+
+Interfaces
+
+↓
+
+Loose Coupling
+
+↓
+
+Dependency Injection
+
+↓
+
+Spring Boot
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="solid-revision">
+
+<div class="section-head">
+
+<h2>
+Chapter 7: SOLID Revision Handbook
+</h2>
+
+<p>
+
+Complete Interview Revision Guide For
+SRP, OCP, LSP, ISP, DIP,
+Design Principles,
+Code Smells,
+and Real Software Engineering Discussions.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is SOLID?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+SOLID is a set of five principles
+that help developers write:
+
+<ul>
+
+<li>Maintainable Code</li>
+<li>Flexible Code</li>
+<li>Scalable Code</li>
+<li>Testable Code</li>
+<li>Extensible Code</li>
+</ul>
+
+</div>
+
+<pre>
+
+S → SRP
+
+O → OCP
+
+L → LSP
+
+I → ISP
+
+D → DIP
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+2. SOLID Big Picture</summary>
+
+<div class="inner">
+
+<pre>
+
+Bad Code
+
+↓
+
+Difficult Changes
+
+↓
+
+More Bugs
+
+↓
+
+Slow Development
+
+↓
+
+Business Problems
+
+</pre>
+
+SOLID tries to solve this.
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+3. SRP Revision</summary>
+
+<div class="inner">
+
+<h3>Definition</h3>
+
+<pre>
+
+One Class
+
+↓
+
+One Responsibility
+
+↓
+
+One Reason To Change
+
+</pre>
+
+Bad:
+
+<pre>
+
+UserManager
+
+Create User
+
+Save Database
+
+Send Email
+
+Generate Report
+
+</pre>
+
+Good:
+
+<pre>
+
+UserService
+
+EmailService
+
+DatabaseService
+
+ReportService
+
+</pre>
+
+Interview Keyword:
+
+<pre>
+
+One Reason To Change
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+4. OCP Revision</summary>
+
+<div class="inner">
+
+<h3>Definition</h3>
+
+<pre>
+
+Open For Extension
+
+Closed For Modification
+
+</pre>
+
+Bad:
+
+<pre>
+
+if(type=="CARD")
+
+else if(type=="UPI")
+
+else if(type=="PAYPAL")
+
+</pre>
+
+Good:
+
+<pre>
+
+PaymentMethod
+
+↓
+
+CardPayment
+
+UpiPayment
+
+PaypalPayment
+
+</pre>
+
+Add new class.
+
+Don't modify old code.
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+5. LSP Revision</summary>
+
+<div class="inner">
+
+<h3>Definition</h3>
+
+<pre>
+
+Child Class
+
+Must Replace
+
+Parent Class
+
+Without Breaking Behavior
+
+</pre>
+
+Bad:
+
+<pre>
+
+Bird
+
+↓
+
+Penguin
+
+</pre>
+
+If Bird requires:
+
+<pre>
+fly()
+</pre>
+
+Penguin breaks behavior.
+
+LSP violated.
+
+Interview Keyword:
+
+<pre>
+
+Behavioral Compatibility
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+6. ISP Revision</summary>
+
+<div class="inner">
+
+<h3>Definition</h3>
+
+<pre>
+
+Don't Force Clients
+
+To Depend On
+
+Methods They Don't Use
+
+</pre>
+
+Bad:
+
+<pre>
+
+Worker
+
+↓
+
+work()
+
+eat()
+
+sleep()
+
+</pre>
+
+Robot cannot eat.
+
+Bad design.
+
+Good:
+
+<pre>
+
+Workable
+
+Eatable
+
+Sleepable
+
+</pre>
+
+Small interfaces.
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+7. DIP Revision</summary>
+
+<div class="inner">
+
+<h3>Definition</h3>
+
+<pre>
+
+Depend On
+
+Abstractions
+
+Not Implementations
+
+</pre>
+
+Bad:
+
+<pre>
+
+UserService
+
+↓
+
+MySQLDatabase
+
+</pre>
+
+Good:
+
+<pre>
+
+UserService
+
+↓
+
+Database Interface
+
+↓
+
+MySQL
+
+PostgreSQL
+
+</pre>
+
+Foundation of Spring.
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+8. SOLID Comparison Table</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Principle</th>
+<th>Main Idea</th>
+</tr>
+
+<tr>
+<td>SRP</td>
+<td>One Responsibility</td>
+</tr>
+
+<tr>
+<td>OCP</td>
+<td>Extend Without Modifying</td>
+</tr>
+
+<tr>
+<td>LSP</td>
+<td>Child Must Behave Like Parent</td>
+</tr>
+
+<tr>
+<td>ISP</td>
+<td>Small Focused Interfaces</td>
+</tr>
+
+<tr>
+<td>DIP</td>
+<td>Depend On Abstractions</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+9. SOLID Memory Diagram</summary>
+
+<div class="inner">
+
+<pre>
+
+SRP
+
+↓
+
+Small Classes
+
+↓
+
+OCP
+
+↓
+
+Extensible Classes
+
+↓
+
+LSP
+
+↓
+
+Correct Inheritance
+
+↓
+
+ISP
+
+↓
+
+Small Interfaces
+
+↓
+
+DIP
+
+↓
+
+Loose Coupling
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+10. Common Code Smells</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Huge Classes</li>
+
+<li>Huge Methods</li>
+
+<li>Fat Interfaces</li>
+
+<li>Giant if-else Chains</li>
+
+<li>UnsupportedOperationException</li>
+
+<li>Direct Dependencies</li>
+
+<li>Copy Paste Code</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+11. Which Principle Solves What?</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Problem</th>
+<th>Principle</th>
+</tr>
+
+<tr>
+<td>God Class</td>
+<td>SRP</td>
+</tr>
+
+<tr>
+<td>if-else Explosion</td>
+<td>OCP</td>
+</tr>
+
+<tr>
+<td>Bad Inheritance</td>
+<td>LSP</td>
+</tr>
+
+<tr>
+<td>Fat Interface</td>
+<td>ISP</td>
+</tr>
+
+<tr>
+<td>Tight Coupling</td>
+<td>DIP</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+12. Real Software Example</summary>
+
+<div class="inner">
+
+E-Commerce Application:
+
+<pre>
+
+OrderService
+
+PaymentService
+
+InventoryService
+
+NotificationService
+
+Database Interface
+
+</pre>
+
+All five SOLID principles appear.
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+13. SOLID In Spring Boot</summary>
+
+<div class="inner">
+
+SRP:
+
+<pre>
+
+UserService
+
+OrderService
+
+ProductService
+
+</pre>
+
+OCP:
+
+<pre>
+
+New Implementations
+
+Without Modifying Existing Code
+
+</pre>
+
+ISP:
+
+<pre>
+
+Small Interfaces
+
+</pre>
+
+DIP:
+
+<pre>
+
+@Autowired
+
+Dependency Injection
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+14. Top 25 SOLID Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is SOLID?</li>
+
+<li>What is SRP?</li>
+
+<li>What is OCP?</li>
+
+<li>What is LSP?</li>
+
+<li>What is ISP?</li>
+
+<li>What is DIP?</li>
+
+<li>Difference between SRP and ISP?</li>
+
+<li>How does OCP use polymorphism?</li>
+
+<li>Why is LSP important?</li>
+
+<li>What is a fat interface?</li>
+
+<li>Why depend on abstractions?</li>
+
+<li>What is loose coupling?</li>
+
+<li>What is cohesion?</li>
+
+<li>What is a code smell?</li>
+
+<li>What is a God class?</li>
+
+<li>How does Spring use DIP?</li>
+
+<li>Why is composition preferred?</li>
+
+<li>How does OCP reduce bugs?</li>
+
+<li>What is behavioral compatibility?</li>
+
+<li>How does ISP improve maintainability?</li>
+
+<li>How does DIP improve testing?</li>
+
+<li>Which SOLID principle is most important?</li>
+
+<li>Give a real-world SOLID example.</li>
+
+<li>How do design patterns use SOLID?</li>
+
+<li>Why should every developer know SOLID?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+15. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Junior Developers ask:
+
+<pre>
+
+How Do I Write Code?
+
+</pre>
+
+Senior Developers ask:
+
+<pre>
+
+How Will This Code
+
+Handle Future Changes?
+
+</pre>
+
+SOLID exists because software changes.
+
+The goal is not:
+
+<pre>
+
+Perfect Code
+
+</pre>
+
+The goal is:
+
+<pre>
+
+Easy To Change Code
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ===================================== -->
+
+<details>
+
+<summary>
+16. Final Revision Sheet</summary>
+
+<div class="inner">
+
+<pre>
+
+SRP
+
+One Responsibility
+
+OCP
+
+Extend Without Modifying
+
+LSP
+
+Child Behaves Like Parent
+
+ISP
+
+Small Interfaces
+
+DIP
+
+Depend On Abstractions
+
+</pre>
+
+<div class="callout interview">
+
+Interview Rule:
+
+When discussing SOLID,
+always connect it to:
+
+Maintainability
+
+Extensibility
+
+Testability
+
+Loose Coupling
+
+High Cohesion
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="singleton">
+
+<div class="section-head">
+
+<h2>
+Chapter 8: Singleton Pattern
+</h2>
+
+<p>
+
+The Most Famous Design Pattern,
+Ensuring Only One Object Exists,
+Thread Safety,
+Lazy Initialization,
+Bill Pugh Singleton,
+Enum Singleton,
+and Interview Deep Dive.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Singleton Pattern?</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Singleton ensures:
+
+<pre>
+
+Only One Object
+
+Of A Class
+
+Exists In JVM
+
+</pre>
+
+and provides a global way
+to access it.
+
+</div>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why Singleton Exists</summary>
+
+<div class="inner">
+
+Some resources should exist
+only once.
+
+Examples:
+
+<pre>
+
+Database Connection Pool
+
+Logger
+
+Configuration Manager
+
+Cache Manager
+
+Thread Pool
+
+</pre>
+
+Creating multiple copies
+would waste resources.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy</summary>
+
+<div class="inner">
+
+Think of:
+
+<pre>
+
+Prime Minister
+
+President
+
+CEO
+
+</pre>
+
+Only one instance exists.
+
+Everyone uses the same one.
+
+That is Singleton.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Problem Without Singleton</summary>
+
+<div class="inner">
+
+Normal Class:
+
+<pre>
+class Logger
+{
+}
+</pre>
+
+Usage:
+
+<pre>
+Logger l1 =
+new Logger();
+
+Logger l2 =
+new Logger();
+
+Logger l3 =
+new Logger();
+</pre>
+
+Three objects created.
+
+Wasteful.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Basic Singleton Structure</summary>
+
+<div class="inner">
+
+Rules:
+
+<pre>
+
+1. Private Constructor
+
+2. Static Instance
+
+3. Public Getter
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Eager Singleton</summary>
+
+<div class="inner">
+
+<h3>Implementation</h3>
+
+<pre>
+class Singleton
+{
+    private static final
+    Singleton INSTANCE =
+    new Singleton();
+
+    private Singleton()
+    {
+    }
+
+    public static Singleton
+    getInstance()
+    {
+        return INSTANCE;
+    }
+}
+</pre>
+
+Object created immediately.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Memory Diagram</summary>
+
+<div class="inner">
+
+<pre>
+
+Class Loading
+
+↓
+
+INSTANCE Created
+
+↓
+
+Heap
+
+|
+
+Singleton Object
+
+|
+
+getInstance()
+
+↓
+
+Returns Same Object
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Advantages Of Eager Singleton</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Simple</li>
+
+<li>Thread Safe</li>
+
+<li>No Synchronization Needed</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Disadvantages Of Eager Singleton</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Object Created Even If Unused</li>
+
+<li>Memory Wastage Possible</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Lazy Singleton</summary>
+
+<div class="inner">
+
+Object created only when needed.
+
+<pre>
+class Singleton
+{
+    private static
+    Singleton instance;
+
+    private Singleton()
+    {
+    }
+
+    public static Singleton
+    getInstance()
+    {
+        if(instance == null)
+        {
+            instance =
+            new Singleton();
+        }
+
+        return instance;
+    }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Problem With Lazy Singleton</summary>
+
+<div class="inner">
+
+Multi-threading issue.
+
+Imagine:
+
+<pre>
+
+Thread A
+
+↓
+
+instance == null
+
+</pre>
+
+Before object creation:
+
+<pre>
+
+Thread B
+
+↓
+
+instance == null
+
+</pre>
+
+Result:
+
+<pre>
+
+Two Objects
+
+</pre>
+
+Singleton broken.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Thread Safe Singleton</summary>
+
+<div class="inner">
+
+Solution:
+
+<pre>
+public static synchronized
+Singleton getInstance()
+{
+   if(instance == null)
+   {
+      instance =
+      new Singleton();
+   }
+
+   return instance;
+}
+</pre>
+
+Now only one thread enters.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Drawback Of synchronized</summary>
+
+<div class="inner">
+
+Every call:
+
+<pre>
+
+Acquire Lock
+
+↓
+
+Release Lock
+
+</pre>
+
+Expensive.
+
+Even after object already exists.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Double Checked Locking (DCL)</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+<pre>
+class Singleton
+{
+   private static
+   volatile Singleton instance;
+
+   private Singleton()
+   {
+   }
+
+   public static Singleton
+   getInstance()
+   {
+      if(instance == null)
+      {
+         synchronized(
+         Singleton.class)
+         {
+            if(instance == null)
+            {
+               instance =
+               new Singleton();
+            }
+         }
+      }
+
+      return instance;
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Why Double Checked?</summary>
+
+<div class="inner">
+
+Check #1
+
+<pre>
+
+Avoid Lock
+
+If Object Exists
+
+</pre>
+
+Check #2
+
+<pre>
+
+Ensure Safety
+
+Inside Lock
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. Why volatile Is Required?</summary>
+
+<div class="inner">
+
+Without:
+
+<pre>
+volatile
+</pre>
+
+Instruction reordering may occur.
+
+Possible situation:
+
+<pre>
+
+Memory Allocated
+
+↓
+
+Reference Assigned
+
+↓
+
+Constructor Not Finished
+
+</pre>
+
+Another thread sees
+partially initialized object.
+
+Dangerous.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Bill Pugh Singleton</summary>
+
+<div class="inner">
+
+Best Traditional Singleton.
+
+<pre>
+class Singleton
+{
+   private Singleton()
+   {
+   }
+
+   private static class Holder
+   {
+      private static final
+      Singleton INSTANCE =
+      new Singleton();
+   }
+
+   public static Singleton
+   getInstance()
+   {
+      return Holder.INSTANCE;
+   }
+}
+</pre>
+
+Uses class loading guarantees.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Why Bill Pugh Is Popular?</summary>
+
+<div class="inner">
+
+Provides:
+
+<ul>
+
+<li>Lazy Loading</li>
+
+<li>Thread Safety</li>
+
+<li>No Synchronization Cost</li>
+
+</ul>
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Enum Singleton</summary>
+
+<div class="inner">
+
+Recommended by Joshua Bloch.
+
+<pre>
+public enum Singleton
+{
+    INSTANCE;
+}
+</pre>
+
+Usage:
+
+<pre>
+Singleton.INSTANCE
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Why Enum Singleton?</summary>
+
+<div class="inner">
+
+Protects against:
+
+<ul>
+
+<li>Reflection</li>
+
+<li>Serialization</li>
+
+<li>Multiple Instances</li>
+
+</ul>
+
+Safest Singleton.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Reflection Attack</summary>
+
+<div class="inner">
+
+Reflection can call:
+
+<pre>
+
+Private Constructor
+
+</pre>
+
+and create another object.
+
+Singleton broken.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Serialization Attack</summary>
+
+<div class="inner">
+
+Serialize:
+
+<pre>
+
+Singleton
+
+↓
+
+File
+
+</pre>
+
+Deserialize:
+
+<pre>
+
+New Object Created
+
+</pre>
+
+Singleton broken.
+
+Solution:
+
+<pre>
+readResolve()
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Clone Attack</summary>
+
+<div class="inner">
+
+Using:
+
+<pre>
+clone()
+</pre>
+
+can create another object.
+
+Need prevention logic.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Real Industry Examples</summary>
+
+<div class="inner">
+
+Common Singleton Uses:
+
+<pre>
+
+Logger
+
+Cache Manager
+
+Configuration Manager
+
+Thread Pool
+
+Database Pool
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. UML Diagram</summary>
+
+<div class="inner">
+
+<pre>
+
++-------------------+
+
+| Singleton |
+
++-------------------+
+
+| - instance |
+
++-------------------+
+
+| getInstance() |
+
++-------------------+
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+26. Singleton Variants Comparison</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Type</th>
+<th>Lazy</th>
+<th>Thread Safe</th>
+</tr>
+
+<tr>
+<td>Eager</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Lazy</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>Synchronized</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>DCL</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Bill Pugh</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Enum</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+27. Common Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Singleton?</li>
+
+<li>Why private constructor?</li>
+
+<li>Why static instance?</li>
+
+<li>What is lazy loading?</li>
+
+<li>Why lazy singleton is unsafe?</li>
+
+<li>How does synchronized help?</li>
+
+<li>What is Double Checked Locking?</li>
+
+<li>Why volatile is required?</li>
+
+<li>What is Bill Pugh Singleton?</li>
+
+<li>Why Enum Singleton is recommended?</li>
+
+<li>How can Reflection break Singleton?</li>
+
+<li>How can Serialization break Singleton?</li>
+
+<li>How can Cloning break Singleton?</li>
+
+<li>Where is Singleton used in industry?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+28. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Many developers overuse Singleton.
+
+Not every object should be Singleton.
+
+Bad:
+
+<pre>
+
+User
+
+Product
+
+Order
+
+Customer
+
+</pre>
+
+Good:
+
+<pre>
+
+Logger
+
+ConfigManager
+
+CacheManager
+
+</pre>
+
+Singleton is a tool,
+not a default design choice.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+29. Revision Sheet</summary>
+
+<div class="inner">
+
+<pre>
+
+Singleton
+
+↓
+
+One Object
+
+↓
+
+Private Constructor
+
+↓
+
+Static Instance
+
+↓
+
+Global Access
+
+↓
+
+Thread Safety
+
+↓
+
+Bill Pugh
+
+↓
+
+Enum Singleton
+
+</pre>
+
+<div class="callout interview">
+
+Interview Tip:
+
+If asked:
+
+"Best Singleton?"
+
+Answer:
+
+Enum Singleton
+
+or
+
+Bill Pugh Singleton
+
+depending on requirements.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="factory">
+
+<div class="section-head">
+
+<h2>
+Chapter 9: Factory Pattern
+</h2>
+
+<p>
+
+Object Creation Pattern,
+Open Closed Principle,
+Loose Coupling,
+Polymorphism,
+and Enterprise Application Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Factory Pattern?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Factory Pattern creates objects
+without exposing creation logic
+to the client.
+
+</div>
+
+<pre>
+
+Client
+
+↓
+
+Factory
+
+↓
+
+Object
+
+</pre>
+
+Instead of:
+
+<pre>
+new Object()
+</pre>
+
+Client asks factory.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why Factory Pattern Exists
+</summary>
+
+<div class="inner">
+
+Without Factory:
+
+<pre>
+Car car =
+new BMW();
+</pre>
+
+Client knows:
+
+<pre>
+
+Concrete Class
+
+Construction Logic
+
+Dependencies
+
+</pre>
+
+Tight coupling.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Pizza Store.
+
+Customer says:
+
+<pre>
+
+Give Me Veg Pizza
+
+</pre>
+
+Customer does NOT know:
+
+<pre>
+
+Ingredients
+
+Oven
+
+Recipe
+
+Preparation
+
+</pre>
+
+Store handles creation.
+
+Store = Factory.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Problem Without Factory
+</summary>
+
+<div class="inner">
+
+<pre>
+class NotificationService
+{
+   public void send(
+   String type)
+   {
+      if(type.equals("EMAIL"))
+      {
+         EmailNotification n =
+         new EmailNotification();
+      }
+
+      else if(type.equals("SMS"))
+      {
+         SmsNotification n =
+         new SmsNotification();
+      }
+   }
+}
+</pre>
+
+Problems:
+
+<ul>
+
+<li>if-else explosion</li>
+<li>Tight coupling</li>
+<li>OCP violation</li>
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Factory Solution
+</summary>
+
+<div class="inner">
+
+Create abstraction.
+
+<pre>
+interface Notification
+{
+   void send();
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Implementations
+</summary>
+
+<div class="inner">
+
+<pre>
+class EmailNotification
+implements Notification
+{
+   public void send()
+   {
+      System.out.println(
+      "Email Sent"
+      );
+   }
+}
+</pre>
+
+<pre>
+class SmsNotification
+implements Notification
+{
+   public void send()
+   {
+      System.out.println(
+      "SMS Sent"
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Notification Factory
+</summary>
+
+<div class="inner">
+
+<pre>
+class NotificationFactory
+{
+   public static Notification
+   createNotification(
+   String type)
+   {
+      if(type.equals("EMAIL"))
+      {
+         return new
+         EmailNotification();
+      }
+
+      if(type.equals("SMS"))
+      {
+         return new
+         SmsNotification();
+      }
+
+      throw new
+      IllegalArgumentException();
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Client Code
+</summary>
+
+<div class="inner">
+
+<pre>
+Notification n =
+NotificationFactory
+.createNotification(
+"EMAIL"
+);
+
+n.send();
+</pre>
+
+Client no longer knows:
+
+<pre>
+
+EmailNotification
+
+SmsNotification
+
+</pre>
+
+Only knows:
+
+<pre>
+Notification
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Visual Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Client
+
+|
+
+Factory
+
+|
+
++--------------------+
+
+| |
+
+Email SMS
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Benefits Of Factory
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Loose Coupling</li>
+
+<li>Centralized Creation</li>
+
+<li>Easy Maintenance</li>
+
+<li>Cleaner Code</li>
+
+<li>Supports OCP</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Factory And OCP
+</summary>
+
+<div class="inner">
+
+Add:
+
+<pre>
+PushNotification
+</pre>
+
+Only factory changes.
+
+Client code untouched.
+
+Supports OCP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Factory And DIP
+</summary>
+
+<div class="inner">
+
+Client depends on:
+
+<pre>
+Notification
+</pre>
+
+not:
+
+<pre>
+
+EmailNotification
+
+SmsNotification
+
+</pre>
+
+Supports DIP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Payment Factory Example
+</summary>
+
+<div class="inner">
+
+<pre>
+
+PaymentMethod
+
+|
+
++----------------+
+
+| |
+
+Card UPI
+
+</pre>
+
+Factory:
+
+<pre>
+
+PaymentFactory
+
+</pre>
+
+creates correct object.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Database Driver Example
+</summary>
+
+<div class="inner">
+
+JDBC internally behaves similarly.
+
+You request:
+
+<pre>
+DriverManager
+</pre>
+
+DriverManager creates
+appropriate driver object.
+
+Factory concept.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Logger Example
+</summary>
+
+<div class="inner">
+
+<pre>
+
+LoggerFactory
+
+↓
+
+FileLogger
+
+ConsoleLogger
+
+CloudLogger
+
+</pre>
+
+Very common in enterprise systems.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. Factory Method Pattern
+</summary>
+
+<div class="inner">
+
+Simple Factory:
+
+<pre>
+
+One Factory Class
+
+</pre>
+
+Factory Method:
+
+<pre>
+
+Subclass Decides
+
+Object Creation
+
+</pre>
+
+More flexible.
+
+Covered later in advanced patterns.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. UML Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Notification
+
+|
+
++------------------+
+
+| |
+
+Email SMS
+
+^
+
+|
+
+NotificationFactory
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Common Beginner Mistakes
+</summary>
+
+<div class="inner">
+
+❌ Creating objects everywhere
+
+❌ Massive if-else chains
+
+❌ Depending on concrete classes
+
+❌ Duplicate creation logic
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. When NOT To Use Factory
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+
+Simple POJO
+
+User
+
+Product
+
+Address
+
+</pre>
+
+No need for Factory.
+
+Factory useful when:
+
+<pre>
+
+Creation Logic Complex
+
+Multiple Variants Exist
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Industry Usage
+</summary>
+
+<div class="inner">
+
+Common examples:
+
+<ul>
+
+<li>Spring BeanFactory</li>
+
+<li>LoggerFactory</li>
+
+<li>JDBC DriverManager</li>
+
+<li>Hibernate SessionFactory</li>
+
+<li>Notification Systems</li>
+
+<li>Payment Systems</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Factory vs Singleton
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Factory</th>
+<th>Singleton</th>
+</tr>
+
+<tr>
+<td>Creates Objects</td>
+<td>Restricts Objects</td>
+</tr>
+
+<tr>
+<td>Many Objects</td>
+<td>One Object</td>
+</tr>
+
+<tr>
+<td>Creation Pattern</td>
+<td>Creation Pattern</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Top Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Factory Pattern?</li>
+
+<li>Why use Factory?</li>
+
+<li>How does Factory reduce coupling?</li>
+
+<li>Factory vs Singleton?</li>
+
+<li>Factory vs Builder?</li>
+
+<li>How does Factory support OCP?</li>
+
+<li>How does Factory support DIP?</li>
+
+<li>Real-world Factory examples?</li>
+
+<li>What is Factory Method Pattern?</li>
+
+<li>When should Factory be avoided?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers often ask:
+
+<pre>
+
+Which Object Should I Create?
+
+</pre>
+
+Senior Developers ask:
+
+<pre>
+
+How Can I Hide
+
+Creation Logic
+
+From The Client?
+
+</pre>
+
+That mindset leads directly
+to Factory Pattern.
+
+Factories become extremely useful
+once systems have dozens of
+implementations.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Factory
+
+↓
+
+Hide Object Creation
+
+↓
+
+Loose Coupling
+
+↓
+
+OCP
+
+↓
+
+DIP
+
+↓
+
+Polymorphism
+
+</pre>
+
+Remember:
+
+<pre>
+
+Client
+
+↓
+
+Factory
+
+↓
+
+Object
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<!-- Chapter 10 -->
+<section id="builder">
+
+<div class="section-head">
+
+<h2>
+Chapter 10: Builder Pattern
+</h2>
+
+<p>
+
+Creating Complex Objects,
+Avoiding Constructor Explosion,
+Immutable Objects,
+Fluent APIs,
+and Modern Java Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Builder Pattern?</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Builder Pattern helps create
+complex objects step-by-step.
+
+</div>
+
+<pre>
+
+Object
+
+↓
+
+Many Fields
+
+↓
+
+Builder
+
+↓
+
+Readable Construction
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why Builder Exists?</summary>
+
+<div class="inner">
+
+Imagine a User object.
+
+<pre>
+User
+{
+  id
+  name
+  email
+  age
+  phone
+  address
+  country
+}
+</pre>
+
+Constructor becomes huge.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Constructor Explosion Problem</summary>
+
+<div class="inner">
+
+<pre>
+User user =
+new User(
+1,
+"Devansh",
+"abc@gmail.com",
+22,
+"999999999",
+"Delhi",
+"India"
+);
+</pre>
+
+Question:
+
+<pre>
+
+What Is Parameter 5?
+
+What Is Parameter 6?
+
+</pre>
+
+Hard to read.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Telescoping Constructors</summary>
+
+<div class="inner">
+
+Developers often create:
+
+<pre>
+User()
+
+User(name)
+
+User(name,email)
+
+User(name,email,age)
+
+User(name,email,age,address)
+
+</pre>
+
+Huge maintenance problem.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Builder Solution</summary>
+
+<div class="inner">
+
+Instead:
+
+<pre>
+User user =
+new UserBuilder()
+.name("Devansh")
+.email("abc@gmail.com")
+.age(22)
+.build();
+</pre>
+
+Much cleaner.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Visual Diagram</summary>
+
+<div class="inner">
+
+<pre>
+
+UserBuilder
+
+↓
+
+name()
+
+↓
+
+email()
+
+↓
+
+age()
+
+↓
+
+build()
+
+↓
+
+User Object
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Product Class</summary>
+
+<div class="inner">
+
+<pre>
+class User
+{
+   private String name;
+   private String email;
+   private int age;
+
+   public User(
+      String name,
+      String email,
+      int age
+   )
+   {
+      this.name = name;
+      this.email = email;
+      this.age = age;
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Builder Class</summary>
+
+<div class="inner">
+
+<pre>
+class UserBuilder
+{
+   private String name;
+   private String email;
+   private int age;
+}
+</pre>
+
+Stores values temporarily.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Builder Methods</summary>
+
+<div class="inner">
+
+<pre>
+public UserBuilder
+name(String name)
+{
+   this.name = name;
+   return this;
+}
+</pre>
+
+Returning:
+
+<pre>
+this
+</pre>
+
+enables chaining.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Method Chaining</summary>
+
+<div class="inner">
+
+<pre>
+builder
+.name("Devansh")
+.email("abc@gmail.com")
+.age(22);
+</pre>
+
+Each method returns builder.
+
+Called:
+
+<pre>
+
+Fluent API
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Build Method</summary>
+
+<div class="inner">
+
+<pre>
+public User build()
+{
+   return new User(
+      name,
+      email,
+      age
+   );
+}
+</pre>
+
+Final object creation.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Complete Example</summary>
+
+<div class="inner">
+
+<pre>
+User user =
+new UserBuilder()
+.name("Devansh")
+.email("abc@gmail.com")
+.age(22)
+.build();
+</pre>
+
+Readable.
+
+Professional.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Real World Analogy</summary>
+
+<div class="inner">
+
+Ordering Pizza.
+
+<pre>
+
+Choose Size
+
+↓
+
+Choose Crust
+
+↓
+
+Choose Toppings
+
+↓
+
+Build Pizza
+
+</pre>
+
+Builder Pattern.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Benefits Of Builder</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Readable</li>
+
+<li>Flexible</li>
+
+<li>Maintainable</li>
+
+<li>Immutable Friendly</li>
+
+<li>No Constructor Explosion</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Immutable Objects + Builder</summary>
+
+<div class="inner">
+
+Builder is often used with:
+
+<pre>
+
+Immutable Classes
+
+</pre>
+
+Example:
+
+<pre>
+
+String
+
+LocalDate
+
+Configuration Objects
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. Validation Inside Builder</summary>
+
+<div class="inner">
+
+Builder can validate data.
+
+<pre>
+public User build()
+{
+   if(name == null)
+   {
+      throw new
+      IllegalArgumentException();
+   }
+
+   return new User(
+      name,
+      email,
+      age
+   );
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Builder In Lombok</summary>
+
+<div class="inner">
+
+Popular annotation:
+
+<pre>
+@Builder
+</pre>
+
+Generates builder automatically.
+
+Used heavily in Spring Boot.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Builder In Industry</summary>
+
+<div class="inner">
+
+Common examples:
+
+<pre>
+
+HttpRequest Builder
+
+StringBuilder
+
+Lombok Builder
+
+JPA Query Builders
+
+Configuration Objects
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. UML Diagram</summary>
+
+<div class="inner">
+
+<pre>
+
+UserBuilder
+
+|
+
++-- name()
+
++-- email()
+
++-- age()
+
++-- build()
+
+|
+
+User
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Builder vs Constructor</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Constructor</th>
+<th>Builder</th>
+</tr>
+
+<tr>
+<td>Hard To Read</td>
+<td>Readable</td>
+</tr>
+
+<tr>
+<td>Many Parameters</td>
+<td>Step By Step</td>
+</tr>
+
+<tr>
+<td>Rigid</td>
+<td>Flexible</td>
+</tr>
+
+<tr>
+<td>Parameter Order Matters</td>
+<td>No Confusion</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Builder vs Factory</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Builder</th>
+<th>Factory</th>
+</tr>
+
+<tr>
+<td>Complex Object Creation</td>
+<td>Select Object Type</td>
+</tr>
+
+<tr>
+<td>Step By Step</td>
+<td>Direct Creation</td>
+</tr>
+
+<tr>
+<td>Same Product</td>
+<td>Different Products</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Common Beginner Mistakes</summary>
+
+<div class="inner">
+
+❌ Builder for simple objects
+
+❌ No validation
+
+❌ Mutable final object
+
+❌ Massive builder classes
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Top Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Builder Pattern?</li>
+
+<li>Why Builder exists?</li>
+
+<li>What is constructor explosion?</li>
+
+<li>What is telescoping constructor?</li>
+
+<li>What is method chaining?</li>
+
+<li>Why return this?</li>
+
+<li>Builder vs Factory?</li>
+
+<li>Builder vs Constructor?</li>
+
+<li>Builder with Immutable Objects?</li>
+
+<li>Where is Builder used in industry?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Builder Pattern becomes valuable
+when objects contain:
+
+<pre>
+
+5+
+
+Fields
+
+Optional Fields
+
+Validation Rules
+
+Complex Construction
+
+</pre>
+
+Most enterprise configuration
+objects use builders.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. Revision Sheet</summary>
+
+<div class="inner">
+
+<pre>
+
+Builder
+
+↓
+
+Complex Object
+
+↓
+
+Step By Step Creation
+
+↓
+
+Method Chaining
+
+↓
+
+build()
+
+↓
+
+Final Object
+
+</pre>
+
+Remember:
+
+<pre>
+
+Factory
+
+↓
+
+WHICH Object
+
+Builder
+
+↓
+
+HOW Object
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 11 -->
+<section id="adapter">
+
+<div class="section-head">
+<h2>Chapter 11: Adapter Pattern</h2>
+<p>
+Make incompatible classes work together.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Adapter Pattern?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Adapter converts one interface into another interface
+that the client expects.
+
+</div>
+
+<pre>
+
+Client Wants
+
+↓
+
+USB-C
+
+↓
+
+Adapter
+
+↓
+
+Old USB
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Example</summary>
+<div class="inner">
+
+<pre>
+
+India Plug
+
+↓
+
+Travel Adapter
+
+↓
+
+US Socket
+
+</pre>
+
+Without adapter:
+
+<pre>
+
+Incompatible
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>3. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface PaymentGateway
+{
+    void pay();
+}
+
+class LegacyGateway
+{
+    void makePayment()
+    {
+        System.out.println(
+        "Legacy Payment"
+        );
+    }
+}
+
+class GatewayAdapter
+implements PaymentGateway
+{
+    private LegacyGateway legacy;
+
+    public GatewayAdapter(
+    LegacyGateway legacy)
+    {
+        this.legacy = legacy;
+    }
+
+    public void pay()
+    {
+        legacy.makePayment();
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>4. UML</summary>
+<div class="inner">
+
+<pre>
+
+Client
+
+↓
+
+Target Interface
+
+↓
+
+Adapter
+
+↓
+
+Adaptee
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+<li>Payment Integrations</li>
+<li>Third Party APIs</li>
+<li>Legacy Systems</li>
+<li>JDBC Drivers</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>6. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+
+<li>What problem does Adapter solve?</li>
+<li>Adapter vs Facade?</li>
+<li>Real-world adapter example?</li>
+
+</ol>
+
+</div>
+</details>
+
+</div>
+
+</section>
+<!-- Chapter 12 -->
+<section id="decorator">
+
+<div class="section-head">
+<h2>Chapter 12: Decorator Pattern</h2>
+<p>
+Add behavior dynamically without modifying existing classes.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Decorator?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Decorator wraps an object and
+adds extra functionality.
+
+</div>
+
+</div>
+</details>
+
+<details>
+<summary>2. Coffee Example</summary>
+<div class="inner">
+
+<pre>
+
+Coffee
+
+↓
+
+Milk
+
+↓
+
+Sugar
+
+↓
+
+Whipped Cream
+
+</pre>
+
+Each adds functionality.
+
+</div>
+</details>
+
+<details>
+<summary>3. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface Coffee
+{
+    String getDescription();
+}
+
+class BasicCoffee
+implements Coffee
+{
+    public String getDescription()
+    {
+        return "Coffee";
+    }
+}
+
+class MilkDecorator
+implements Coffee
+{
+    private Coffee coffee;
+
+    public MilkDecorator(
+    Coffee coffee)
+    {
+        this.coffee = coffee;
+    }
+
+    public String getDescription()
+    {
+        return coffee.getDescription()
+        + " + Milk";
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>4. UML</summary>
+<div class="inner">
+
+<pre>
+
+Coffee
+
+↓
+
+BasicCoffee
+
+↓
+
+MilkDecorator
+
+↓
+
+SugarDecorator
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+
+<li>Java IO Streams</li>
+<li>Logging</li>
+<li>Caching</li>
+<li>Security Wrappers</li>
+
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>6. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+
+<li>Decorator vs Inheritance?</li>
+<li>Why is Decorator flexible?</li>
+<li>Java IO example?</li>
+
+</ol>
+
+</div>
+</details>
+
+</div>
+
+</section>
+<!-- Chapter 13 -->
+<section id="facade">
+
+<div class="section-head">
+<h2>Chapter 13: Facade Pattern</h2>
+<p>
+Provide a simple interface to a complex subsystem.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Facade?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Facade hides complexity
+behind one simple interface.
+
+</div>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Analogy</summary>
+<div class="inner">
+
+<pre>
+
+Restaurant Waiter
+
+↓
+
+Customer
+
+</pre>
+
+Customer talks to one waiter.
+
+Waiter handles:
+
+<pre>
+
+Kitchen
+
+Billing
+
+Inventory
+
+Staff
+
+</pre>
+
+Facade.
+
+</div>
+</details>
+
+<details>
+<summary>3. Problem</summary>
+<div class="inner">
+
+Without facade:
+
+<pre>
+
+Client
+
+↓
+
+Subsystem A
+
+Subsystem B
+
+Subsystem C
+
+Subsystem D
+
+</pre>
+
+Too much complexity.
+
+</div>
+</details>
+
+<details>
+<summary>4. Facade Solution</summary>
+<div class="inner">
+
+<pre>
+class HomeTheaterFacade
+{
+    void watchMovie()
+    {
+        System.out.println(
+        "Projector ON"
+        );
+
+        System.out.println(
+        "Sound ON"
+        );
+
+        System.out.println(
+        "Movie Started"
+        );
+    }
+}
+</pre>
+
+Client:
+
+<pre>
+facade.watchMovie();
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. UML</summary>
+<div class="inner">
+
+<pre>
+
+Client
+
+↓
+
+Facade
+
+↓
+
+Subsystems
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>6. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+
+<li>Spring Framework</li>
+<li>Hibernate</li>
+<li>Banking APIs</li>
+<li>Microservices Gateways</li>
+
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>7. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+
+<li>Facade vs Adapter?</li>
+<li>Facade vs Proxy?</li>
+<li>Why use Facade?</li>
+
+</ol>
+
+</div>
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 14 -->
+<section id="proxy">
+
+<div class="section-head">
+<h2>Chapter 14: Proxy Pattern</h2>
+<p>
+Control access to an object.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Proxy?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Proxy acts as a substitute
+for another object.
+
+</div>
+
+<pre>
+
+Client
+
+↓
+
+Proxy
+
+↓
+
+Real Object
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Example</summary>
+<div class="inner">
+
+<pre>
+
+Bank Account
+
+↓
+
+ATM
+
+↓
+
+Customer
+
+</pre>
+
+Customer never directly accesses
+the banking system.
+
+ATM acts as proxy.
+
+</div>
+</details>
+
+<details>
+<summary>3. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface Image
+{
+    void display();
+}
+
+class RealImage
+implements Image
+{
+    public RealImage(
+    String file)
+    {
+        System.out.println(
+        "Loading Image"
+        );
+    }
+
+    public void display()
+    {
+        System.out.println(
+        "Displaying Image"
+        );
+    }
+}
+
+class ProxyImage
+implements Image
+{
+    private RealImage image;
+
+    public void display()
+    {
+        if(image == null)
+        {
+            image =
+            new RealImage(
+            "photo.jpg"
+            );
+        }
+
+        image.display();
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>4. Types Of Proxy</summary>
+<div class="inner">
+
+<pre>
+
+Virtual Proxy
+
+Protection Proxy
+
+Remote Proxy
+
+Caching Proxy
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. UML</summary>
+<div class="inner">
+
+<pre>
+
+Client
+
+↓
+
+Proxy
+
+↓
+
+Real Subject
+
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>6. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+
+<li>Spring AOP</li>
+<li>Hibernate Lazy Loading</li>
+<li>Security Layers</li>
+<li>Remote Services</li>
+
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>7. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+
+<li>What is Proxy Pattern?</li>
+<li>Proxy vs Decorator?</li>
+<li>What is Virtual Proxy?</li>
+<li>How does Hibernate use Proxy?</li>
+
+</ol>
+
+</div>
+</details>
+
+<details>
+<summary>8. Structural Patterns Revision</summary>
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Adapter</td>
+<td>Convert Interface</td>
+</tr>
+
+<tr>
+<td>Decorator</td>
+<td>Add Behavior</td>
+</tr>
+
+<tr>
+<td>Facade</td>
+<td>Simplify Complexity</td>
+</tr>
+
+<tr>
+<td>Proxy</td>
+<td>Control Access</td>
+</tr>
+
+</table>
+
+<div class="callout interview">
+
+Memory Trick:
+
+Adapter → Convert
+
+Decorator → Enhance
+
+Facade → Simplify
+
+Proxy → Control
+
+</div>
+
+</div>
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 15 -->
+<section id="strategy">
+
+<div class="section-head">
+<h2>Chapter 15: Strategy Pattern</h2>
+<p>
+Encapsulate interchangeable behavior, avoid giant if-else chains, and switch algorithms at runtime.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Strategy Pattern?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Strategy Pattern defines a family of algorithms,
+puts each one in a separate class, and makes them interchangeable.
+
+</div>
+
+<pre>
+Context
+  |
+  +-- Strategy Interface
+  |
+  +-- Concrete Strategy A
+  |
+  +-- Concrete Strategy B
+  |
+  +-- Concrete Strategy C
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>2. Why Strategy Exists</summary>
+<div class="inner">
+
+Bad design usually looks like this:
+
+<pre>
+if(paymentType.equals("CARD")) { ... }
+else if(paymentType.equals("UPI")) { ... }
+else if(paymentType.equals("PAYPAL")) { ... }
+else if(paymentType.equals("CRYPTO")) { ... }
+</pre>
+
+Problems:
+
+<ul>
+<li>Violates OCP</li>
+<li>Hard to extend</li>
+<li>Hard to test</li>
+<li>Becomes unreadable</li>
+</ul>
+
+Strategy replaces condition-heavy code with polymorphism.
+
+</div>
+</details>
+
+<details>
+<summary>3. Real World Analogy</summary>
+<div class="inner">
+
+Think of navigation apps:
+
+<ul>
+<li>Shortest route</li>
+<li>Fastest route</li>
+<li>Fuel-efficient route</li>
+</ul>
+
+Same destination, different strategy.
+
+The app chooses the strategy based on user preference.
+
+</div>
+</details>
+
+<details>
+<summary>4. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface PaymentStrategy
+{
+    void pay(int amount);
+}
+
+class CardPayment implements PaymentStrategy
+{
+    public void pay(int amount)
+    {
+        System.out.println("Paid " + amount + " using Card");
+    }
+}
+
+class UpiPayment implements PaymentStrategy
+{
+    public void pay(int amount)
+    {
+        System.out.println("Paid " + amount + " using UPI");
+    }
+}
+
+class PaymentContext
+{
+    private PaymentStrategy strategy;
+
+    public PaymentContext(PaymentStrategy strategy)
+    {
+        this.strategy = strategy;
+    }
+
+    public void executePayment(int amount)
+    {
+        strategy.pay(amount);
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. Usage</summary>
+<div class="inner">
+
+<pre>
+PaymentContext context =
+new PaymentContext(new UpiPayment());
+
+context.executePayment(500);
+</pre>
+
+Output:
+
+<pre>
+Paid 500 using UPI
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>6. Why It Is Powerful</summary>
+<div class="inner">
+
+<ul>
+<li>Behavior can change at runtime</li>
+<li>No giant switch statements</li>
+<li>Easy to add new strategies</li>
+<li>Fits OCP beautifully</li>
+<li>Highly testable</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>7. UML</summary>
+<div class="inner">
+
+<pre>
+PaymentStrategy
+   /     |     \
+Card   UPI   Paypal
+
+PaymentContext
+   |
+   +-- uses PaymentStrategy
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>8. Real Industry Usage</summary>
+<div class="inner">
+
+<ul>
+<li>Payment routing</li>
+<li>Compression algorithms</li>
+<li>Sorting algorithms</li>
+<li>Discount calculators</li>
+<li>Retry policies</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>9. Common Mistakes</summary>
+<div class="inner">
+
+<ul>
+<li>Using Strategy for one trivial algorithm</li>
+<li>Creating too many unnecessary classes</li>
+<li>Forcing strategy when simple polymorphism is enough</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>10. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+<li>What problem does Strategy solve?</li>
+<li>How is Strategy different from if-else?</li>
+<li>How does Strategy support OCP?</li>
+<li>When would you not use Strategy?</li>
+</ol>
+
+</div>
+</details>
+
+</div>
+</section>
+
+
+<section id="observer">
+
+<div class="section-head">
+<h2>Chapter 16: Observer Pattern</h2>
+<p>
+Define a one-to-many dependency so when one object changes state, all dependents are notified automatically.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Observer Pattern?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Observer Pattern creates a subscription model.
+
+When the subject changes, all observers get notified.
+
+</div>
+
+<pre>
+Subject
+  |
+  +-- Observer 1
+  +-- Observer 2
+  +-- Observer 3
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Analogy</summary>
+<div class="inner">
+
+Think of YouTube notifications:
+
+<ul>
+<li>You subscribe to a channel</li>
+<li>When a new video is uploaded, you get notified</li>
+<li>You did not poll constantly</li>
+</ul>
+
+That is Observer.
+
+</div>
+</details>
+
+<details>
+<summary>3. Why Observer Exists</summary>
+<div class="inner">
+
+Without Observer:
+
+<pre>
+Check for updates again and again
+</pre>
+
+That wastes time and resources.
+
+Observer gives push-based updates instead of repeated checking.
+
+</div>
+</details>
+
+<details>
+<summary>4. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface Observer
+{
+    void update(String message);
+}
+
+interface Subject
+{
+    void registerObserver(Observer o);
+    void removeObserver(Observer o);
+    void notifyObservers();
+}
+
+class NewsAgency implements Subject
+{
+    private List<Observer> observers = new ArrayList<>();
+    private String news;
+
+    public void setNews(String news)
+    {
+        this.news = news;
+        notifyObservers();
+    }
+
+    public void registerObserver(Observer o)
+    {
+        observers.add(o);
+    }
+
+    public void removeObserver(Observer o)
+    {
+        observers.remove(o);
+    }
+
+    public void notifyObservers()
+    {
+        for(Observer o : observers)
+        {
+            o.update(news);
+        }
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. Memory Diagram</summary>
+<div class="inner">
+
+<pre>
+NewsAgency
+   |
+   +-- Observer list
+        |
+        +-- UserA
+        +-- UserB
+        +-- UserC
+</pre>
+
+Whenever news changes, all users are notified.
+
+</div>
+</details>
+
+<details>
+<summary>6. Pull vs Push</summary>
+<div class="inner">
+
+Observer can be:
+
+<ul>
+<li>Push-based: subject sends the data</li>
+<li>Pull-based: observer asks for data</li>
+</ul>
+
+Most beginners only know the basic notification idea, but the push vs pull distinction is important in interviews.
+
+</div>
+</details>
+
+<details>
+<summary>7. Real Industry Usage</summary>
+<div class="inner">
+
+<ul>
+<li>Event listeners in GUI apps</li>
+<li>Spring application events</li>
+<li>Messaging systems</li>
+<li>Stock price updates</li>
+<li>Notification services</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>8. Java Built-in Example</summary>
+<div class="inner">
+
+Java historically had the `Observer` / `Observable` idea, and modern frameworks often implement the same concept using listeners, event publishers, and callbacks.
+
+</div>
+</details>
+
+<details>
+<summary>9. Common Mistakes</summary>
+<div class="inner">
+
+<ul>
+<li>Forgetting to unsubscribe observers</li>
+<li>Making subject too tightly coupled with observer internals</li>
+<li>Using observer when simple method calls are enough</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>10. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+<li>What is Observer Pattern?</li>
+<li>Observer vs Publisher-Subscriber?</li>
+<li>Push vs Pull model?</li>
+<li>Real-world examples?</li>
+<li>Why is Observer useful in event-driven systems?</li>
+</ol>
+
+</div>
+</details>
+
+</div>
+</section>
+
+
+<section id="state">
+
+<div class="section-head">
+<h2>Chapter 17: State Pattern</h2>
+<p>
+Allow an object to change its behavior when its internal state changes.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is State Pattern?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+State Pattern lets an object behave differently depending on its internal state.
+
+</div>
+
+<pre>
+Context
+  |
+  +-- State A
+  +-- State B
+  +-- State C
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Analogy</summary>
+<div class="inner">
+
+ATM example:
+
+<ul>
+<li>Card inserted state</li>
+<li>PIN entered state</li>
+<li>Transaction state</li>
+<li>Eject card state</li>
+</ul>
+
+The same machine behaves differently depending on state.
+
+</div>
+</details>
+
+<details>
+<summary>3. Why State Exists</summary>
+<div class="inner">
+
+Without State Pattern, you often get:
+
+<pre>
+if(state == A) { ... }
+else if(state == B) { ... }
+else if(state == C) { ... }
+</pre>
+
+This becomes messy and hard to maintain.
+
+</div>
+</details>
+
+<details>
+<summary>4. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface State
+{
+    void handle();
+}
+
+class IdleState implements State
+{
+    public void handle()
+    {
+        System.out.println("System is idle");
+    }
+}
+
+class RunningState implements State
+{
+    public void handle()
+    {
+        System.out.println("System is running");
+    }
+}
+
+class Context
+{
+    private State state;
+
+    public Context(State state)
+    {
+        this.state = state;
+    }
+
+    public void setState(State state)
+    {
+        this.state = state;
+    }
+
+    public void request()
+    {
+        state.handle();
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>5. State Transition</summary>
+<div class="inner">
+
+<pre>
+Idle -> Running -> Paused -> Running -> Stopped
+</pre>
+
+The context delegates work to the current state object.
+
+</div>
+</details>
+
+<details>
+<summary>6. State vs Strategy</summary>
+<div class="inner">
+
+<table>
+<tr>
+<th>State</th>
+<th>Strategy</th>
+</tr>
+<tr>
+<td>Behavior depends on internal state</td>
+<td>Behavior chosen by client</td>
+</tr>
+<tr>
+<td>State changes over time</td>
+<td>Strategy is usually switched deliberately</td>
+</tr>
+<tr>
+<td>Often used in workflows</td>
+<td>Often used in algorithms</td>
+</tr>
+</table>
+
+</div>
+</details>
+
+<details>
+<summary>7. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+<li>Workflow engines</li>
+<li>Order processing</li>
+<li>Document lifecycle</li>
+<li>UI controls</li>
+<li>Game state logic</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>8. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+<li>What is State Pattern?</li>
+<li>State vs Strategy?</li>
+<li>Where is State used?</li>
+<li>Why not use if-else?</li>
+</ol>
+
+</div>
+</details>
+
+</div>
+</section>
+
+
+<section id="command">
+
+<div class="section-head">
+<h2>Chapter 18: Command Pattern</h2>
+<p>
+Encapsulate a request as an object so you can parameterize, queue, and log actions.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Command Pattern?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Command Pattern turns actions into objects.
+
+</div>
+
+<pre>
+Invoker -> Command -> Receiver
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Analogy</summary>
+<div class="inner">
+
+Remote control:
+
+<ul>
+<li>Button is the invoker</li>
+<li>Command knows what to do</li>
+<li>TV is the receiver</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>3. Java Example</summary>
+<div class="inner">
+
+<pre>
+interface Command
+{
+    void execute();
+}
+
+class Light
+{
+    public void turnOn()
+    {
+        System.out.println("Light ON");
+    }
+
+    public void turnOff()
+    {
+        System.out.println("Light OFF");
+    }
+}
+
+class LightOnCommand implements Command
+{
+    private Light light;
+
+    public LightOnCommand(Light light)
+    {
+        this.light = light;
+    }
+
+    public void execute()
+    {
+        light.turnOn();
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>4. Why Command Exists</summary>
+<div class="inner">
+
+Command enables:
+
+<ul>
+<li>Queueing actions</li>
+<li>Logging actions</li>
+<li>Undo/redo</li>
+<li>Macro commands</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>5. Undo Example</summary>
+<div class="inner">
+
+Command object can store enough information to reverse an action later.
+
+This is why text editors and IDEs use command-like structures.
+
+</div>
+</details>
+
+<details>
+<summary>6. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+<li>Menu systems</li>
+<li>Undo/redo in editors</li>
+<li>Task queues</li>
+<li>Job schedulers</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>7. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+<li>What is Command Pattern?</li>
+<li>Invoker vs Receiver?</li>
+<li>Why is it useful for undo?</li>
+<li>Real-world example?</li>
+</ol>
+
+</div>
+</details>
+
+</div>
+</section>
+
+
+<section id="template-method">
+
+<div class="section-head">
+<h2>Chapter 19: Template Method Pattern</h2>
+<p>
+Define the skeleton of an algorithm and let subclasses override specific steps.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. What Is Template Method?</summary>
+<div class="inner">
+
+<div class="callout intuit">
+
+Template Method defines the algorithm structure in a base class,
+while subclasses customize certain steps.
+
+</div>
+
+</div>
+</details>
+
+<details>
+<summary>2. Real World Analogy</summary>
+<div class="inner">
+
+Making tea:
+
+<pre>
+Boil Water
+Add Tea
+Add Milk
+Serve
+</pre>
+
+The steps are fixed, but some details can change.
+
+</div>
+</details>
+
+<details>
+<summary>3. Java Example</summary>
+<div class="inner">
+
+<pre>
+abstract class Beverage
+{
+    public final void makeDrink()
+    {
+        boilWater();
+        brew();
+        pour();
+        addCondiments();
+    }
+
+    private void boilWater()
+    {
+        System.out.println("Boiling water");
+    }
+
+    protected abstract void brew();
+    protected abstract void addCondiments();
+
+    private void pour()
+    {
+        System.out.println("Pouring into cup");
+    }
+}
+</pre>
+
+</div>
+</details>
+
+<details>
+<summary>4. Why final Is Used</summary>
+<div class="inner">
+
+The algorithm skeleton should not be changed by subclasses.
+
+That is why the template method itself is often `final`.
+
+</div>
+</details>
+
+<details>
+<summary>5. Industry Usage</summary>
+<div class="inner">
+
+<ul>
+<li>Framework base classes</li>
+<li>Report generation</li>
+<li>Data export pipelines</li>
+<li>Game loops</li>
+</ul>
+
+</div>
+</details>
+
+<details>
+<summary>6. Interview Questions</summary>
+<div class="inner">
+
+<ol>
+<li>What is Template Method Pattern?</li>
+<li>Why is the method often final?</li>
+<li>Template Method vs Strategy?</li>
+</ol>
+
+</div>
+</details>
+
+</div>
+</section>
+
+
+<section id="patterns-revision">
+
+<div class="section-head">
+<h2>Chapter 20: Design Patterns Revision</h2>
+<p>
+Quick revision of the behavioral design patterns covered in this volume.
+</p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. Pattern Summary Table</summary>
+<div class="inner">
+
+<table>
+<tr>
+<th>Pattern</th>
+<th>Main Idea</th>
+</tr>
+<tr>
+<td>Strategy</td>
+<td>Swap algorithms at runtime</td>
+</tr>
+<tr>
+<td>Observer</td>
+<td>Notify subscribers on change</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Change behavior based on internal state</td>
+</tr>
+<tr>
+<td>Command</td>
+<td>Turn requests into objects</td>
+</tr>
+<tr>
+<td>Template Method</td>
+<td>Fix algorithm skeleton, customize steps</td>
+</tr>
+</table>
+
+</div>
+</details>
+
+<details>
+<summary>2. One-Line Memory Trick</summary>
+<div class="inner">
+
+<pre>
+
+Strategy -> Behavior Choice
+
+Observer -> Notifications
+
+State -> Internal Mode
+
+Command -> Request Object
+
+Template Method -> Skeleton + Hooks
+
+</pre>
+
+</div>
+</details>
+
+</div>
+</section>
+<!-- Chapter 16 -->
+
+<section id="observer">
+
+<div class="section-head">
+
+<h2>
+Chapter 16: Observer Pattern
+</h2>
+
+<p>
+
+Event Driven Architecture,
+Publish Subscribe Systems,
+Notifications,
+Spring Events,
+and Real World Observer Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Observer Pattern?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Observer Pattern creates a
+
+ONE TO MANY
+
+relationship.
+
+When one object changes state,
+all dependent objects are notified automatically.
+
+</div>
+
+<pre>
+
+Subject
+
+↓
+
+Observer 1
+
+Observer 2
+
+Observer 3
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why Observer Exists
+</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+
+YouTube Channel
+
+</pre>
+
+uploads a new video.
+
+Should subscribers repeatedly ask:
+
+<pre>
+
+Any New Video?
+
+Any New Video?
+
+Any New Video?
+
+</pre>
+
+No.
+
+Channel pushes updates.
+
+Observer Pattern solves this.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Examples
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>YouTube Notifications</li>
+
+<li>Instagram Followers</li>
+
+<li>Weather Alerts</li>
+
+<li>Stock Price Updates</li>
+
+<li>Email Subscriptions</li>
+
+<li>Breaking News Alerts</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Core Components
+</summary>
+
+<div class="inner">
+
+Observer Pattern contains:
+
+<pre>
+
+Subject
+
+Observer
+
+Concrete Subject
+
+Concrete Observer
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Subject Interface
+</summary>
+
+<div class="inner">
+
+Subject manages subscribers.
+
+<pre>
+interface Subject
+{
+    void registerObserver(
+    Observer observer
+    );
+
+    void removeObserver(
+    Observer observer
+    );
+
+    void notifyObservers();
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Observer Interface
+</summary>
+
+<div class="inner">
+
+Every observer implements:
+
+<pre>
+interface Observer
+{
+    void update(
+    String message
+    );
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Concrete Subject
+</summary>
+
+<div class="inner">
+
+<pre>
+class YouTubeChannel
+implements Subject
+{
+    private List<Observer>
+    subscribers =
+    new ArrayList<>();
+
+    private String video;
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Register Observer
+</summary>
+
+<div class="inner">
+
+<pre>
+public void registerObserver(
+Observer observer)
+{
+    subscribers.add(
+    observer
+    );
+}
+</pre>
+
+Subscriber joins.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Remove Observer
+</summary>
+
+<div class="inner">
+
+<pre>
+public void removeObserver(
+Observer observer)
+{
+    subscribers.remove(
+    observer
+    );
+}
+</pre>
+
+Unsubscribe.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Notify Observers
+</summary>
+
+<div class="inner">
+
+<pre>
+public void notifyObservers()
+{
+    for(
+      Observer observer
+      : subscribers
+    )
+    {
+       observer.update(
+       video
+       );
+    }
+}
+</pre>
+
+Core of Observer Pattern.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. State Change
+</summary>
+
+<div class="inner">
+
+<pre>
+public void uploadVideo(
+String video)
+{
+    this.video = video;
+
+    notifyObservers();
+}
+</pre>
+
+Whenever state changes:
+
+<pre>
+
+Notify Everyone
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Concrete Observer
+</summary>
+
+<div class="inner">
+
+<pre>
+class Subscriber
+implements Observer
+{
+   private String name;
+
+   public Subscriber(
+   String name)
+   {
+      this.name = name;
+   }
+
+   public void update(
+   String video)
+   {
+      System.out.println(
+      name +
+      " notified about "
+      + video
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Client Code
+</summary>
+
+<div class="inner">
+
+<pre>
+YouTubeChannel channel =
+new YouTubeChannel();
+
+Observer devansh =
+new Subscriber(
+"Devansh"
+);
+
+Observer alex =
+new Subscriber(
+"Alex"
+);
+
+channel.registerObserver(
+devansh
+);
+
+channel.registerObserver(
+alex
+);
+
+channel.uploadVideo(
+"Observer Pattern"
+);
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Output
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Devansh notified
+about Observer Pattern
+
+Alex notified
+about Observer Pattern
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Visual Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+YouTubeChannel
+
+|
+
++------------------+
+
+| | |
+
+Devansh Alex John
+
+</pre>
+
+New video:
+
+<pre>
+
+Notify All
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. Push Model
+</summary>
+
+<div class="inner">
+
+Subject sends data.
+
+<pre>
+
+Subject
+
+↓
+
+Video Uploaded
+
+↓
+
+Observer Gets Data
+
+</pre>
+
+Most common.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Pull Model
+</summary>
+
+<div class="inner">
+
+Subject sends notification only.
+
+Observer requests data later.
+
+<pre>
+
+Notify
+
+↓
+
+Observer Fetches Data
+
+</pre>
+
+Used for large data.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Push vs Pull
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Push</th>
+<th>Pull</th>
+</tr>
+
+<tr>
+<td>Sends Data</td>
+<td>Sends Notification</td>
+</tr>
+
+<tr>
+<td>Simple</td>
+<td>Flexible</td>
+</tr>
+
+<tr>
+<td>More Network Usage</td>
+<td>Less Network Usage</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Benefits
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Loose Coupling</li>
+
+<li>Scalable</li>
+
+<li>Easy Extension</li>
+
+<li>Supports OCP</li>
+
+<li>Event Driven Design</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Drawbacks
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Too Many Notifications</li>
+
+<li>Debugging Can Be Difficult</li>
+
+<li>Memory Leaks If Unsubscribe Forgotten</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Memory Leak Problem
+</summary>
+
+<div class="inner">
+
+Observer remains registered.
+
+<pre>
+
+Subject
+
+↓
+
+Still Holds Reference
+
+↓
+
+GC Cannot Remove
+
+</pre>
+
+Common interview question.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Observer And OCP
+</summary>
+
+<div class="inner">
+
+Add new observer:
+
+<pre>
+
+EmailObserver
+
+SMSObserver
+
+PushObserver
+
+</pre>
+
+No modification needed.
+
+OCP achieved.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Observer And DIP
+</summary>
+
+<div class="inner">
+
+Subject depends on:
+
+<pre>
+Observer
+</pre>
+
+not:
+
+<pre>
+
+EmailObserver
+
+SMSObserver
+
+</pre>
+
+Supports DIP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Spring Boot Example
+</summary>
+
+<div class="inner">
+
+Spring Events:
+
+<pre>
+
+ApplicationEvent
+
+↓
+
+ApplicationListener
+
+</pre>
+
+Observer Pattern.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. Kafka Connection
+</summary>
+
+<div class="inner">
+
+Kafka uses similar ideas.
+
+<pre>
+
+Producer
+
+↓
+
+Topic
+
+↓
+
+Consumers
+
+</pre>
+
+Observer-like architecture.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+26. Industry Usage
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Spring Events</li>
+
+<li>Kafka Consumers</li>
+
+<li>RabbitMQ</li>
+
+<li>Stock Market Systems</li>
+
+<li>Notification Services</li>
+
+<li>Monitoring Systems</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+27. Observer vs Pub/Sub
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Observer</th>
+<th>Pub/Sub</th>
+</tr>
+
+<tr>
+<td>Direct Reference</td>
+<td>Broker</td>
+</tr>
+
+<tr>
+<td>Same Process</td>
+<td>Distributed</td>
+</tr>
+
+<tr>
+<td>Tightly Connected</td>
+<td>Loosely Connected</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+28. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Observer Pattern?</li>
+
+<li>What problem does it solve?</li>
+
+<li>Subject vs Observer?</li>
+
+<li>Push vs Pull Model?</li>
+
+<li>Observer vs Pub/Sub?</li>
+
+<li>How does Observer support OCP?</li>
+
+<li>How does Observer support DIP?</li>
+
+<li>What memory leak issue exists?</li>
+
+<li>How does Spring use Observer?</li>
+
+<li>How does Kafka relate to Observer?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+29. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Observer is the foundation of:
+
+<pre>
+
+Event Driven Architecture
+
+</pre>
+
+Modern backend systems are heavily event-driven.
+
+Understanding Observer helps you understand:
+
+<pre>
+
+Spring Events
+
+Kafka
+
+RabbitMQ
+
+Microservices
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+30. Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Observer
+
+↓
+
+One To Many
+
+↓
+
+Subject
+
+↓
+
+Observers
+
+↓
+
+Notify On Change
+
+↓
+
+Loose Coupling
+
+↓
+
+Event Driven Design
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 17 -->
+<section id="state">
+
+<div class="section-head">
+
+<h2>
+Chapter 17: State Pattern
+</h2>
+
+<p>
+
+Behavior Changes Based On Internal State,
+Workflow Modeling,
+ATM Design,
+Order Systems,
+and Low Level Design Interviews.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is State Pattern?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+State Pattern allows an object
+to change its behavior
+when its internal state changes.
+
+The object appears to change
+its class.
+
+</div>
+
+<pre>
+
+Current State
+
+↓
+
+Controls Behavior
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why State Pattern Exists
+</summary>
+
+<div class="inner">
+
+Without State Pattern:
+
+<pre>
+if(state == NEW)
+{
+}
+else if(state == PAID)
+{
+}
+else if(state == SHIPPED)
+{
+}
+else if(state == DELIVERED)
+{
+}
+</pre>
+
+As states grow:
+
+<pre>
+
+Huge If Else Chains
+
+</pre>
+
+become difficult to maintain.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Think of a traffic signal.
+
+<pre>
+
+RED
+
+↓
+
+STOP
+
+</pre>
+
+<pre>
+
+GREEN
+
+↓
+
+GO
+
+</pre>
+
+<pre>
+
+YELLOW
+
+↓
+
+WAIT
+
+</pre>
+
+Same signal.
+
+Different behavior.
+
+Different state.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. ATM Example
+</summary>
+
+<div class="inner">
+
+ATM States:
+
+<pre>
+
+No Card
+
+↓
+
+Card Inserted
+
+↓
+
+PIN Entered
+
+↓
+
+Transaction
+
+↓
+
+Card Ejected
+
+</pre>
+
+Behavior changes at every state.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Order Management Example
+</summary>
+
+<div class="inner">
+
+Order States:
+
+<pre>
+
+NEW
+
+↓
+
+PAID
+
+↓
+
+SHIPPED
+
+↓
+
+DELIVERED
+
+</pre>
+
+Actions allowed depend on state.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Traditional Approach Problem
+</summary>
+
+<div class="inner">
+
+<pre>
+if(orderState == PAID)
+{
+}
+else if(orderState == SHIPPED)
+{
+}
+else if(orderState == DELIVERED)
+{
+}
+</pre>
+
+Problems:
+
+<ul>
+
+<li>Hard To Extend</li>
+
+<li>OCP Violation</li>
+
+<li>Messy Logic</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. State Pattern Structure
+</summary>
+
+<div class="inner">
+
+Components:
+
+<pre>
+
+Context
+
+State Interface
+
+Concrete States
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. State Interface
+</summary>
+
+<div class="inner">
+
+<pre>
+interface OrderState
+{
+   void next(
+   OrderContext context
+   );
+}
+</pre>
+
+All states follow same contract.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Concrete State: New Order
+</summary>
+
+<div class="inner">
+
+<pre>
+class NewState
+implements OrderState
+{
+   public void next(
+   OrderContext context
+   )
+   {
+      System.out.println(
+      "Order Paid"
+      );
+
+      context.setState(
+      new PaidState()
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Concrete State: Paid
+</summary>
+
+<div class="inner">
+
+<pre>
+class PaidState
+implements OrderState
+{
+   public void next(
+   OrderContext context
+   )
+   {
+      System.out.println(
+      "Order Shipped"
+      );
+
+      context.setState(
+      new ShippedState()
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Context Class
+</summary>
+
+<div class="inner">
+
+<pre>
+class OrderContext
+{
+   private OrderState state;
+
+   public OrderContext()
+   {
+      state =
+      new NewState();
+   }
+
+   public void setState(
+   OrderState state)
+   {
+      this.state = state;
+   }
+
+   public void next()
+   {
+      state.next(this);
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Client Code
+</summary>
+
+<div class="inner">
+
+<pre>
+OrderContext order =
+new OrderContext();
+
+order.next();
+
+order.next();
+
+order.next();
+</pre>
+
+Output changes automatically.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Visual Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+OrderContext
+
+|
+
+OrderState
+
+|
+
++----------------------+
+
+| | | |
+
+New Paid Shipped Delivered
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. State Transition Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+NEW
+
+↓
+
+PAID
+
+↓
+
+SHIPPED
+
+↓
+
+DELIVERED
+
+</pre>
+
+Classic state machine.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Why State Is Better
+</summary>
+
+<div class="inner">
+
+Instead of:
+
+<pre>
+
+One Huge Class
+
+</pre>
+
+we get:
+
+<pre>
+
+One State
+
+One Class
+
+</pre>
+
+Cleaner design.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. State And OCP
+</summary>
+
+<div class="inner">
+
+Need new state?
+
+<pre>
+
+Cancelled
+
+Returned
+
+Refunded
+
+</pre>
+
+Add class.
+
+No modification.
+
+Supports OCP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. State And SRP
+</summary>
+
+<div class="inner">
+
+Each state manages:
+
+<pre>
+
+One Behavior
+
+</pre>
+
+Supports SRP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. State vs Strategy
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>State</th>
+<th>Strategy</th>
+</tr>
+
+<tr>
+<td>Behavior Depends On State</td>
+<td>Behavior Depends On Choice</td>
+</tr>
+
+<tr>
+<td>Changes Automatically</td>
+<td>Chosen Explicitly</td>
+</tr>
+
+<tr>
+<td>Workflow</td>
+<td>Algorithm</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. State vs If Else
+</summary>
+
+<div class="inner">
+
+If Else:
+
+<pre>
+
+Hard To Extend
+
+Hard To Maintain
+
+</pre>
+
+State Pattern:
+
+<pre>
+
+Easy To Extend
+
+Easy To Maintain
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Media Player Example
+</summary>
+
+<div class="inner">
+
+States:
+
+<pre>
+
+Playing
+
+Paused
+
+Stopped
+
+</pre>
+
+Buttons behave differently
+depending on state.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Vending Machine Example
+</summary>
+
+<div class="inner">
+
+States:
+
+<pre>
+
+No Coin
+
+Coin Inserted
+
+Item Selected
+
+Dispensing
+
+</pre>
+
+Classic LLD question.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. ATM Example Revisited
+</summary>
+
+<div class="inner">
+
+Most ATM interview solutions
+use State Pattern.
+
+States:
+
+<pre>
+
+Idle
+
+CardInserted
+
+PinVerified
+
+Transaction
+
+</pre>
+
+Each state owns behavior.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Industry Usage
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>ATM Systems</li>
+
+<li>Workflow Engines</li>
+
+<li>Game Engines</li>
+
+<li>Order Processing</li>
+
+<li>Traffic Control</li>
+
+<li>Media Players</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Common Beginner Mistakes
+</summary>
+
+<div class="inner">
+
+❌ Too many if-else chains
+
+❌ Enum with giant switch statements
+
+❌ State logic inside context
+
+❌ Not separating state behavior
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is State Pattern?</li>
+
+<li>Why does State Pattern exist?</li>
+
+<li>State vs Strategy?</li>
+
+<li>State vs If Else?</li>
+
+<li>How does State support OCP?</li>
+
+<li>Real world examples?</li>
+
+<li>How is ATM designed using State?</li>
+
+<li>How is Vending Machine designed?</li>
+
+<li>What is a state transition?</li>
+
+<li>When should State Pattern be used?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+26. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Whenever you hear:
+
+<pre>
+
+Current State
+
+Allowed Actions
+
+State Transition
+
+</pre>
+
+you should immediately think:
+
+<pre>
+
+State Pattern
+
+</pre>
+
+This pattern appears frequently
+in SDE-2 and LLD interviews.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+27. Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+State Pattern
+
+↓
+
+Behavior Depends On State
+
+↓
+
+Context
+
+↓
+
+State Interface
+
+↓
+
+Concrete States
+
+↓
+
+State Transition
+
+↓
+
+Workflow Modeling
+
+</pre>
+
+<div class="callout interview">
+
+Interview Shortcut:
+
+If the system can be represented
+as:
+
+State → Action → Next State
+
+then State Pattern is probably
+the correct solution.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+<!-- Chapter 18 -->
+<section id="command">
+
+<div class="section-head">
+
+<h2>
+Chapter 18: Command Pattern
+</h2>
+
+<p>
+
+Encapsulating Requests As Objects,
+Undo/Redo Systems,
+Task Scheduling,
+Queues,
+and Enterprise Application Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Command Pattern?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Command Pattern converts a request
+into an object.
+
+Instead of directly calling methods,
+we create command objects.
+
+</div>
+
+<pre>
+
+Request
+
+↓
+
+Command Object
+
+↓
+
+Execute Later
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why Command Pattern Exists
+</summary>
+
+<div class="inner">
+
+Normally:
+
+<pre>
+light.turnOn();
+</pre>
+
+Executes immediately.
+
+But what if we want:
+
+<pre>
+
+Queue It
+
+Log It
+
+Undo It
+
+Schedule It
+
+Retry It
+
+</pre>
+
+Need Command Pattern.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Restaurant Example.
+
+Customer:
+
+<pre>
+
+Place Order
+
+</pre>
+
+Waiter writes order.
+
+The written order becomes
+the command.
+
+Kitchen executes later.
+
+<pre>
+
+Customer
+
+↓
+
+Waiter
+
+↓
+
+Order Slip
+
+↓
+
+Chef
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Core Components
+</summary>
+
+<div class="inner">
+
+Command Pattern contains:
+
+<pre>
+
+Client
+
+Invoker
+
+Command
+
+Receiver
+
+Concrete Command
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Command Interface
+</summary>
+
+<div class="inner">
+
+<pre>
+interface Command
+{
+    void execute();
+}
+</pre>
+
+Every command follows
+same contract.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Receiver
+</summary>
+
+<div class="inner">
+
+Receiver does actual work.
+
+<pre>
+class Light
+{
+    public void turnOn()
+    {
+        System.out.println(
+        "Light ON"
+        );
+    }
+
+    public void turnOff()
+    {
+        System.out.println(
+        "Light OFF"
+        );
+    }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Concrete Command
+</summary>
+
+<div class="inner">
+
+<pre>
+class LightOnCommand
+implements Command
+{
+   private Light light;
+
+   public LightOnCommand(
+   Light light)
+   {
+      this.light = light;
+   }
+
+   public void execute()
+   {
+      light.turnOn();
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Another Command
+</summary>
+
+<div class="inner">
+
+<pre>
+class LightOffCommand
+implements Command
+{
+   private Light light;
+
+   public LightOffCommand(
+   Light light)
+   {
+      this.light = light;
+   }
+
+   public void execute()
+   {
+      light.turnOff();
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Invoker
+</summary>
+
+<div class="inner">
+
+Invoker triggers command.
+
+<pre>
+class RemoteControl
+{
+   private Command command;
+
+   public void setCommand(
+   Command command)
+   {
+      this.command =
+      command;
+   }
+
+   public void pressButton()
+   {
+      command.execute();
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Client Code
+</summary>
+
+<div class="inner">
+
+<pre>
+Light light =
+new Light();
+
+Command on =
+new LightOnCommand(
+light
+);
+
+RemoteControl remote =
+new RemoteControl();
+
+remote.setCommand(on);
+
+remote.pressButton();
+</pre>
+
+Output:
+
+<pre>
+
+Light ON
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Visual Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Client
+
+↓
+
+Command
+
+↓
+
+Invoker
+
+↓
+
+Receiver
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Why Not Direct Method Calls?
+</summary>
+
+<div class="inner">
+
+Direct Call:
+
+<pre>
+
+light.turnOn()
+
+</pre>
+
+Command:
+
+<pre>
+
+Store
+
+Queue
+
+Undo
+
+Retry
+
+Schedule
+
+</pre>
+
+Much more flexible.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Undo Functionality
+</summary>
+
+<div class="inner">
+
+Add:
+
+<pre>
+void undo();
+</pre>
+
+to Command interface.
+
+Example:
+
+<pre>
+
+Light ON
+
+↓
+
+Undo
+
+↓
+
+Light OFF
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Command History
+</summary>
+
+<div class="inner">
+
+Store executed commands.
+
+<pre>
+
+Stack
+
+↓
+
+Last Command
+
+↓
+
+Undo
+
+</pre>
+
+Used by:
+
+<ul>
+
+<li>Text Editors</li>
+
+<li>Photoshop</li>
+
+<li>IDEs</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Macro Commands
+</summary>
+
+<div class="inner">
+
+One command executes
+many commands.
+
+<pre>
+
+Movie Mode
+
+↓
+
+Lights OFF
+
+↓
+
+Projector ON
+
+↓
+
+Sound ON
+
+</pre>
+
+Single button.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. Task Queue Example
+</summary>
+
+<div class="inner">
+
+Commands stored:
+
+<pre>
+
+Queue
+
+↓
+
+Worker Thread
+
+↓
+
+Execute Later
+
+</pre>
+
+Very common in backend systems.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Scheduler Example
+</summary>
+
+<div class="inner">
+
+Store commands:
+
+<pre>
+
+Run At 10 PM
+
+Run Tomorrow
+
+Run Weekly
+
+</pre>
+
+Scheduler executes later.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Command And OCP
+</summary>
+
+<div class="inner">
+
+Need new action?
+
+Create:
+
+<pre>
+
+New Command Class
+
+</pre>
+
+No modification.
+
+Supports OCP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Command And SRP
+</summary>
+
+<div class="inner">
+
+Each command handles:
+
+<pre>
+
+One Action
+
+</pre>
+
+Supports SRP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Command And Queue Systems
+</summary>
+
+<div class="inner">
+
+Modern systems:
+
+<pre>
+
+Kafka
+
+RabbitMQ
+
+Job Queues
+
+</pre>
+
+often use command-like ideas.
+
+Commands represent work.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Industry Usage
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Undo/Redo</li>
+
+<li>Task Scheduling</li>
+
+<li>Message Queues</li>
+
+<li>Workflow Engines</li>
+
+<li>Game Engines</li>
+
+<li>Batch Processing</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Command vs Strategy
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Command</th>
+<th>Strategy</th>
+</tr>
+
+<tr>
+<td>Encapsulates Action</td>
+<td>Encapsulates Algorithm</td>
+</tr>
+
+<tr>
+<td>Supports Undo</td>
+<td>No Undo</td>
+</tr>
+
+<tr>
+<td>Queue Friendly</td>
+<td>Not Queue Focused</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Command vs State
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Command</th>
+<th>State</th>
+</tr>
+
+<tr>
+<td>Represents Action</td>
+<td>Represents State</td>
+</tr>
+
+<tr>
+<td>Can Be Stored</td>
+<td>Changes Behavior</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Common Beginner Mistakes
+</summary>
+
+<div class="inner">
+
+❌ Creating commands for trivial actions
+
+❌ Too many tiny commands
+
+❌ No receiver separation
+
+❌ Business logic inside invoker
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Command Pattern?</li>
+
+<li>Why convert requests into objects?</li>
+
+<li>How does Command support undo?</li>
+
+<li>What is Invoker?</li>
+
+<li>What is Receiver?</li>
+
+<li>What is Macro Command?</li>
+
+<li>How do schedulers use Command?</li>
+
+<li>How do queues use Command?</li>
+
+<li>Command vs Strategy?</li>
+
+<li>Command vs State?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+26. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Whenever requirements mention:
+
+<pre>
+
+Undo
+
+Redo
+
+Queue
+
+Retry
+
+Schedule
+
+Macro
+
+</pre>
+
+immediately think:
+
+<pre>
+
+Command Pattern
+
+</pre>
+
+This pattern appears often
+in system design and enterprise software.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+27. Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Command Pattern
+
+↓
+
+Request As Object
+
+↓
+
+Invoker
+
+↓
+
+Command
+
+↓
+
+Receiver
+
+↓
+
+Undo
+
+↓
+
+Queue
+
+↓
+
+Scheduler
+
+</pre>
+
+<div class="callout interview">
+
+Interview Shortcut:
+
+If actions must be stored,
+queued,
+retried,
+scheduled,
+or undone,
+
+think Command Pattern.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 19 -->
+<section id="template-method">
+
+<div class="section-head">
+
+<h2>
+Chapter 19: Template Method Pattern
+</h2>
+
+<p>
+
+Framework Design,
+Algorithm Skeletons,
+Hooks,
+Inheritance-Based Reuse,
+and Enterprise Application Development.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Template Method Pattern?
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Template Method defines
+the overall algorithm structure
+while allowing subclasses
+to customize specific steps.
+
+</div>
+
+<pre>
+
+Fixed Algorithm
+
+↓
+
+Customizable Steps
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Why Template Method Exists
+</summary>
+
+<div class="inner">
+
+Many systems share:
+
+<pre>
+
+Same Process
+
+Different Steps
+
+</pre>
+
+Example:
+
+<pre>
+
+Generate Report
+
+↓
+
+Fetch Data
+
+↓
+
+Format Data
+
+↓
+
+Export
+
+</pre>
+
+Overall process remains same.
+
+Some steps differ.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Real World Analogy
+</summary>
+
+<div class="inner">
+
+Making Tea:
+
+<pre>
+
+Boil Water
+
+↓
+
+Add Tea
+
+↓
+
+Pour
+
+↓
+
+Serve
+
+</pre>
+
+Making Coffee:
+
+<pre>
+
+Boil Water
+
+↓
+
+Add Coffee
+
+↓
+
+Pour
+
+↓
+
+Serve
+
+</pre>
+
+Same algorithm.
+
+Different step.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Basic Structure
+</summary>
+
+<div class="inner">
+
+Template Method contains:
+
+<pre>
+
+Abstract Class
+
+↓
+
+Template Method
+
+↓
+
+Abstract Steps
+
+↓
+
+Concrete Steps
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Abstract Base Class
+</summary>
+
+<div class="inner">
+
+<pre>
+abstract class Beverage
+{
+   public final void makeDrink()
+   {
+      boilWater();
+      brew();
+      pourIntoCup();
+      addCondiments();
+   }
+
+   protected abstract
+   void brew();
+
+   protected abstract
+   void addCondiments();
+
+   private void boilWater()
+   {
+      System.out.println(
+      "Boiling Water"
+      );
+   }
+
+   private void pourIntoCup()
+   {
+      System.out.println(
+      "Pouring Into Cup"
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Tea Implementation
+</summary>
+
+<div class="inner">
+
+<pre>
+class Tea
+extends Beverage
+{
+   protected void brew()
+   {
+      System.out.println(
+      "Steeping Tea"
+      );
+   }
+
+   protected void addCondiments()
+   {
+      System.out.println(
+      "Adding Lemon"
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Coffee Implementation
+</summary>
+
+<div class="inner">
+
+<pre>
+class Coffee
+extends Beverage
+{
+   protected void brew()
+   {
+      System.out.println(
+      "Brewing Coffee"
+      );
+   }
+
+   protected void addCondiments()
+   {
+      System.out.println(
+      "Adding Sugar"
+      );
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Client Code
+</summary>
+
+<div class="inner">
+
+<pre>
+Beverage tea =
+new Tea();
+
+tea.makeDrink();
+
+Beverage coffee =
+new Coffee();
+
+coffee.makeDrink();
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Output Flow
+</summary>
+
+<div class="inner">
+
+Tea:
+
+<pre>
+
+Boiling Water
+
+Steeping Tea
+
+Pouring Into Cup
+
+Adding Lemon
+
+</pre>
+
+Coffee:
+
+<pre>
+
+Boiling Water
+
+Brewing Coffee
+
+Pouring Into Cup
+
+Adding Sugar
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Why final Is Important
+</summary>
+
+<div class="inner">
+
+Template method:
+
+<pre>
+makeDrink()
+</pre>
+
+is usually:
+
+<pre>
+final
+</pre>
+
+Reason:
+
+Prevent subclasses from
+breaking algorithm flow.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Visual Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Beverage
+
+|
+
++----------------+
+
+| |
+
+Tea Coffee
+
+</pre>
+
+Template method:
+
+<pre>
+
+makeDrink()
+
+</pre>
+
+shared by all.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Hooks
+</summary>
+
+<div class="inner">
+
+Hooks are optional methods.
+
+Example:
+
+<pre>
+protected boolean
+customerWantsCondiments()
+{
+   return true;
+}
+</pre>
+
+Subclass may override.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Hook Example
+</summary>
+
+<div class="inner">
+
+<pre>
+if(
+customerWantsCondiments()
+)
+{
+   addCondiments();
+}
+</pre>
+
+Gives flexibility.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Framework Usage
+</summary>
+
+<div class="inner">
+
+Framework provides:
+
+<pre>
+
+Skeleton
+
+</pre>
+
+Developers provide:
+
+<pre>
+
+Implementation
+
+</pre>
+
+This is Template Method.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Spring Framework Example
+</summary>
+
+<div class="inner">
+
+Spring internally uses
+Template Method concepts.
+
+Examples:
+
+<pre>
+
+JdbcTemplate
+
+RestTemplate
+
+HibernateTemplate
+
+</pre>
+
+Framework controls flow.
+
+Developers provide logic.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. JUnit Example
+</summary>
+
+<div class="inner">
+
+JUnit follows similar ideas.
+
+Framework controls:
+
+<pre>
+
+Setup
+
+↓
+
+Execute Test
+
+↓
+
+Cleanup
+
+</pre>
+
+User customizes parts.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Template Method And OCP
+</summary>
+
+<div class="inner">
+
+Need new behavior?
+
+Create subclass.
+
+No modification.
+
+Supports OCP.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Template Method And Inheritance
+</summary>
+
+<div class="inner">
+
+Unlike Strategy:
+
+<pre>
+
+Uses Inheritance
+
+</pre>
+
+not composition.
+
+Important interview point.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Template Method vs Strategy
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Template Method</th>
+<th>Strategy</th>
+</tr>
+
+<tr>
+<td>Inheritance</td>
+<td>Composition</td>
+</tr>
+
+<tr>
+<td>Compile Time</td>
+<td>Runtime</td>
+</tr>
+
+<tr>
+<td>Fixed Algorithm</td>
+<td>Swappable Algorithm</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Template Method vs Factory
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Template</th>
+<th>Factory</th>
+</tr>
+
+<tr>
+<td>Controls Process</td>
+<td>Creates Objects</td>
+</tr>
+
+<tr>
+<td>Behavior Reuse</td>
+<td>Object Creation</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Industry Usage
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Spring Templates</li>
+
+<li>Hibernate Templates</li>
+
+<li>Game Engines</li>
+
+<li>Workflow Systems</li>
+
+<li>Report Generators</li>
+
+<li>Framework Development</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Common Beginner Mistakes
+</summary>
+
+<div class="inner">
+
+❌ Too many abstract methods
+
+❌ Deep inheritance chains
+
+❌ Breaking template flow
+
+❌ Not using final
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Template Method Pattern?</li>
+
+<li>Why use final template methods?</li>
+
+<li>What are hooks?</li>
+
+<li>Template Method vs Strategy?</li>
+
+<li>How does Spring use Template Method?</li>
+
+<li>When should it be used?</li>
+
+<li>Inheritance vs Composition?</li>
+
+<li>How does Template support OCP?</li>
+
+<li>Real-world examples?</li>
+
+<li>Framework examples?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Whenever requirements say:
+
+<pre>
+
+Process Is Same
+
+But Certain Steps Differ
+
+</pre>
+
+think:
+
+<pre>
+
+Template Method
+
+</pre>
+
+Frameworks use this pattern heavily.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. Revision Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Template Method
+
+↓
+
+Algorithm Skeleton
+
+↓
+
+Abstract Steps
+
+↓
+
+Subclass Customization
+
+↓
+
+Hooks
+
+↓
+
+Framework Design
+
+</pre>
+
+<div class="callout interview">
+
+Interview Shortcut:
+
+Same process,
+different steps
+
+=
+
+Template Method Pattern
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 20 -->
+<section id="patterns-revision">
+
+<div class="section-head">
+
+<h2>
+Chapter 20: Design Patterns Master Revision Handbook
+</h2>
+
+<p>
+
+Complete Design Patterns Revision Guide,
+Pattern Selection Framework,
+Interview Cheat Sheets,
+Comparison Tables,
+and Senior Engineer Notes.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why Design Patterns Exist
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Design Patterns are reusable
+solutions to recurring software problems.
+
+They are NOT code.
+
+They are design ideas.
+
+</div>
+
+<pre>
+
+Problem
+
+↓
+
+Pattern
+
+↓
+
+Reusable Solution
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Design Pattern Categories
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Creational
+
+↓
+
+Object Creation
+
+</pre>
+
+<pre>
+
+Structural
+
+↓
+
+Object Relationships
+
+</pre>
+
+<pre>
+
+Behavioral
+
+↓
+
+Object Communication
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Creational Patterns Revision
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Singleton</td>
+<td>One Instance</td>
+</tr>
+
+<tr>
+<td>Factory</td>
+<td>Create Objects</td>
+</tr>
+
+<tr>
+<td>Builder</td>
+<td>Create Complex Objects</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Structural Patterns Revision
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Adapter</td>
+<td>Convert Interface</td>
+</tr>
+
+<tr>
+<td>Decorator</td>
+<td>Add Behavior</td>
+</tr>
+
+<tr>
+<td>Facade</td>
+<td>Simplify Complexity</td>
+</tr>
+
+<tr>
+<td>Proxy</td>
+<td>Control Access</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Behavioral Patterns Revision
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Strategy</td>
+<td>Swap Algorithms</td>
+</tr>
+
+<tr>
+<td>Observer</td>
+<td>Notifications</td>
+</tr>
+
+<tr>
+<td>State</td>
+<td>State-Based Behavior</td>
+</tr>
+
+<tr>
+<td>Command</td>
+<td>Action As Object</td>
+</tr>
+
+<tr>
+<td>Template Method</td>
+<td>Algorithm Skeleton</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Pattern Selection Decision Tree
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Need One Object?
+
+↓
+
+Singleton
+
+----------------
+
+Need Object Creation?
+
+↓
+
+Factory
+
+----------------
+
+Need Complex Object?
+
+↓
+
+Builder
+
+----------------
+
+Need Interface Conversion?
+
+↓
+
+Adapter
+
+----------------
+
+Need Additional Features?
+
+↓
+
+Decorator
+
+----------------
+
+Need Simpler API?
+
+↓
+
+Facade
+
+----------------
+
+Need Access Control?
+
+↓
+
+Proxy
+
+----------------
+
+Need Runtime Algorithm Change?
+
+↓
+
+Strategy
+
+----------------
+
+Need Event Notification?
+
+↓
+
+Observer
+
+----------------
+
+Need State Driven Logic?
+
+↓
+
+State
+
+----------------
+
+Need Undo / Queue / Retry?
+
+↓
+
+Command
+
+----------------
+
+Need Fixed Process?
+
+↓
+
+Template Method
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Singleton Revision
+</summary>
+
+<div class="inner">
+
+<pre>
+
+One Instance
+
+Private Constructor
+
+Static Instance
+
+Global Access
+
+</pre>
+
+Use Cases:
+
+<ul>
+
+<li>Logger</li>
+<li>Cache Manager</li>
+<li>Configuration Manager</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Factory Revision
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Hide Object Creation
+
+</pre>
+
+Client knows:
+
+<pre>
+
+Interface
+
+</pre>
+
+Not:
+
+<pre>
+
+Implementation
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Builder Revision
+</summary>
+
+<div class="inner">
+
+Use when:
+
+<pre>
+
+Many Fields
+
+Optional Fields
+
+Validation
+
+Immutable Objects
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Adapter Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Make Incompatible Systems
+
+Work Together
+
+</pre>
+
+Think:
+
+<pre>
+
+Power Adapter
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Decorator Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Add Features
+
+Without Modifying Code
+
+</pre>
+
+Think:
+
+<pre>
+
+Coffee
+
++
+
+Milk
+
++
+
+Sugar
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. Facade Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Hide Complexity
+
+Behind Simpler API
+
+</pre>
+
+Think:
+
+<pre>
+
+Restaurant Waiter
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. Proxy Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Control Access
+
+</pre>
+
+Think:
+
+<pre>
+
+ATM
+
+↓
+
+Bank
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. Strategy Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Change Algorithm
+
+At Runtime
+
+</pre>
+
+Think:
+
+<pre>
+
+Payment Method
+
+Navigation Route
+
+Discount Logic
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Observer Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Notify Subscribers
+
+Automatically
+
+</pre>
+
+Think:
+
+<pre>
+
+YouTube Subscribers
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. State Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Behavior Depends
+
+On State
+
+</pre>
+
+Think:
+
+<pre>
+
+ATM
+
+Order Workflow
+
+Traffic Signal
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. Command Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Request As Object
+
+</pre>
+
+Supports:
+
+<pre>
+
+Undo
+
+Redo
+
+Queue
+
+Retry
+
+Scheduler
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Template Method Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Fixed Process
+
+Custom Steps
+
+</pre>
+
+Think:
+
+<pre>
+
+Spring Templates
+
+Frameworks
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Most Asked Interview Patterns
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Interview Frequency</th>
+</tr>
+
+<tr>
+<td>Singleton</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Factory</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Builder</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Strategy</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Observer</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>State</td>
+<td>★★★★☆</td>
+</tr>
+
+<tr>
+<td>Command</td>
+<td>★★★★☆</td>
+</tr>
+
+<tr>
+<td>Adapter</td>
+<td>★★★☆☆</td>
+</tr>
+
+<tr>
+<td>Decorator</td>
+<td>★★★☆☆</td>
+</tr>
+
+<tr>
+<td>Proxy</td>
+<td>★★★☆☆</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. Pattern Comparison Table
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Main Goal</th>
+</tr>
+
+<tr>
+<td>Singleton</td>
+<td>One Instance</td>
+</tr>
+
+<tr>
+<td>Factory</td>
+<td>Create Object</td>
+</tr>
+
+<tr>
+<td>Builder</td>
+<td>Build Complex Object</td>
+</tr>
+
+<tr>
+<td>Adapter</td>
+<td>Convert Interface</td>
+</tr>
+
+<tr>
+<td>Decorator</td>
+<td>Add Features</td>
+</tr>
+
+<tr>
+<td>Facade</td>
+<td>Simplify API</td>
+</tr>
+
+<tr>
+<td>Proxy</td>
+<td>Control Access</td>
+</tr>
+
+<tr>
+<td>Strategy</td>
+<td>Swap Algorithm</td>
+</tr>
+
+<tr>
+<td>Observer</td>
+<td>Notify Changes</td>
+</tr>
+
+<tr>
+<td>State</td>
+<td>Manage State Behavior</td>
+</tr>
+
+<tr>
+<td>Command</td>
+<td>Encapsulate Action</td>
+</tr>
+
+<tr>
+<td>Template</td>
+<td>Reuse Workflow</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Design Patterns And SOLID
+</summary>
+
+<div class="inner">
+
+Most patterns rely on:
+
+<pre>
+
+SRP
+
+OCP
+
+DIP
+
+</pre>
+
+Examples:
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>SOLID Connection</th>
+</tr>
+
+<tr>
+<td>Strategy</td>
+<td>OCP + DIP</td>
+</tr>
+
+<tr>
+<td>Factory</td>
+<td>OCP + DIP</td>
+</tr>
+
+<tr>
+<td>Observer</td>
+<td>DIP</td>
+</tr>
+
+<tr>
+<td>State</td>
+<td>SRP + OCP</td>
+</tr>
+
+<tr>
+<td>Command</td>
+<td>SRP</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Junior Developers ask:
+
+<pre>
+
+Which Pattern Is Best?
+
+</pre>
+
+Senior Engineers ask:
+
+<pre>
+
+Which Problem
+
+Am I Solving?
+
+</pre>
+
+Patterns are tools.
+
+Not goals.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. Final Interview Cheat Sheet
+</summary>
+
+<div class="inner">
+
+<pre>
+
+One Object?
+
+→ Singleton
+
+Create Objects?
+
+→ Factory
+
+Complex Object?
+
+→ Builder
+
+Convert Interface?
+
+→ Adapter
+
+Add Features?
+
+→ Decorator
+
+Hide Complexity?
+
+→ Facade
+
+Control Access?
+
+→ Proxy
+
+Change Algorithm?
+
+→ Strategy
+
+Notify Users?
+
+→ Observer
+
+Behavior By State?
+
+→ State
+
+Undo/Queue?
+
+→ Command
+
+Fixed Workflow?
+
+→ Template Method
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 21 -->
+<section id="pattern-selection">
+
+<div class="section-head">
+
+<h2>
+Chapter 21: Pattern Selection Framework
+</h2>
+
+<p>
+
+How Senior Engineers Choose Design Patterns,
+Decision Trees,
+Pattern Selection Rules,
+and Practical Design Thinking.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Most Important Rule</summary>
+
+<div class="inner">
+
+<div class="callout senior">
+
+Never start with:
+
+"What pattern should I use?"
+
+Start with:
+
+"What problem am I solving?"
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Pattern Selection Tree</summary>
+
+<div class="inner">
+
+<pre>
+
+Need One Object?
+
+↓
+
+Singleton
+
+----------------
+
+Need To Create Objects?
+
+↓
+
+Factory
+
+----------------
+
+Need Complex Construction?
+
+↓
+
+Builder
+
+----------------
+
+Need Interface Conversion?
+
+↓
+
+Adapter
+
+----------------
+
+Need Extra Functionality?
+
+↓
+
+Decorator
+
+----------------
+
+Need Simpler API?
+
+↓
+
+Facade
+
+----------------
+
+Need Access Control?
+
+↓
+
+Proxy
+
+----------------
+
+Need Runtime Algorithm?
+
+↓
+
+Strategy
+
+----------------
+
+Need Notifications?
+
+↓
+
+Observer
+
+----------------
+
+Need State Changes?
+
+↓
+
+State
+
+----------------
+
+Need Undo/Queue?
+
+↓
+
+Command
+
+----------------
+
+Need Fixed Workflow?
+
+↓
+
+Template Method
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Pattern Misuse</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Using Singleton everywhere</li>
+
+<li>Using Builder for tiny classes</li>
+
+<li>Using Observer for simple method calls</li>
+
+<li>Using Strategy for one algorithm</li>
+
+<li>Overengineering small projects</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Industry Advice</summary>
+
+<div class="inner">
+
+<pre>
+
+Simple Code
+
+↓
+
+Then Pattern
+
+</pre>
+
+Never reverse the order.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 22 -->
+<section id="top-interview">
+
+<div class="section-head">
+
+<h2>
+Chapter 22: Top Interview Design Patterns
+</h2>
+
+<p>
+
+Most Frequently Asked Design Patterns
+In SDE Interviews.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Ranking</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Frequency</th>
+</tr>
+
+<tr>
+<td>Singleton</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Factory</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Builder</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Strategy</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>Observer</td>
+<td>★★★★★</td>
+</tr>
+
+<tr>
+<td>State</td>
+<td>★★★★☆</td>
+</tr>
+
+<tr>
+<td>Command</td>
+<td>★★★★☆</td>
+</tr>
+
+<tr>
+<td>Decorator</td>
+<td>★★★☆☆</td>
+</tr>
+
+<tr>
+<td>Adapter</td>
+<td>★★★☆☆</td>
+</tr>
+
+<tr>
+<td>Proxy</td>
+<td>★★★☆☆</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Most Important To Master</summary>
+
+<div class="inner">
+
+<pre>
+
+Factory
+
+Builder
+
+Strategy
+
+Observer
+
+State
+
+</pre>
+
+These appear repeatedly in:
+
+<ul>
+
+<li>Java Interviews</li>
+
+<li>Spring Interviews</li>
+
+<li>LLD Interviews</li>
+
+<li>System Design</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Common Interview Question</summary>
+
+<div class="inner">
+
+<pre>
+
+Why Not Use If Else?
+
+</pre>
+
+Expected Answer:
+
+<pre>
+
+OCP Violation
+
+Hard To Maintain
+
+Hard To Extend
+
+Patterns Use Polymorphism
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<!-- Chapter 23 -->
+<section id="senior-notes">
+
+<div class="section-head">
+
+<h2>
+Chapter 23: Senior Engineer Design Notes
+</h2>
+
+<p>
+
+How Experienced Engineers Think About Design.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Junior vs Senior Thinking</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Junior</th>
+<th>Senior</th>
+</tr>
+
+<tr>
+<td>What Pattern?</td>
+<td>What Problem?</td>
+</tr>
+
+<tr>
+<td>How To Write?</td>
+<td>How To Maintain?</td>
+</tr>
+
+<tr>
+<td>Today</td>
+<td>Next 5 Years</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Most Important Design Principles</summary>
+
+<div class="inner">
+
+<pre>
+
+Readability
+
+Maintainability
+
+Testability
+
+Scalability
+
+Extensibility
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Golden Rules</summary>
+
+<div class="inner">
+
+<pre>
+
+Prefer Composition
+
+Over Inheritance
+
+----------------
+
+Program To Interfaces
+
+----------------
+
+Keep Classes Small
+
+----------------
+
+Avoid Tight Coupling
+
+----------------
+
+Follow SOLID
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Real Industry Truth</summary>
+
+<div class="inner">
+
+<div class="callout senior">
+
+Most production systems
+use only a handful of patterns repeatedly:
+
+Factory,
+Builder,
+Strategy,
+Observer,
+Dependency Injection.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+<!-- Chapter 24 -->
+<section id="volume4-revision">
+
+<div class="section-head">
+
+<h2>
+Chapter 24: Volume 4 Final Revision Handbook
+</h2>
+
+<p>
+
+Complete Design Patterns Revision
+For Interviews.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Complete Pattern Table</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Pattern</th>
+<th>Main Purpose</th>
+</tr>
+
+<tr>
+<td>Singleton</td>
+<td>One Instance</td>
+</tr>
+
+<tr>
+<td>Factory</td>
+<td>Create Objects</td>
+</tr>
+
+<tr>
+<td>Builder</td>
+<td>Build Complex Objects</td>
+</tr>
+
+<tr>
+<td>Adapter</td>
+<td>Convert Interface</td>
+</tr>
+
+<tr>
+<td>Decorator</td>
+<td>Add Functionality</td>
+</tr>
+
+<tr>
+<td>Facade</td>
+<td>Simplify Complexity</td>
+</tr>
+
+<tr>
+<td>Proxy</td>
+<td>Control Access</td>
+</tr>
+
+<tr>
+<td>Strategy</td>
+<td>Swap Algorithms</td>
+</tr>
+
+<tr>
+<td>Observer</td>
+<td>Notify Subscribers</td>
+</tr>
+
+<tr>
+<td>State</td>
+<td>State Based Behavior</td>
+</tr>
+
+<tr>
+<td>Command</td>
+<td>Action As Object</td>
+</tr>
+
+<tr>
+<td>Template Method</td>
+<td>Fixed Workflow</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Pattern Cheat Sheet</summary>
+
+<div class="inner">
+
+<pre>
+
+One Object
+→ Singleton
+
+Create Objects
+→ Factory
+
+Complex Construction
+→ Builder
+
+Convert Interface
+→ Adapter
+
+Add Functionality
+→ Decorator
+
+Hide Complexity
+→ Facade
+
+Control Access
+→ Proxy
+
+Change Algorithm
+→ Strategy
+
+Notify Users
+→ Observer
+
+State Changes
+→ State
+
+Undo/Redo
+→ Command
+
+Fixed Process
+→ Template Method
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. What You Have Learned</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>SOLID Principles</li>
+
+<li>Dependency Injection</li>
+
+<li>Design Patterns</li>
+
+<li>OOP Design</li>
+
+<li>Pattern Selection</li>
+
+<li>Interview Design Thinking</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Volume 4 Completion</summary>
+
+<div class="inner">
+
+<div class="callout interview">
+
+Volume 4 Complete.
+
+You now understand:
+
+SOLID +
+Design Patterns +
+Professional OOP Design
+
+which forms the foundation of:
+
+Spring Framework,
+Low Level Design,
+Backend Development,
+and SDE Interviews.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+margin-top:30px;
+">
+
+<a href="volume3.html">
+← Volume 3
+</a>
+
+<a href="volume5.html">
+Volume 5 →
+</a>
+
+</div>
+
+<div class="footer">
+
+Volume 4
+
+SOLID Principles,
+Design Patterns,
+Software Engineering,
+Interview Preparation,
+and Low Level Design Foundations.
+
+</div>
+
+</main>
+
+</div>
+
+</div>
+
+</body>
+</html>

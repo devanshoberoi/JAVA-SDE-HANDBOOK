@@ -1,0 +1,12788 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Volume 2 - Collections Framework</title>
+
+    <link rel="stylesheet" href="../css/handbook.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div class="hero">
+
+        <div class="topbar">
+            <div class="badge">
+                Volume 2 · Collections Framework · Interview Handbook
+            </div>
+
+            <button class="theme-btn" onclick="toggleTheme()">
+                Toggle Theme
+            </button>
+        </div>
+
+        <h1>Collections Framework Master Handbook</h1>
+
+        <p class="subtitle">
+            Deep dive into Java Collections, HashMap internals,
+            ArrayList, LinkedList, Sets, Queues, Maps,
+            Concurrent Collections and Interview Questions.
+        </p>
+
+    </div>
+
+    <div class="layout">
+
+        <aside>
+
+            <div class="toc-title">
+                TABLE OF CONTENTS
+            </div>
+            
+            <nav class="toc">
+<ul>
+
+<li><a href="#collections-overview">1. Collections Overview</a></li>
+
+<li><a href="#arraylist">2. ArrayList</a></li>
+
+<li><a href="#linkedlist">3. LinkedList</a></li>
+
+<li><a href="#vector">4. Vector & Stack</a></li>
+
+<li><a href="#hashset">5. HashSet</a></li>
+
+<li><a href="#treeset">6. TreeSet</a></li>
+
+<li><a href="#priorityqueue">7. PriorityQueue</a></li>
+
+<li><a href="#hashmap">8. HashMap Internals</a></li>
+
+<li><a href="#linkedhashmap">9. LinkedHashMap</a></li>
+
+<li><a href="#treemap">10. TreeMap</a></li>
+
+<li><a href="#concurrenthashmap">11. ConcurrentHashMap</a></li>
+
+<li><a href="#iterators">12. Iterator & Fail-Fast</a></li>
+
+<li><a href="#generics">13. Generics Deep Dive</a></li>
+
+<li><a href="#collections-utility">14. Collections Utility Class</a></li>
+
+<li><a href="#collections-master-revision">15. Collections Master Revision</a></li>
+
+</ul>
+</nav>
+           
+        </aside>
+
+        <main>
+
+           <section id="overview">
+
+    <div class="section-head">
+        <h2>Chapter 1: Collections Framework Overview</h2>
+
+        <p>
+            Understanding why collections exist, how they are organized,
+            and how interviewers expect you to think about them.
+        </p>
+    </div>
+
+    <div class="content">
+
+        <details open>
+
+            <summary>1. Intuition</summary>
+
+            <div class="inner">
+
+                <div class="callout intuit">
+
+                    <b>The Problem Collections Solve</b>
+
+                    Imagine storing student marks.
+
+                    <pre>
+int[] marks = new int[5];
+                    </pre>
+
+                    What happens if you need 100 students?
+
+                    You must create a bigger array and copy everything.
+
+                    Arrays are:
+
+                    • Fixed Size
+                    • Hard to Resize
+                    • Limited Operations
+
+                    Collections solve these problems.
+
+                </div>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>2. Real World Analogy</summary>
+
+            <div class="inner">
+
+                Think of Collections as storage systems.
+
+                <table>
+
+                    <tr>
+                        <th>Collection</th>
+                        <th>Analogy</th>
+                    </tr>
+
+                    <tr>
+                        <td>ArrayList</td>
+                        <td>Numbered Lockers</td>
+                    </tr>
+
+                    <tr>
+                        <td>LinkedList</td>
+                        <td>Train Compartments</td>
+                    </tr>
+
+                    <tr>
+                        <td>HashMap</td>
+                        <td>Dictionary</td>
+                    </tr>
+
+                    <tr>
+                        <td>Queue</td>
+                        <td>Ticket Counter Line</td>
+                    </tr>
+
+                    <tr>
+                        <td>TreeSet</td>
+                        <td>Sorted Leaderboard</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>3. Collections Hierarchy</summary>
+
+            <div class="inner">
+
+<pre>
+Iterable
+   |
+Collection
+   |
+------------------------------------------------
+|                    |                         |
+List                 Set                      Queue
+|                    |                         |
+----------------     ------------------       |
+|      |      |      |        |       |       |
+Array  Linked Vector HashSet Linked  TreeSet PriorityQueue
+List   List          Set
+</pre>
+
+                <hr>
+
+<pre>
+Map
+ |
+------------------------------------------------
+|                 |                |
+HashMap      LinkedHashMap      TreeMap
+ |
+ConcurrentHashMap
+</pre>
+
+                <div class="callout interview">
+
+                    <b>Interview Question</b>
+
+                    Why is Map not part of Collection hierarchy?
+
+                    Because Collection stores individual elements.
+
+                    Map stores key-value pairs.
+
+                </div>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>4. Collection vs Collections</summary>
+
+            <div class="inner">
+
+                <table>
+
+                    <tr>
+                        <th>Collection</th>
+                        <th>Collections</th>
+                    </tr>
+
+                    <tr>
+                        <td>Interface</td>
+                        <td>Utility Class</td>
+                    </tr>
+
+                    <tr>
+                        <td>Root of hierarchy</td>
+                        <td>Provides helper methods</td>
+                    </tr>
+
+                    <tr>
+                        <td>Implemented by ArrayList, Set etc.</td>
+                        <td>Provides sort(), reverse() etc.</td>
+                    </tr>
+
+                </table>
+
+<pre>
+Collections.sort(list);
+Collections.reverse(list);
+Collections.shuffle(list);
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>5. Core Interfaces</summary>
+
+            <div class="inner">
+
+                <table>
+
+                    <tr>
+                        <th>Interface</th>
+                        <th>Purpose</th>
+                    </tr>
+
+                    <tr>
+                        <td>List</td>
+                        <td>Ordered + Duplicates Allowed</td>
+                    </tr>
+
+                    <tr>
+                        <td>Set</td>
+                        <td>Unique Elements</td>
+                    </tr>
+
+                    <tr>
+                        <td>Queue</td>
+                        <td>FIFO Processing</td>
+                    </tr>
+
+                    <tr>
+                        <td>Deque</td>
+                        <td>Double Ended Queue</td>
+                    </tr>
+
+                    <tr>
+                        <td>Map</td>
+                        <td>Key Value Storage</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>6. Iterable and Iterator</summary>
+
+            <div class="inner">
+
+                Root interface:
+
+<pre>
+Iterable
+</pre>
+
+                Method:
+
+<pre>
+iterator()
+</pre>
+
+                Enables:
+
+<pre>
+for(String name : names)
+{
+    System.out.println(name);
+}
+</pre>
+
+                Internal Working:
+
+<pre>
+Iterator<String> it =
+        names.iterator();
+
+while(it.hasNext())
+{
+    System.out.println(it.next());
+}
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>7. List vs Set vs Queue</summary>
+
+            <div class="inner">
+
+                <table>
+
+                    <tr>
+                        <th>Feature</th>
+                        <th>List</th>
+                        <th>Set</th>
+                        <th>Queue</th>
+                    </tr>
+
+                    <tr>
+                        <td>Duplicates</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Usually Yes</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ordering</td>
+                        <td>Preserved</td>
+                        <td>Depends</td>
+                        <td>FIFO</td>
+                    </tr>
+
+                    <tr>
+                        <td>Index Access</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>No</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>8. Dry Run Example</summary>
+
+            <div class="inner">
+
+<pre>
+List<Integer> list =
+        new ArrayList<>();
+
+list.add(10);
+list.add(20);
+list.add(30);
+</pre>
+
+Memory:
+
+<pre>
+Index   Value
+
+0       10
+1       20
+2       30
+</pre>
+
+Access:
+
+<pre>
+list.get(1)
+</pre>
+
+Output:
+
+<pre>
+20
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>9. Common Mistakes</summary>
+
+            <div class="inner">
+
+                <ul>
+
+                    <li>Confusing Collection with Collections.</li>
+
+                    <li>Thinking HashMap is part of Collection hierarchy.</li>
+
+                    <li>Using LinkedList when ArrayList is better.</li>
+
+                    <li>Ignoring time complexity.</li>
+
+                    <li>Using raw types instead of Generics.</li>
+
+                </ul>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>10. Interview Questions</summary>
+
+            <div class="inner">
+
+                <ol>
+
+                    <li>Why was Collections Framework introduced?</li>
+
+                    <li>Difference between Collection and Collections?</li>
+
+                    <li>Difference between List and Set?</li>
+
+                    <li>Why is Map separate?</li>
+
+                    <li>What is Iterable?</li>
+
+                    <li>How does foreach work internally?</li>
+
+                    <li>Difference between Iterator and ListIterator?</li>
+
+                    <li>When would you use Queue?</li>
+
+                    <li>When would you use Set?</li>
+
+                    <li>What is the root interface of Collections?</li>
+
+                </ol>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>11. Senior Engineer Notes</summary>
+
+            <div class="inner">
+
+                Most interview candidates memorize APIs.
+
+                Strong engineers understand:
+
+                • Memory Layout
+
+                • Time Complexity
+
+                • Cache Locality
+
+                • Concurrency Impact
+
+                • Internal Implementation
+
+                The rest of this volume focuses on those topics.
+
+            </div>
+
+        </details>
+
+    </div>
+
+</section>
+
+<section id="arraylist">
+
+    <div class="section-head">
+        <h2>Chapter 2: ArrayList Deep Dive</h2>
+
+        <p>
+            Internal implementation, memory layout, resizing,
+            amortized complexity, iteration behavior, pitfalls,
+            interview traps, and practical engineering tradeoffs.
+        </p>
+    </div>
+
+    <div class="content">
+
+        <details open>
+            <summary>1. Intuition</summary>
+            <div class="inner">
+
+                <div class="callout intuit">
+                    <b>What problem does ArrayList solve?</b>
+
+                    Imagine you need a container that:
+                    <ul>
+                        <li>stores elements in order</li>
+                        <li>lets you access any element quickly by index</li>
+                        <li>grows automatically when more items are added</li>
+                    </ul>
+
+                    A normal array gives you fast indexing, but it has one big limitation:
+                    <b>fixed size</b>.
+
+                    ArrayList keeps the speed of array indexing and adds dynamic growth.
+                </div>
+
+                <div class="callout analogy">
+                    <b>Real-world analogy</b>
+                    Think of ArrayList as a row of numbered lockers in a mall.
+
+                    Each locker has a fixed slot number:
+                    <pre>
+0   1   2   3   4   5
+                    </pre>
+
+                    If you know the locker number, you can go directly there.
+                    That is why <code>get(index)</code> is very fast.
+                </div>
+
+                <div class="callout senior">
+                    <b>Senior-level intuition</b>
+                    ArrayList is optimized for:
+                    <ul>
+                        <li>random access</li>
+                        <li>iteration over contiguous memory</li>
+                        <li>append-heavy workloads</li>
+                    </ul>
+
+                    It is not ideal for frequent insertions in the middle or removals from the front.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>2. What ArrayList is internally</summary>
+            <div class="inner">
+
+                The key idea: ArrayList is backed by an array.
+
+<pre>
+public class ArrayList<E> implements List<E> {
+    transient Object[] elementData;
+    private int size;
+}
+</pre>
+
+                <table>
+                    <tr>
+                        <th>Field</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td><code>elementData</code></td>
+                        <td>The actual internal array that stores elements</td>
+                    </tr>
+                    <tr>
+                        <td><code>size</code></td>
+                        <td>Number of actual elements currently in the list</td>
+                    </tr>
+                </table>
+
+                <div class="callout mistake">
+                    <b>Common misunderstanding</b>
+                    <code>size</code> is not the same as capacity.  
+                    <code>size</code> = actual elements stored.  
+                    <code>capacity</code> = how many elements the internal array can hold before resizing.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>3. Memory layout</summary>
+            <div class="inner">
+
+                Suppose you create:
+
+<pre>
+ArrayList<String> list = new ArrayList<>();
+list.add("A");
+list.add("B");
+list.add("C");
+</pre>
+
+                The memory conceptually looks like this:
+
+<pre>
+ArrayList object
+    |
+    +-- elementData ------------------------------+
+    |                                            |
+    v                                            v
+
+Heap array:
+┌────┬────┬────┬────┬────┬────┐
+│ A  │ B  │ C  │    │    │    │
+└────┴────┴────┴────┴────┴────┘
+
+size = 3
+capacity = 6 (example)
+</pre>
+
+                Important point:
+                the elements are stored contiguously in memory, which is why iteration is cache-friendly.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>4. Size vs Capacity</summary>
+            <div class="inner">
+
+                Consider:
+
+<pre>
+ArrayList<Integer> list = new ArrayList<>(10);
+</pre>
+
+                Immediately after creation:
+
+<pre>
+size = 0
+capacity = 10
+</pre>
+
+                After:
+
+<pre>
+list.add(10);
+list.add(20);
+</pre>
+
+                Now:
+
+<pre>
+size = 2
+capacity = 10
+</pre>
+
+                <table>
+                    <tr>
+                        <th>Concept</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td><b>Size</b></td>
+                        <td>How many elements are currently present</td>
+                    </tr>
+                    <tr>
+                        <td><b>Capacity</b></td>
+                        <td>How many elements can be stored before resizing</td>
+                    </tr>
+                </table>
+
+                <div class="callout interview">
+                    <b>Interview line</b>
+                    ArrayList grows automatically, but it does not shrink on every removal. Resizing is expensive, so it is done only when required.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>5. Why get(index) is O(1)</summary>
+            <div class="inner">
+
+                Since elements are stored contiguously, the JVM can compute the location directly.
+
+<pre>
+address = baseAddress + index × elementSize
+</pre>
+
+                So if you call:
+
+<pre>
+list.get(3);
+</pre>
+
+                the runtime can jump directly to the 4th slot without traversing earlier elements.
+
+                <div class="callout intuit">
+                    <b>Why this matters</b>
+                    This is the strongest advantage of ArrayList: fast random access.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>6. Why add at end is fast</summary>
+            <div class="inner">
+
+                Appending to the end is usually cheap because the next empty slot is often already available.
+
+<pre>
+[A][B][C][ ][ ][ ]
+</pre>
+
+                Add <code>D</code>:
+
+<pre>
+[A][B][C][D][ ][ ]
+</pre>
+
+                This is typically an O(1) operation.
+
+                But if the internal array is full, a resize is triggered.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>7. Resize operation</summary>
+            <div class="inner">
+
+                Suppose capacity is full:
+
+<pre>
+capacity = 4
+size = 4
+
+[A][B][C][D]
+</pre>
+
+                If you add one more element, ArrayList allocates a bigger array and copies the old elements.
+
+                Common growth strategy is roughly 1.5x:
+
+<pre>
+newCapacity = oldCapacity + (oldCapacity >> 1)
+</pre>
+
+                Example growth:
+
+<pre>
+10 -> 15
+15 -> 22
+22 -> 33
+33 -> 49
+</pre>
+
+                Resize steps:
+
+                <ol>
+                    <li>Allocate new larger array</li>
+                    <li>Copy old elements into it</li>
+                    <li>Discard old array reference</li>
+                    <li>Insert the new element</li>
+                </ol>
+
+                <div class="callout mistake">
+                    <b>Why add() is not always O(1)</b>
+                    Most of the time it is fast, but when resizing happens, the copy operation costs O(n).
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>8. Amortized O(1)</summary>
+            <div class="inner">
+
+                This is one of the most asked interview concepts.
+
+                Appending is usually O(1), but occasionally O(n) during resize.
+
+                Over many insertions, the expensive resize cost is spread out.
+
+<pre>
+add1  -> cheap
+add2  -> cheap
+add3  -> cheap
+...
+resize -> expensive
+...
+</pre>
+
+                Average cost over time becomes:
+
+<pre>
+Amortized O(1)
+</pre>
+
+                <div class="callout senior">
+                    <b>Interview-ready explanation</b>
+                    Amortized analysis means that even though some individual operations are expensive, the average cost per operation over a long sequence is still constant.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>9. Why insertion in the middle is O(n)</summary>
+            <div class="inner">
+
+                Suppose you have:
+
+<pre>
+Index:   0   1   2   3
+Value:   A   B   C   D
+</pre>
+
+                Insert <code>X</code> at index 1:
+
+<pre>
+A   X   B   C   D
+</pre>
+
+                To make space, elements must shift right:
+
+<pre>
+B -> moves one step
+C -> moves one step
+D -> moves one step
+</pre>
+
+                That shift can take O(n) time.
+
+                <div class="callout analogy">
+                    <b>Analogy</b>
+                    Like inserting a person in the middle of a row: everyone behind them has to step back.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>10. Why remove from the middle is O(n)</summary>
+            <div class="inner">
+
+                If you remove an element from the middle, elements after it must shift left.
+
+<pre>
+Before:
+[A][B][C][D][E]
+
+Remove C:
+[A][B][D][E][ ]
+</pre>
+
+                The shifting cost is O(n).
+
+                Removing from the end is much cheaper because no shifting is needed.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>11. Time complexity table</summary>
+            <div class="inner">
+
+                <table>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Average Time</th>
+                        <th>Reason</th>
+                    </tr>
+                    <tr>
+                        <td><code>get(i)</code></td>
+                        <td>O(1)</td>
+                        <td>Direct index access</td>
+                    </tr>
+                    <tr>
+                        <td><code>set(i, x)</code></td>
+                        <td>O(1)</td>
+                        <td>Direct overwrite at index</td>
+                    </tr>
+                    <tr>
+                        <td><code>add(x)</code></td>
+                        <td>Amortized O(1)</td>
+                        <td>Occasional resize</td>
+                    </tr>
+                    <tr>
+                        <td><code>add(index, x)</code></td>
+                        <td>O(n)</td>
+                        <td>Shifting elements</td>
+                    </tr>
+                    <tr>
+                        <td><code>remove(index)</code></td>
+                        <td>O(n)</td>
+                        <td>Shifting elements</td>
+                    </tr>
+                    <tr>
+                        <td><code>contains(x)</code></td>
+                        <td>O(n)</td>
+                        <td>Linear scan</td>
+                    </tr>
+                    <tr>
+                        <td><code>indexOf(x)</code></td>
+                        <td>O(n)</td>
+                        <td>Linear scan</td>
+                    </tr>
+                </table>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>12. Null handling and duplicates</summary>
+            <div class="inner">
+
+                ArrayList allows:
+                <ul>
+                    <li>duplicate values</li>
+                    <li>null values</li>
+                </ul>
+
+<pre>
+ArrayList<String> list = new ArrayList<>();
+list.add("A");
+list.add("A");
+list.add(null);
+</pre>
+
+<pre>
+[A, A, null]
+</pre>
+
+                This makes ArrayList flexible for many application-level use cases.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>13. Iteration behavior and cache locality</summary>
+            <div class="inner">
+
+                ArrayList is fast in loops because its data is contiguous.
+
+<pre>
+for (int i = 0; i < list.size(); i++) {
+    System.out.println(list.get(i));
+}
+</pre>
+
+                Why this is efficient:
+                <ul>
+                    <li>contiguous memory access</li>
+                    <li>good CPU cache locality</li>
+                    <li>simple index calculation</li>
+                </ul>
+
+                <div class="callout senior">
+                    <b>Why ArrayList often beats LinkedList</b>
+                    Even though both can store ordered elements, ArrayList frequently wins in real systems because CPUs prefer contiguous arrays over pointer-heavy structures.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>14. Iterator and fail-fast behavior</summary>
+            <div class="inner">
+
+                ArrayList iterators are generally fail-fast.
+
+                That means if you structurally modify the list while iterating in an unsafe way, the iterator can throw a <code>ConcurrentModificationException</code>.
+
+<pre>
+for (String s : list) {
+    list.add("X"); // unsafe structural change during iteration
+}
+</pre>
+
+                Why?
+                Because the iterator expects the structure to remain stable unless modified through the iterator itself.
+
+                <div class="callout mistake">
+                    <b>Important warning</b>
+                    Fail-fast does not mean thread-safe. It is a best-effort debugging aid, not a concurrency guarantee.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>15. SubList behavior</summary>
+            <div class="inner">
+
+                ArrayList provides <code>subList()</code>, which returns a view, not necessarily a completely independent copy.
+
+<pre>
+List<Integer> sub = list.subList(1, 4);
+</pre>
+
+                Important:
+                changes in the underlying list can affect the view, and changes in the view can affect the parent structure.
+
+                <div class="callout interview">
+                    <b>Interview trap</b>
+                    Many candidates assume <code>subList()</code> always creates a new list. In reality, it often behaves like a view over the original list.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>16. Constructor variants</summary>
+            <div class="inner">
+
+                Common ways to create an ArrayList:
+
+<pre>
+new ArrayList<>();
+new ArrayList<>(10);
+new ArrayList<>(existingCollection);
+</pre>
+
+                <table>
+                    <tr>
+                        <th>Constructor</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td><code>new ArrayList&lt;&gt;()</code></td>
+                        <td>Starts with default internal capacity behavior</td>
+                    </tr>
+                    <tr>
+                        <td><code>new ArrayList&lt;&gt;(10)</code></td>
+                        <td>Pre-allocates space for 10 elements</td>
+                    </tr>
+                    <tr>
+                        <td><code>new ArrayList&lt;&gt;(collection)</code></td>
+                        <td>Copies elements from an existing collection</td>
+                    </tr>
+                </table>
+
+                <div class="callout senior">
+                    <b>Practical tip</b>
+                    If you know the approximate size in advance, pre-sizing can reduce resizing overhead.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>17. Dry run: add, resize, and access</summary>
+            <div class="inner">
+
+                Start:
+<pre>
+capacity = 3
+size = 0
+[ ][ ][ ]
+</pre>
+
+                Add A:
+<pre>
+[A][ ][ ]
+size = 1
+</pre>
+
+                Add B:
+<pre>
+[A][B][ ]
+size = 2
+</pre>
+
+                Add C:
+<pre>
+[A][B][C]
+size = 3
+</pre>
+
+                Add D:
+<pre>
+Old array full -> resize
+New array maybe 4 or 5 or 6 depending on implementation
+Copy A, B, C
+Insert D
+</pre>
+
+                Access:
+<pre>
+list.get(2) -> C
+</pre>
+
+                Remove B:
+<pre>
+[A][C][D]
+</pre>
+
+                Everything after B shifts left.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>18. When ArrayList is the right choice</summary>
+            <div class="inner">
+
+                Use ArrayList when:
+                <ul>
+                    <li>you need random access</li>
+                    <li>you mostly append items</li>
+                    <li>you iterate frequently</li>
+                    <li>you need compact memory layout</li>
+                    <li>you want general-purpose ordered storage</li>
+                </ul>
+
+                Typical use cases:
+                <ul>
+                    <li>API response lists</li>
+                    <li>search results</li>
+                    <li>in-memory buffers</li>
+                    <li>batch processing</li>
+                    <li>business objects collections</li>
+                </ul>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>19. When ArrayList is a poor choice</summary>
+            <div class="inner">
+
+                Avoid ArrayList when:
+                <ul>
+                    <li>you insert or delete frequently in the middle</li>
+                    <li>you need a lot of front removals</li>
+                    <li>you need thread-safe mutation by default</li>
+                    <li>you need a sorted unique collection</li>
+                </ul>
+
+                Better alternatives may include:
+                <ul>
+                    <li>LinkedList for specific deque-style operations</li>
+                    <li>Set for uniqueness</li>
+                    <li>Concurrent collections for thread safety</li>
+                </ul>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>20. Common mistakes</summary>
+            <div class="inner">
+
+                <ul>
+                    <li>Assuming add is always O(1)</li>
+                    <li>Confusing size and capacity</li>
+                    <li>Using LinkedList just because “insertion is faster”</li>
+                    <li>Doing repeated middle inserts in ArrayList without considering shifts</li>
+                    <li>Ignoring the cost of resizing</li>
+                    <li>Not pre-sizing when the size is already known</li>
+                    <li>Using ArrayList where set uniqueness is required</li>
+                </ul>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>21. Interview questions</summary>
+            <div class="inner">
+
+                <ol>
+                    <li>How is ArrayList implemented internally?</li>
+                    <li>What is the role of <code>elementData</code>?</li>
+                    <li>Difference between size and capacity?</li>
+                    <li>Why is <code>get()</code> O(1)?</li>
+                    <li>Why is insertion in the middle O(n)?</li>
+                    <li>Explain resize behavior.</li>
+                    <li>What is amortized O(1)?</li>
+                    <li>Why is ArrayList often preferred over LinkedList?</li>
+                    <li>What happens during iteration if the list is structurally modified?</li>
+                    <li>What is <code>subList()</code>?</li>
+                    <li>Does ArrayList allow duplicates and nulls?</li>
+                    <li>When would you pre-size an ArrayList?</li>
+                </ol>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>22. Senior-level discussion points</summary>
+            <div class="inner">
+
+                <div class="callout senior">
+                    <b>Things a senior engineer should know</b>
+                    <ul>
+                        <li>ArrayList is cache-friendly because of contiguous storage.</li>
+                        <li>Resize costs are the price paid for dynamic growth.</li>
+                        <li>Most app code prefers ArrayList because read/append workloads dominate.</li>
+                        <li>Linked structures are not automatically faster in practice.</li>
+                        <li>Choosing the right collection is about access patterns, not just theoretical complexity.</li>
+                    </ul>
+                </div>
+
+                <div class="callout interview">
+                    <b>Best interview answer style</b>
+                    Define the structure, explain the memory model, talk about complexity, mention the resize tradeoff, then end with real usage. That sequence sounds complete and confident.
+                </div>
+
+            </div>
+        </details>
+
+    </div>
+
+</section>
+
+<section id="linkedlist">
+
+    <div class="section-head">
+        <h2>Chapter 3: LinkedList Deep Dive</h2>
+
+        <p>
+            Internal node structure, pointer links, memory behavior,
+            complexity tradeoffs, traversal cost, queue/deque usage,
+            interview traps, and real-world engineering judgment.
+        </p>
+    </div>
+
+    <div class="content">
+
+        <details open>
+            <summary>1. Intuition</summary>
+            <div class="inner">
+
+                <div class="callout intuit">
+                    <b>What problem does LinkedList solve?</b>
+
+                    LinkedList is useful when you want to insert or remove items
+                    without shifting a large block of elements.
+
+                    Instead of storing values in one continuous block like ArrayList,
+                    LinkedList stores nodes that point to each other.
+
+                    Each node knows:
+                    <ul>
+                        <li>its value</li>
+                        <li>the previous node</li>
+                        <li>the next node</li>
+                    </ul>
+                </div>
+
+                <div class="callout analogy">
+                    <b>Real-world analogy</b>
+                    Think of a LinkedList like train compartments connected by hooks.
+
+                    Each compartment contains:
+                    <ul>
+                        <li>passengers = data</li>
+                        <li>hook to previous compartment</li>
+                        <li>hook to next compartment</li>
+                    </ul>
+
+                    To reach a compartment, you may need to travel through the chain.
+                </div>
+
+                <div class="callout senior">
+                    <b>Senior-level intuition</b>
+                    LinkedList optimizes for localized insertions and removals when you already have a node reference or are working at the ends.
+                    It is usually not a good default replacement for ArrayList because traversal is expensive and memory overhead is high.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>2. Internal node structure</summary>
+            <div class="inner">
+
+                Conceptually, LinkedList uses a node like this:
+
+<pre>
+class Node<E> {
+    E item;
+    Node<E> next;
+    Node<E> prev;
+}
+</pre>
+
+                Every element is wrapped inside a node object.
+
+                <table>
+                    <tr>
+                        <th>Field</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td><code>item</code></td>
+                        <td>The actual stored value</td>
+                    </tr>
+                    <tr>
+                        <td><code>next</code></td>
+                        <td>Reference to the next node</td>
+                    </tr>
+                    <tr>
+                        <td><code>prev</code></td>
+                        <td>Reference to the previous node</td>
+                    </tr>
+                </table>
+
+                <div class="callout mistake">
+                    <b>Important memory cost</b>
+                    A LinkedList node stores extra references for linking.
+                    That means every element has overhead beyond the actual data.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>3. Memory layout</summary>
+            <div class="inner">
+
+                Suppose you insert A, B, C.
+
+<pre>
+head -> [A] <-> [B] <-> [C] <- tail
+</pre>
+
+                More detailed memory view:
+
+<pre>
+Head
+ |
+ v
+┌─────────┐    ┌─────────┐    ┌─────────┐
+│ item:A  │    │ item:B  │    │ item:C  │
+│ prev:∅  │<-->| prev:A  │<-->| prev:B  │
+│ next:B  │    │ next:C  │    │ next:∅  │
+└─────────┘    └─────────┘    └─────────┘
+</pre>
+
+                Each node is a separate object, so the list is not contiguous in memory.
+
+                This matters for cache locality and traversal speed.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>4. Why LinkedList is called doubly linked</summary>
+            <div class="inner">
+
+                It is called doubly linked because each node points in two directions:
+                <ul>
+                    <li>to the next node</li>
+                    <li>to the previous node</li>
+                </ul>
+
+                This makes:
+                <ul>
+                    <li>forward traversal easy</li>
+                    <li>backward traversal possible</li>
+                    <li>middle insertions and deletions more natural than in a singly linked structure</li>
+                </ul>
+
+                <div class="callout senior">
+                    <b>Why this matters</b>
+                    The bidirectional links make LinkedList flexible, but they also increase memory usage and pointer maintenance cost.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>5. Head and tail references</summary>
+            <div class="inner">
+
+                LinkedList typically keeps references to both ends:
+
+<pre>
+head  -> first node
+tail  -> last node
+</pre>
+
+                That allows:
+                <ul>
+                    <li>fast insertion at front</li>
+                    <li>fast insertion at end</li>
+                    <li>fast removal from front</li>
+                    <li>fast removal from end</li>
+                </ul>
+
+                Example operations:
+<pre>
+addFirst(x)
+addLast(x)
+removeFirst()
+removeLast()
+</pre>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>6. Why get(index) is O(n)</summary>
+            <div class="inner">
+
+                Unlike ArrayList, LinkedList cannot jump directly to an index.
+
+                To access index 5, it must traverse node by node:
+
+<pre>
+head -> 0 -> 1 -> 2 -> 3 -> 4 -> 5
+</pre>
+
+                So:
+
+<pre>
+get(5)
+</pre>
+
+                is O(n), because the list has to walk through links.
+
+                <div class="callout intuit">
+                    <b>Key idea</b>
+                    LinkedList trades direct access for flexible insertion/removal.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>7. Why insertion can be O(1) in some cases</summary>
+            <div class="inner">
+
+                If you already have the node location, insertion is fast.
+
+                Example:
+<pre>
+A <-> B <-> C
+</pre>
+
+                Insert X between B and C:
+
+<pre>
+A <-> B <-> X <-> C
+</pre>
+
+                Only a few pointer updates are needed.
+
+                That is why insertion can be O(1) once the position is known.
+
+                <div class="callout interview">
+                    <b>Interview nuance</b>
+                    “LinkedList insert is O(1)” is only partially true.
+                    Finding the insertion position may still cost O(n).
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>8. Why deletion can be O(1) in some cases</summary>
+            <div class="inner">
+
+                If the node to delete is already known, you only need to relink neighbors.
+
+<pre>
+prev <-> target <-> next
+</pre>
+
+                After deletion:
+
+<pre>
+prev <-> next
+</pre>
+
+                The node is disconnected in constant time.
+
+                But again, locating the node may take O(n).
+
+            </div>
+        </details>
+
+        <details>
+            <summary>9. Time complexity table</summary>
+            <div class="inner">
+
+                <table>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Complexity</th>
+                        <th>Reason</th>
+                    </tr>
+                    <tr>
+                        <td><code>get(index)</code></td>
+                        <td>O(n)</td>
+                        <td>Must traverse from head or tail</td>
+                    </tr>
+                    <tr>
+                        <td><code>addFirst(x)</code></td>
+                        <td>O(1)</td>
+                        <td>Only pointer updates at head</td>
+                    </tr>
+                    <tr>
+                        <td><code>addLast(x)</code></td>
+                        <td>O(1)</td>
+                        <td>Tail reference makes insertion cheap</td>
+                    </tr>
+                    <tr>
+                        <td><code>removeFirst()</code></td>
+                        <td>O(1)</td>
+                        <td>Move head pointer</td>
+                    </tr>
+                    <tr>
+                        <td><code>removeLast()</code></td>
+                        <td>O(1)</td>
+                        <td>Tail reference makes it cheap</td>
+                    </tr>
+                    <tr>
+                        <td><code>add(index, x)</code></td>
+                        <td>O(n)</td>
+                        <td>Need to traverse to index first</td>
+                    </tr>
+                    <tr>
+                        <td><code>remove(index)</code></td>
+                        <td>O(n)</td>
+                        <td>Need to traverse to index first</td>
+                    </tr>
+                    <tr>
+                        <td><code>contains(x)</code></td>
+                        <td>O(n)</td>
+                        <td>Linear search</td>
+                    </tr>
+                </table>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>10. Internal working of addLast</summary>
+            <div class="inner">
+
+                Suppose the list is:
+
+<pre>
+[A] <-> [B]
+head      tail
+</pre>
+
+                Adding C at the end means:
+
+<pre>
+[B].next = [C]
+[C].prev = [B]
+tail = [C]
+</pre>
+
+                Only local pointer changes are required.
+
+                <div class="callout analogy">
+                    <b>Analogy</b>
+                    Adding a new train compartment at the end is easy if the last compartment is already known.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>11. Dry run of insertion in the middle</summary>
+            <div class="inner">
+
+                Initial list:
+
+<pre>
+[A] <-> [B] <-> [C] <-> [D]
+</pre>
+
+                Insert X between B and C:
+
+<pre>
+Step 1: find B
+Step 2: create node X
+Step 3: B.next = X
+Step 4: X.prev = B
+Step 5: X.next = C
+Step 6: C.prev = X
+</pre>
+
+                Final structure:
+
+<pre>
+[A] <-> [B] <-> [X] <-> [C] <-> [D]
+</pre>
+
+                No shifting of all later elements is needed.
+                But traversal to B still costs time.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>12. Why LinkedList is often slower than ArrayList</summary>
+            <div class="inner">
+
+                This is one of the most important interview traps.
+
+                Many people think:
+                <ul>
+                    <li>LinkedList insert = fast</li>
+                    <li>ArrayList insert = slow</li>
+                </ul>
+
+                That is too simplistic.
+
+                LinkedList problems:
+                <ul>
+                    <li>each element is a separate object</li>
+                    <li>extra pointer overhead</li>
+                    <li>poor cache locality</li>
+                    <li>traversal is expensive</li>
+                    <li>memory fragmentation in practice</li>
+                </ul>
+
+                ArrayList advantages:
+                <ul>
+                    <li>contiguous memory</li>
+                    <li>very fast iteration</li>
+                    <li>excellent CPU cache behavior</li>
+                    <li>lower per-element overhead</li>
+                </ul>
+
+                <div class="callout senior">
+                    <b>Practical truth</b>
+                    For most application code, ArrayList is faster than LinkedList unless your access pattern specifically benefits from front-end deque operations or node-level manipulations.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>13. Queue and Deque usage</summary>
+            <div class="inner">
+
+                LinkedList implements both List and Deque.
+                That means it can act as:
+                <ul>
+                    <li>a list</li>
+                    <li>a queue</li>
+                    <li>a deque</li>
+                </ul>
+
+                Examples:
+<pre>
+Queue<Integer> q = new LinkedList<>();
+Deque<Integer> d = new LinkedList<>();
+</pre>
+
+                Common operations:
+<pre>
+q.offer(x);
+q.poll();
+d.addFirst(x);
+d.addLast(x);
+d.removeFirst();
+d.removeLast();
+</pre>
+
+                <div class="callout interview">
+                    <b>Interview note</b>
+                    LinkedList can be used as a Queue or Deque, but ArrayDeque is often a better queue/deque implementation in practice.
+                </div>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>14. Nulls and duplicates</summary>
+            <div class="inner">
+
+                LinkedList allows:
+                <ul>
+                    <li>duplicate values</li>
+                    <li>null values</li>
+                </ul>
+
+<pre>
+LinkedList<String> list = new LinkedList<>();
+list.add("A");
+list.add("A");
+list.add(null);
+</pre>
+
+<pre>
+[A, A, null]
+</pre>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>15. Iterator behavior</summary>
+            <div class="inner">
+
+                LinkedList also uses iterators for traversal.
+
+<pre>
+for (String s : list) {
+    System.out.println(s);
+}
+</pre>
+
+                Internally, this walks node by node using next pointers.
+
+                Because each step follows a reference, traversal tends to be less cache-friendly than ArrayList.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>16. Fail-fast behavior</summary>
+            <div class="inner">
+
+                Like many Java collections, LinkedList iterators are generally fail-fast.
+
+<pre>
+Iterator<String> it = list.iterator();
+list.add("X"); // structural modification
+it.next();     // may throw ConcurrentModificationException
+</pre>
+
+                This is not thread safety.
+                It is a best-effort mechanism to detect illegal concurrent structural changes during iteration.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>17. When LinkedList makes sense</summary>
+            <div class="inner">
+
+                LinkedList can be useful when:
+                <ul>
+                    <li>you frequently add/remove at the beginning</li>
+                    <li>you work with deque-style operations</li>
+                    <li>you already have node references in a custom algorithm</li>
+                    <li>the size changes heavily and random access is rare</li>
+                </ul>
+
+                Example patterns:
+                <ul>
+                    <li>processing queues</li>
+                    <li>undo/redo chains</li>
+                    <li>deque-based algorithms</li>
+                </ul>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>18. When LinkedList is a bad choice</summary>
+            <div class="inner">
+
+                Avoid LinkedList when:
+                <ul>
+                    <li>you need random access</li>
+                    <li>you iterate often</li>
+                    <li>memory efficiency matters</li>
+                    <li>you need a common general-purpose list</li>
+                </ul>
+
+                In many real systems, ArrayList is the better default.
+
+            </div>
+        </details>
+
+        <details>
+            <summary>19. ArrayList vs LinkedList</summary>
+            <div class="inner">
+
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>ArrayList</th>
+                        <th>LinkedList</th>
+                    </tr>
+                    <tr>
+                        <td>Storage</td>
+                        <td>Contiguous array</td>
+                        <td>Nodes connected by pointers</td>
+                    </tr>
+                    <tr>
+                        <td>Access by index</td>
+                        <td>Fast O(1)</td>
+                        <td>Slow O(n)</td>
+                    </tr>
+                    <tr>
+                        <td>Insert at end</td>
+                        <td>Amortized O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>Insert in middle</td>
+                        <td>O(n)</td>
+                        <td>O(n) traversal + O(1) relink</td>
+                    </tr>
+                    <tr>
+                        <td>Iteration</td>
+                        <td>Fast, cache-friendly</td>
+                        <td>Slower, pointer chasing</td>
+                    </tr>
+                    <tr>
+                        <td>Memory overhead</td>
+                        <td>Lower</td>
+                        <td>Higher</td>
+                    </tr>
+                    <tr>
+                        <td>Best for</td>
+                        <td>Reads, iteration, appends</td>
+                        <td>Deque operations, linked algorithms</td>
+                    </tr>
+                </table>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>20. Common mistakes</summary>
+            <div class="inner">
+
+                <ul>
+                    <li>Using LinkedList as a default choice without a workload reason</li>
+                    <li>Assuming insert/delete are always O(1)</li>
+                    <li>Ignoring traversal cost</li>
+                    <li>Ignoring memory overhead of nodes</li>
+                    <li>Thinking LinkedList is faster just because it has “links”</li>
+                    <li>Choosing LinkedList for random access workloads</li>
+                </ul>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>21. Interview questions</summary>
+            <div class="inner">
+
+                <ol>
+                    <li>How is LinkedList implemented internally?</li>
+                    <li>What does a Node contain?</li>
+                    <li>Why is get(index) O(n)?</li>
+                    <li>Why is addFirst O(1)?</li>
+                    <li>Why is LinkedList usually slower than ArrayList?</li>
+                    <li>What is the difference between singly and doubly linked lists?</li>
+                    <li>Can LinkedList store null values?</li>
+                    <li>Can LinkedList contain duplicates?</li>
+                    <li>When would you use LinkedList over ArrayList?</li>
+                    <li>Why is LinkedList suitable for Deque?</li>
+                    <li>What is fail-fast behavior?</li>
+                    <li>Is LinkedList thread-safe?</li>
+                </ol>
+
+            </div>
+        </details>
+
+        <details>
+            <summary>22. Senior-level discussion points</summary>
+            <div class="inner">
+
+                <div class="callout senior">
+                    <b>What strong engineers notice</b>
+                    <ul>
+                        <li>LinkedList is pointer-heavy and cache-unfriendly.</li>
+                        <li>Its theoretical advantages often disappear in real workloads.</li>
+                        <li>ArrayList is the default list for most services.</li>
+                        <li>LinkedList is best understood as a specialized data structure, not a universal replacement.</li>
+                    </ul>
+                </div>
+
+                <div class="callout interview">
+                    <b>Interview response pattern</b>
+                    Explain node structure, then pointer traversal, then time complexity, then compare it to ArrayList using memory and cache locality. That answer sounds precise and senior.
+                </div>
+
+            </div>
+        </details>
+
+    </div>
+
+</section>
+
+<section id="hashset">
+
+    <div class="section-head">
+        <h2>Chapter 4: HashSet Deep Dive</h2>
+
+        <p>
+            Internal implementation, hashing, uniqueness,
+            equals() & hashCode(), collision handling,
+            performance characteristics and interview questions.
+        </p>
+    </div>
+
+    <div class="content">
+
+        <details open>
+            <summary>1. Intuition</summary>
+
+            <div class="inner">
+
+                <div class="callout intuit">
+
+                    <b>Problem HashSet Solves</b>
+
+                    Suppose you are maintaining a database of employee IDs.
+
+                    Requirement:
+
+                    <ul>
+                        <li>No duplicates allowed</li>
+                        <li>Fast searching</li>
+                        <li>Fast insertion</li>
+                    </ul>
+
+                    ArrayList allows duplicates.
+
+                    HashSet automatically prevents duplicates.
+
+                </div>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>2. Real World Analogy</summary>
+
+            <div class="inner">
+
+                Imagine a club entry system.
+
+                Every visitor gets checked.
+
+                If the visitor already entered:
+
+<pre>
+Entry Denied
+</pre>
+
+                If new:
+
+<pre>
+Entry Allowed
+</pre>
+
+                That's exactly what HashSet does.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>3. Important Interview Fact</summary>
+
+            <div class="inner">
+
+                <div class="callout interview">
+
+                    <b>Most Important Fact</b>
+
+                    HashSet is internally backed by HashMap.
+
+                </div>
+
+<pre>
+public class HashSet<E>
+{
+    private transient HashMap<E,Object> map;
+}
+</pre>
+
+                Every element becomes:
+
+<pre>
+Key -> Element
+
+Value -> Dummy Object
+</pre>
+
+                Example:
+
+<pre>
+HashSet<String> set =
+        new HashSet<>();
+
+set.add("Java");
+set.add("Python");
+</pre>
+
+Internally:
+
+<pre>
+Java   -> PRESENT
+Python -> PRESENT
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>4. Internal Architecture</summary>
+
+            <div class="inner">
+
+<pre>
+HashSet
+    |
+    v
+
+HashMap
+    |
+    v
+
+Buckets
+</pre>
+
+                Diagram:
+
+<pre>
+Bucket 0 -> null
+
+Bucket 1 -> Java
+
+Bucket 2 -> null
+
+Bucket 3 -> Python
+
+Bucket 4 -> null
+</pre>
+
+                Storage is based on hashes.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>5. Why Duplicates Are Not Allowed</summary>
+
+            <div class="inner">
+
+<pre>
+set.add("Java");
+set.add("Java");
+</pre>
+
+                First insertion:
+
+<pre>
+Java inserted
+</pre>
+
+                Second insertion:
+
+                HashSet checks:
+
+<pre>
+equals()
+hashCode()
+</pre>
+
+                Same element found.
+
+                Therefore:
+
+<pre>
+Insertion Rejected
+</pre>
+
+                Final:
+
+<pre>
+[Java]
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>6. hashCode() Deep Dive</summary>
+
+            <div class="inner">
+
+                Every Java object has:
+
+<pre>
+hashCode()
+</pre>
+
+                Example:
+
+<pre>
+String s = "Java";
+
+System.out.println(
+        s.hashCode());
+</pre>
+
+                Output:
+
+<pre>
+2301506
+</pre>
+
+                HashSet uses hash codes to decide where data should go.
+
+                Think:
+
+<pre>
+Hash Code
+      |
+      v
+Bucket Selection
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>7. equals() Deep Dive</summary>
+
+            <div class="inner">
+
+                hashCode narrows down the bucket.
+
+                equals confirms identity.
+
+                Example:
+
+<pre>
+String a = "Java";
+String b = "Java";
+</pre>
+
+                Same content.
+
+                Therefore:
+
+<pre>
+a.equals(b)
+true
+</pre>
+
+                HashSet uses both methods together.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>8. How Insertion Works Internally</summary>
+
+            <div class="inner">
+
+                Insert:
+
+<pre>
+set.add("Java");
+</pre>
+
+Step 1
+
+<pre>
+Calculate hashCode
+</pre>
+
+Step 2
+
+<pre>
+Find bucket index
+</pre>
+
+Step 3
+
+<pre>
+Check existing nodes
+</pre>
+
+Step 4
+
+<pre>
+Insert if not duplicate
+</pre>
+
+                Diagram:
+
+<pre>
+"Java"
+   |
+hashCode()
+   |
+Bucket 3
+   |
+Insert
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>9. Collision</summary>
+
+            <div class="inner">
+
+                Interview favorite.
+
+                Sometimes:
+
+<pre>
+Object A
+Object B
+</pre>
+
+                produce:
+
+<pre>
+Same Bucket
+</pre>
+
+                This is called:
+
+<pre>
+Collision
+</pre>
+
+                Example:
+
+<pre>
+hash(A)=3
+hash(B)=3
+</pre>
+
+                Both go to bucket 3.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>10. Collision Handling</summary>
+
+            <div class="inner">
+
+Before collision:
+
+<pre>
+Bucket 3
+
+Java
+</pre>
+
+After collision:
+
+<pre>
+Bucket 3
+
+Java
+  |
+Python
+</pre>
+
+                Java uses chaining.
+
+                Multiple entries can exist in one bucket.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>11. Null Handling</summary>
+
+            <div class="inner">
+
+                HashSet allows one null.
+
+<pre>
+set.add(null);
+set.add(null);
+</pre>
+
+Result:
+
+<pre>
+[null]
+</pre>
+
+                Because duplicates aren't allowed.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>12. Ordering</summary>
+
+            <div class="inner">
+
+                HashSet does NOT guarantee insertion order.
+
+<pre>
+set.add("A");
+set.add("B");
+set.add("C");
+</pre>
+
+Output might be:
+
+<pre>
+[C, A, B]
+</pre>
+
+                Order is unpredictable.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>13. Time Complexity</summary>
+
+            <div class="inner">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Average</th>
+</tr>
+
+<tr>
+<td>add()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>contains()</td>
+<td>O(1)</td>
+</tr>
+
+</table>
+
+                Worst case:
+
+<pre>
+O(n)
+</pre>
+
+                when many collisions occur.
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>14. Memory Diagram</summary>
+
+            <div class="inner">
+
+<pre>
+HashSet
+   |
+   v
+
+HashMap
+
+Bucket0 -> null
+
+Bucket1 -> Java
+
+Bucket2 -> null
+
+Bucket3 -> Python
+
+Bucket4 -> C++
+</pre>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>15. Common Mistakes</summary>
+
+            <div class="inner">
+
+<ul>
+
+<li>Thinking HashSet stores data directly.</li>
+
+<li>Ignoring equals().</li>
+
+<li>Ignoring hashCode().</li>
+
+<li>Expecting insertion order.</li>
+
+<li>Using mutable objects as keys.</li>
+
+</ul>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>16. Interview Questions</summary>
+
+            <div class="inner">
+
+<ol>
+
+<li>How is HashSet implemented internally?</li>
+
+<li>Why are duplicates not allowed?</li>
+
+<li>Why does HashSet use HashMap?</li>
+
+<li>What is hashing?</li>
+
+<li>What is collision?</li>
+
+<li>How are collisions handled?</li>
+
+<li>Why must equals and hashCode be consistent?</li>
+
+<li>Can HashSet store null?</li>
+
+<li>Does HashSet preserve insertion order?</li>
+
+<li>What is the complexity of contains()?</li>
+
+</ol>
+
+            </div>
+
+        </details>
+
+        <details>
+
+            <summary>17. Senior Engineer Notes</summary>
+
+            <div class="inner">
+
+                Strong engineers understand:
+
+                <ul>
+
+                    <li>HashSet performance depends on HashMap.</li>
+
+                    <li>equals/hashCode bugs can break production systems.</li>
+
+                    <li>Bad hash functions cause collisions.</li>
+
+                    <li>HashSet is usually preferred over List when uniqueness matters.</li>
+
+                </ul>
+
+                <div class="callout senior">
+
+                    The next chapter (HashMap Internals)
+                    is the single most important Collections topic
+                    for Java interviews.
+
+                </div>
+
+            </div>
+
+        </details>
+
+    </div>
+
+</section>
+
+<section id="hashmap">
+
+<div class="section-head">
+    <h2>Chapter 5: HashMap Internals (Part 1)</h2>
+
+    <p>
+        The most important collection in Java.
+        Understanding HashMap deeply is essential for
+        SDE interviews, backend engineering, caching,
+        databases, distributed systems and production code.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Intuition</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+<b>The Problem HashMap Solves</b>
+
+Suppose we have:
+
+<pre>
+101 -> Rahul
+102 -> Amit
+103 -> Devansh
+</pre>
+
+Requirements:
+
+<ul>
+<li>Fast Search</li>
+<li>Fast Insert</li>
+<li>Fast Delete</li>
+</ul>
+
+Searching inside ArrayList:
+
+<pre>
+[101,102,103]
+</pre>
+
+requires scanning.
+
+Complexity:
+
+<pre>
+O(n)
+</pre>
+
+HashMap aims for:
+
+<pre>
+O(1)
+</pre>
+
+average lookup.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Real World Analogy</summary>
+
+<div class="inner">
+
+Imagine a huge library.
+
+Without HashMap:
+
+<pre>
+Search shelf by shelf
+</pre>
+
+With HashMap:
+
+<pre>
+Book Number
+     ↓
+Exact Shelf
+     ↓
+Book Found
+</pre>
+
+Hashing gives us the shelf directly.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. What is HashMap?</summary>
+
+<div class="inner">
+
+HashMap stores:
+
+<pre>
+Key -> Value
+</pre>
+
+Example:
+
+<pre>
+Map<Integer,String> map =
+        new HashMap<>();
+
+map.put(101,"Rahul");
+map.put(102,"Amit");
+</pre>
+
+Memory Concept:
+
+<pre>
+101 -> Rahul
+
+102 -> Amit
+</pre>
+
+Important:
+
+<ul>
+<li>Keys must be unique</li>
+<li>Values can repeat</li>
+<li>One null key allowed</li>
+<li>Multiple null values allowed</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Internal Architecture</summary>
+
+<div class="inner">
+
+HashMap internally uses:
+
+<pre>
+Bucket Array
+</pre>
+
+Diagram:
+
+<pre>
+Index
+
+0 -> null
+
+1 -> Node
+
+2 -> null
+
+3 -> Node
+
+4 -> null
+</pre>
+
+Every bucket can store entries.
+
+HashMap's entire performance depends on:
+
+<ul>
+<li>Hash Function</li>
+<li>Bucket Distribution</li>
+<li>Collision Handling</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Internal Source Code Structure</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+Simplified Node class:
+
+<pre>
+static class Node<K,V>
+{
+    final int hash;
+
+    final K key;
+
+    V value;
+
+    Node<K,V> next;
+}
+</pre>
+
+Fields:
+
+<table>
+
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>hash</td>
+<td>Stores hash value</td>
+</tr>
+
+<tr>
+<td>key</td>
+<td>Actual key</td>
+</tr>
+
+<tr>
+<td>value</td>
+<td>Actual value</td>
+</tr>
+
+<tr>
+<td>next</td>
+<td>Used for collision chaining</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Memory Diagram</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+map.put("Java",100);
+map.put("Python",200);
+</pre>
+
+Memory:
+
+<pre>
+HashMap
+   |
+   v
+
+Bucket Array
+
+0 -> null
+
+1 -> Node(Java,100)
+
+2 -> null
+
+3 -> Node(Python,200)
+
+4 -> null
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. What is Hashing?</summary>
+
+<div class="inner">
+
+Hashing converts:
+
+<pre>
+Key
+</pre>
+
+into:
+
+<pre>
+Integer Hash Value
+</pre>
+
+Example:
+
+<pre>
+"Java"
+</pre>
+
+hashCode:
+
+<pre>
+2301506
+</pre>
+
+Now HashMap uses this number
+to determine bucket location.
+
+Think:
+
+<pre>
+Key
+ ↓
+
+Hash Function
+
+ ↓
+
+Hash Value
+
+ ↓
+
+Bucket Index
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Bucket Calculation</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+hashCode = 2301506
+</pre>
+
+Bucket count:
+
+<pre>
+16
+</pre>
+
+Index:
+
+<pre>
+hash % bucketSize
+</pre>
+
+Conceptually:
+
+<pre>
+2301506 % 16
+
+=
+2
+</pre>
+
+Store inside:
+
+<pre>
+Bucket 2
+</pre>
+
+Actual JDK implementation is slightly optimized.
+
+Interviewers care about the concept.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. put() Internal Working</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+map.put("Java",100);
+</pre>
+
+Internally:
+
+Step 1
+
+<pre>
+Compute hashCode
+</pre>
+
+Step 2
+
+<pre>
+Find bucket
+</pre>
+
+Step 3
+
+<pre>
+Check collision
+</pre>
+
+Step 4
+
+<pre>
+Insert node
+</pre>
+
+Flow:
+
+<pre>
+put()
+
+ ↓
+
+hashCode()
+
+ ↓
+
+bucket index
+
+ ↓
+
+collision check
+
+ ↓
+
+insert
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. put() Dry Run</summary>
+
+<div class="inner">
+
+Insert:
+
+<pre>
+map.put("Java",100);
+</pre>
+
+Hash:
+
+<pre>
+2301506
+</pre>
+
+Index:
+
+<pre>
+2
+</pre>
+
+Memory:
+
+<pre>
+Bucket 2
+
+Java -> 100
+</pre>
+
+Insert:
+
+<pre>
+map.put("Python",200);
+</pre>
+
+Memory:
+
+<pre>
+Bucket 2
+
+Java -> 100
+
+Bucket 5
+
+Python -> 200
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. get() Internal Working</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+map.get("Java");
+</pre>
+
+Process:
+
+Step 1
+
+<pre>
+Compute hash
+</pre>
+
+Step 2
+
+<pre>
+Find bucket
+</pre>
+
+Step 3
+
+<pre>
+Search node
+</pre>
+
+Step 4
+
+<pre>
+Return value
+</pre>
+
+Flow:
+
+<pre>
+get()
+
+ ↓
+
+hashCode()
+
+ ↓
+
+bucket
+
+ ↓
+
+equals()
+
+ ↓
+
+value
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. Why equals() Is Needed</summary>
+
+<div class="inner">
+
+Important Interview Topic.
+
+Two objects can produce:
+
+<pre>
+Same Bucket
+</pre>
+
+Example:
+
+<pre>
+hash(A)=3
+
+hash(B)=3
+</pre>
+
+HashMap must verify:
+
+<pre>
+Are A and B
+actually same?
+</pre>
+
+It uses:
+
+<pre>
+equals()
+</pre>
+
+Therefore:
+
+<pre>
+hashCode()
++
+equals()
+</pre>
+
+work together.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Collision</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+Collision means:
+
+<pre>
+Different Keys
+
+↓
+
+Same Bucket
+</pre>
+
+Example:
+
+<pre>
+Java
+Python
+C++
+</pre>
+
+all land in:
+
+<pre>
+Bucket 3
+</pre>
+
+Diagram:
+
+<pre>
+Bucket 3
+
+Java
+
+Python
+
+C++
+</pre>
+
+This creates extra work.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Collision Handling (Chaining)</summary>
+
+<div class="inner">
+
+Java uses:
+
+<pre>
+Separate Chaining
+</pre>
+
+Diagram:
+
+<pre>
+Bucket 3
+
+Java
+  |
+  v
+
+Python
+  |
+  v
+
+C++
+</pre>
+
+Each node points to next.
+
+This is why Node contains:
+
+<pre>
+next
+</pre>
+
+reference.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. containsKey()</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+map.containsKey("Java");
+</pre>
+
+Internally:
+
+<pre>
+hashCode()
+
+↓
+
+bucket
+
+↓
+
+equals()
+</pre>
+
+Result:
+
+<pre>
+true
+</pre>
+
+Average Complexity:
+
+<pre>
+O(1)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Null Handling</summary>
+
+<div class="inner">
+
+HashMap allows:
+
+<pre>
+One Null Key
+</pre>
+
+Example:
+
+<pre>
+map.put(null,"Admin");
+</pre>
+
+Valid.
+
+Also:
+
+<pre>
+map.put(1,null);
+map.put(2,null);
+</pre>
+
+Valid.
+
+Memory:
+
+<pre>
+null -> Admin
+
+1 -> null
+
+2 -> null
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Complexity Table</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Average</th>
+</tr>
+
+<tr>
+<td>put()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>get()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>containsKey()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>O(1)</td>
+</tr>
+
+</table>
+
+Worst Case:
+
+<pre>
+O(n)
+</pre>
+
+when many collisions occur.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Thinking HashMap stores data in sorted order.</li>
+
+<li>Ignoring equals().</li>
+
+<li>Ignoring hashCode().</li>
+
+<li>Assuming O(1) is always guaranteed.</li>
+
+<li>Using mutable keys.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is HashMap?</li>
+
+<li>How is HashMap implemented internally?</li>
+
+<li>What is hashing?</li>
+
+<li>What is a bucket?</li>
+
+<li>How does put() work?</li>
+
+<li>How does get() work?</li>
+
+<li>What is collision?</li>
+
+<li>How are collisions handled?</li>
+
+<li>Why does HashMap use equals()?</li>
+
+<li>Why does HashMap use hashCode()?</li>
+
+<li>Can HashMap store null keys?</li>
+
+<li>Can HashMap store null values?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+HashMap performance depends on:
+
+<ul>
+
+<li>Good hash distribution</li>
+
+<li>Low collision rate</li>
+
+<li>Proper equals/hashCode implementation</li>
+
+<li>Correct capacity sizing</li>
+
+</ul>
+
+The next chapter will cover:
+
+<pre>
+Load Factor
+
+Resize
+
+Rehashing
+
+Treeification
+
+Red Black Trees
+
+Java 8 Improvements
+</pre>
+
+which are the topics that differentiate
+junior and senior interview answers.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="hashmap-advanced">
+
+<div class="section-head">
+    <h2>Chapter 6: HashMap Internals (Part 2)</h2>
+
+    <p>
+        Load Factor, Capacity, Resize,
+        Rehashing, Treeification,
+        Red Black Trees, Mutable Keys,
+        Java 7 vs Java 8 Internals.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Why Capacity Exists</summary>
+
+<div class="inner">
+
+HashMap stores data inside:
+
+<pre>
+Bucket Array
+</pre>
+
+Example:
+
+<pre>
+Capacity = 16
+</pre>
+
+means:
+
+<pre>
+0
+1
+2
+3
+...
+15
+</pre>
+
+16 buckets exist.
+
+Memory:
+
+<pre>
+Bucket Array
+
+0 -> null
+1 -> null
+2 -> Node
+3 -> null
+...
+15 -> Node
+</pre>
+
+More buckets:
+
+✅ Less collision
+
+❌ More memory
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Default Capacity</summary>
+
+<div class="inner">
+
+When you write:
+
+<pre>
+Map<Integer,String> map =
+        new HashMap<>();
+</pre>
+
+Default Capacity:
+
+<pre>
+16
+</pre>
+
+Interview Question:
+
+Why 16?
+
+Because:
+
+<pre>
+16 = 2^4
+</pre>
+
+Power of 2 enables extremely fast bucket calculations.
+
+Java uses bit operations instead of expensive modulo operations.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Load Factor</summary>
+
+<div class="inner">
+
+One of the most asked interview topics.
+
+Default:
+
+<pre>
+0.75
+</pre>
+
+Meaning:
+
+<pre>
+75% Full
+</pre>
+
+Then resize occurs.
+
+Formula:
+
+<pre>
+Threshold
+
+=
+
+Capacity × LoadFactor
+</pre>
+
+Example:
+
+<pre>
+Capacity = 16
+
+LoadFactor = 0.75
+</pre>
+
+Threshold:
+
+<pre>
+16 × 0.75
+
+=
+
+12
+</pre>
+
+After 12 elements:
+
+Resize triggered.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Why 0.75?</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+Suppose:
+
+Load Factor:
+
+<pre>
+1.0
+</pre>
+
+Pros:
+
+<pre>
+Less memory
+</pre>
+
+Cons:
+
+<pre>
+More collisions
+</pre>
+
+---
+
+Suppose:
+
+<pre>
+0.25
+</pre>
+
+Pros:
+
+<pre>
+Few collisions
+</pre>
+
+Cons:
+
+<pre>
+Huge memory waste
+</pre>
+
+---
+
+Java engineers found:
+
+<pre>
+0.75
+</pre>
+
+provides a great balance.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Resize Trigger</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Capacity = 16
+
+Threshold = 12
+</pre>
+
+Current Elements:
+
+<pre>
+11
+</pre>
+
+Insert one more:
+
+<pre>
+12
+</pre>
+
+Still okay.
+
+Insert next:
+
+<pre>
+13
+</pre>
+
+Resize starts.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Resize Operation</summary>
+
+<div class="inner">
+
+Old:
+
+<pre>
+Capacity = 16
+</pre>
+
+New:
+
+<pre>
+Capacity = 32
+</pre>
+
+HashMap doubles capacity.
+
+Formula:
+
+<pre>
+newCapacity
+
+=
+
+oldCapacity * 2
+</pre>
+
+Example:
+
+<pre>
+16 -> 32
+
+32 -> 64
+
+64 -> 128
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Rehashing</summary>
+
+<div class="inner">
+
+Most Important Topic.
+
+After resizing:
+
+Old Bucket:
+
+<pre>
+16 Buckets
+</pre>
+
+becomes:
+
+<pre>
+32 Buckets
+</pre>
+
+Every existing node must be recalculated.
+
+Example:
+
+Before:
+
+<pre>
+Java
+
+Bucket 3
+</pre>
+
+After resize:
+
+<pre>
+Java
+
+Bucket 19
+</pre>
+
+This process is:
+
+<pre>
+Rehashing
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Rehashing Diagram</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+Capacity = 4
+
+0
+1
+2 -> Java
+3
+</pre>
+
+Resize:
+
+<pre>
+Capacity = 8
+</pre>
+
+After:
+
+<pre>
+0
+1
+2
+3
+4
+5
+6 -> Java
+7
+</pre>
+
+Nodes may move.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Why Resize Is Expensive</summary>
+
+<div class="inner">
+
+Resize requires:
+
+<pre>
+Create New Array
+</pre>
+
+↓
+
+<pre>
+Visit Every Node
+</pre>
+
+↓
+
+<pre>
+Recalculate Bucket
+</pre>
+
+↓
+
+<pre>
+Insert Again
+</pre>
+
+Complexity:
+
+<pre>
+O(n)
+</pre>
+
+Therefore resizing should not happen frequently.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Constructor Optimization</summary>
+
+<div class="inner">
+
+If you know size:
+
+Bad:
+
+<pre>
+new HashMap<>();
+</pre>
+
+Better:
+
+<pre>
+new HashMap<>(1000);
+</pre>
+
+Reduces resize operations.
+
+Common backend optimization.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. Collision Review</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+Java
+
+Python
+
+C++
+</pre>
+
+all land in:
+
+<pre>
+Bucket 3
+</pre>
+
+Memory:
+
+<pre>
+Bucket 3
+
+Java
+ |
+Python
+ |
+C++
+</pre>
+
+This is chaining.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. Problem With Excessive Collisions</summary>
+
+<div class="inner">
+
+Normal:
+
+<pre>
+O(1)
+</pre>
+
+Many collisions:
+
+<pre>
+O(n)
+</pre>
+
+Because JVM must traverse:
+
+<pre>
+Node
+ ↓
+Node
+ ↓
+Node
+ ↓
+Node
+</pre>
+
+like LinkedList.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Java 8 Treeification</summary>
+
+<div class="inner">
+
+Huge interview topic.
+
+Before Java 8:
+
+Collision Chain:
+
+<pre>
+A
+ |
+B
+ |
+C
+ |
+D
+ |
+E
+</pre>
+
+Search:
+
+<pre>
+O(n)
+</pre>
+
+Java 8 improvement:
+
+Convert chain into:
+
+<pre>
+Red Black Tree
+</pre>
+
+Search becomes:
+
+<pre>
+O(log n)
+</pre>
+
+Huge improvement.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Treeification Threshold</summary>
+
+<div class="inner">
+
+Java converts chain to tree when:
+
+<pre>
+Nodes >= 8
+</pre>
+
+Threshold:
+
+<pre>
+TREEIFY_THRESHOLD = 8
+</pre>
+
+Interview favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Treeification Diagram</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+A
+ |
+B
+ |
+C
+ |
+D
+ |
+E
+ |
+F
+ |
+G
+ |
+H
+</pre>
+
+After:
+
+<pre>
+        D
+      /   \
+     B     F
+    / \   / \
+   A  C E   G
+             \
+              H
+</pre>
+
+Red Black Tree structure.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Untreeify Threshold</summary>
+
+<div class="inner">
+
+If nodes reduce:
+
+Tree can become LinkedList again.
+
+Threshold:
+
+<pre>
+6
+</pre>
+
+Called:
+
+<pre>
+UNTREEIFY_THRESHOLD
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Mutable Key Disaster</summary>
+
+<div class="inner">
+
+Extremely important.
+
+Example:
+
+<pre>
+class Employee
+{
+    int id;
+}
+</pre>
+
+Insert:
+
+<pre>
+Employee e = new Employee();
+
+e.id = 100;
+
+map.put(e,"Developer");
+</pre>
+
+Later:
+
+<pre>
+e.id = 200;
+</pre>
+
+Now:
+
+<pre>
+map.get(e)
+</pre>
+
+returns:
+
+<pre>
+null
+</pre>
+
+Why?
+
+HashCode changed.
+
+Bucket changed.
+
+Object lost.
+
+Production bug.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Immutable Keys</summary>
+
+<div class="inner">
+
+Best Practice:
+
+Use immutable keys.
+
+Examples:
+
+<pre>
+String
+
+Integer
+
+UUID
+</pre>
+
+Safe.
+
+Predictable.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. equals() and hashCode() Contract</summary>
+
+<div class="inner">
+
+Rule:
+
+If:
+
+<pre>
+a.equals(b)
+
+true
+</pre>
+
+Then:
+
+<pre>
+a.hashCode()
+
+==
+
+b.hashCode()
+</pre>
+
+must be true.
+
+Violation breaks HashMap.
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Java 7 vs Java 8 HashMap</summary>
+
+<div class="inner">
+
+Java 7:
+
+<pre>
+Collision
+
+↓
+
+LinkedList
+</pre>
+
+Worst Case:
+
+<pre>
+O(n)
+</pre>
+
+Java 8:
+
+<pre>
+Collision
+
+↓
+
+LinkedList
+
+↓
+
+Red Black Tree
+</pre>
+
+Worst Case:
+
+<pre>
+O(log n)
+</pre>
+
+Much better.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Production Best Practices</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Always override equals/hashCode together.</li>
+
+<li>Prefer immutable keys.</li>
+
+<li>Pre-size large HashMaps.</li>
+
+<li>Avoid poor hash functions.</li>
+
+<li>Monitor memory usage for huge maps.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Advanced Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Why is default capacity 16?</li>
+
+<li>Why is load factor 0.75?</li>
+
+<li>What triggers resize?</li>
+
+<li>What is rehashing?</li>
+
+<li>Why is resize expensive?</li>
+
+<li>What is treeification?</li>
+
+<li>Why threshold 8?</li>
+
+<li>What is untreeify threshold?</li>
+
+<li>What is a mutable key problem?</li>
+
+<li>How does Java 8 improve HashMap?</li>
+
+<li>Why must equals and hashCode be consistent?</li>
+
+<li>Why are immutable keys preferred?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers understand:
+
+<ul>
+
+<li>HashMap is the foundation of HashSet.</li>
+
+<li>HashMap concepts appear in caches, databases and distributed systems.</li>
+
+<li>Load factor is a memory-performance tradeoff.</li>
+
+<li>Treeification prevents collision attacks.</li>
+
+<li>Poor key design can destroy HashMap performance.</li>
+
+</ul>
+
+<div class="callout senior">
+
+If you fully understand Chapters 5 and 6,
+you understand more HashMap internals
+than most Java developers.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="linkedhashmap">
+
+<div class="section-head">
+    <h2>Chapter 7: LinkedHashMap & TreeMap</h2>
+
+    <p>
+        Ordered maps, sorted maps,
+        LRU cache implementation,
+        Red Black Trees,
+        NavigableMap and interview questions.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Why LinkedHashMap Exists</summary>
+
+<div class="inner">
+
+HashMap does NOT guarantee order.
+
+Example:
+
+<pre>
+map.put(3,"C");
+map.put(1,"A");
+map.put(2,"B");
+</pre>
+
+Output:
+
+<pre>
+{2=B,3=C,1=A}
+</pre>
+
+Order unpredictable.
+
+Sometimes we need:
+
+<pre>
+Insertion Order
+</pre>
+
+For this Java provides:
+
+<pre>
+LinkedHashMap
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. LinkedHashMap Internal Structure</summary>
+
+<div class="inner">
+
+LinkedHashMap extends HashMap.
+
+Internally:
+
+<pre>
+HashMap
++
+Doubly Linked List
+</pre>
+
+Diagram:
+
+<pre>
+Bucket Array
+
+        Java
+          |
+Python <- Node -> C++
+          |
+        Spring
+</pre>
+
+Nodes are connected.
+
+This preserves order.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Memory Diagram</summary>
+
+<div class="inner">
+
+HashMap Structure:
+
+<pre>
+Buckets
+
+0 -> Java
+
+3 -> Python
+
+5 -> Spring
+</pre>
+
+LinkedHashMap adds:
+
+<pre>
+Java <-> Python <-> Spring
+</pre>
+
+Extra memory cost.
+
+But insertion order maintained.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Insertion Order Preservation</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+Map<Integer,String> map =
+        new LinkedHashMap<>();
+
+map.put(3,"C");
+map.put(1,"A");
+map.put(2,"B");
+</pre>
+
+Output:
+
+<pre>
+3=C
+1=A
+2=B
+</pre>
+
+Exactly same order.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Access Order Mode</summary>
+
+<div class="inner">
+
+Special constructor:
+
+<pre>
+new LinkedHashMap<>(
+16,
+0.75f,
+true
+);
+</pre>
+
+Third parameter:
+
+<pre>
+accessOrder=true
+</pre>
+
+Now recently accessed entries move to end.
+
+Used for:
+
+<pre>
+LRU Cache
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. LRU Cache Concept</summary>
+
+<div class="inner">
+
+LRU:
+
+<pre>
+Least Recently Used
+</pre>
+
+Memory:
+
+<pre>
+A <-> B <-> C
+</pre>
+
+Access:
+
+<pre>
+A
+</pre>
+
+Becomes:
+
+<pre>
+B <-> C <-> A
+</pre>
+
+Most recently used moved to end.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Building LRU Cache</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+<pre>
+class LRUCache
+extends LinkedHashMap<Integer,Integer>
+{
+    private int capacity;
+
+    public LRUCache(int capacity)
+    {
+        super(capacity,0.75f,true);
+        this.capacity=capacity;
+    }
+
+    @Override
+    protected boolean removeEldestEntry(
+        Map.Entry<Integer,Integer> eldest)
+    {
+        return size() > capacity;
+    }
+}
+</pre>
+
+Asked frequently in LLD interviews.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. LinkedHashMap Complexity</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Complexity</th>
+</tr>
+
+<tr>
+<td>put()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>get()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>O(1)</td>
+</tr>
+
+</table>
+
+Almost same as HashMap.
+
+Extra memory overhead exists.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. When To Use LinkedHashMap</summary>
+
+<div class="inner">
+
+Use when:
+
+<ul>
+
+<li>Order matters</li>
+
+<li>Building cache</li>
+
+<li>Need predictable iteration</li>
+
+<li>Configuration storage</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<hr>
+
+<details>
+
+<summary>10. Why TreeMap Exists</summary>
+
+<div class="inner">
+
+HashMap:
+
+<pre>
+Fast
+</pre>
+
+LinkedHashMap:
+
+<pre>
+Ordered
+</pre>
+
+But neither provides:
+
+<pre>
+Sorting
+</pre>
+
+TreeMap provides:
+
+<pre>
+Automatically Sorted Keys
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. TreeMap Internal Structure</summary>
+
+<div class="inner">
+
+TreeMap uses:
+
+<pre>
+Red Black Tree
+</pre>
+
+Not Hash Table.
+
+Diagram:
+
+<pre>
+        50
+      /    \
+    30      70
+   /  \    /  \
+ 20   40 60   80
+</pre>
+
+Balanced tree.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. What Is A Red Black Tree?</summary>
+
+<div class="inner">
+
+Self-balancing BST.
+
+Rules:
+
+<ul>
+
+<li>Root always black</li>
+
+<li>No two red nodes adjacent</li>
+
+<li>Tree remains balanced</li>
+
+</ul>
+
+Guarantees:
+
+<pre>
+O(log n)
+</pre>
+
+operations.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Automatic Sorting</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+TreeMap<Integer,String> map =
+        new TreeMap<>();
+
+map.put(30,"C");
+map.put(10,"A");
+map.put(20,"B");
+</pre>
+
+Output:
+
+<pre>
+10=A
+20=B
+30=C
+</pre>
+
+Automatically sorted.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Comparable vs Comparator</summary>
+
+<div class="inner">
+
+TreeMap needs sorting logic.
+
+Option 1:
+
+<pre>
+Comparable
+</pre>
+
+Inside class.
+
+Option 2:
+
+<pre>
+Comparator
+</pre>
+
+External sorting logic.
+
+Example:
+
+<pre>
+TreeMap<String,Integer>
+</pre>
+
+sorted alphabetically.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Custom Comparator Example</summary>
+
+<div class="inner">
+
+Reverse order:
+
+<pre>
+TreeMap<Integer,String> map =
+new TreeMap<>(
+(a,b)->b-a
+);
+</pre>
+
+Output:
+
+<pre>
+100
+50
+20
+10
+</pre>
+
+Descending order.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. NavigableMap Features</summary>
+
+<div class="inner">
+
+TreeMap implements:
+
+<pre>
+NavigableMap
+</pre>
+
+Useful methods:
+
+<pre>
+ceilingKey()
+
+floorKey()
+
+higherKey()
+
+lowerKey()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Ceiling Example</summary>
+
+<div class="inner">
+
+Tree:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Query:
+
+<pre>
+ceilingKey(25)
+</pre>
+
+Result:
+
+<pre>
+30
+</pre>
+
+Smallest key >= 25
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Floor Example</summary>
+
+<div class="inner">
+
+Tree:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Query:
+
+<pre>
+floorKey(25)
+</pre>
+
+Result:
+
+<pre>
+20
+</pre>
+
+Largest key <= 25
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Complexity Table</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Complexity</th>
+</tr>
+
+<tr>
+<td>put()</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>get()</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>O(log n)</td>
+</tr>
+
+</table>
+
+Because Red Black Tree.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. HashMap vs LinkedHashMap vs TreeMap</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Feature</th>
+<th>HashMap</th>
+<th>LinkedHashMap</th>
+<th>TreeMap</th>
+</tr>
+
+<tr>
+<td>Order</td>
+<td>No</td>
+<td>Insertion</td>
+<td>Sorted</td>
+</tr>
+
+<tr>
+<td>Implementation</td>
+<td>Hash Table</td>
+<td>Hash Table + DLL</td>
+<td>RB Tree</td>
+</tr>
+
+<tr>
+<td>put()</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>get()</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(log n)</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Expecting HashMap order.</li>
+
+<li>Using TreeMap without Comparable.</li>
+
+<li>Ignoring Comparator.</li>
+
+<li>Using TreeMap when sorting isn't needed.</li>
+
+<li>Using LinkedHashMap when HashMap is enough.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Difference between HashMap and LinkedHashMap?</li>
+
+<li>Difference between LinkedHashMap and TreeMap?</li>
+
+<li>What is access order mode?</li>
+
+<li>How is LRU cache implemented?</li>
+
+<li>What is a Red Black Tree?</li>
+
+<li>Why TreeMap operations are O(log n)?</li>
+
+<li>What is NavigableMap?</li>
+
+<li>Difference between Comparable and Comparator?</li>
+
+<li>What is ceilingKey()?</li>
+
+<li>What is floorKey()?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers know:
+
+<ul>
+
+<li>HashMap = Fastest General Purpose Map</li>
+
+<li>LinkedHashMap = Order Preservation</li>
+
+<li>TreeMap = Sorted Data</li>
+
+<li>LinkedHashMap powers many cache implementations</li>
+
+<li>TreeMap powers range-query systems</li>
+
+</ul>
+
+<div class="callout senior">
+
+A huge number of backend systems use
+LinkedHashMap for LRU caches and
+TreeMap for sorted lookups.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="treeset">
+
+<div class="section-head">
+    <h2>Chapter 8: TreeSet Deep Dive</h2>
+
+    <p>
+        Sorted Sets, Red Black Trees,
+        NavigableSet, Comparable,
+        Comparator and Interview Questions.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Intuition</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+HashSet gives:
+
+<pre>
+Unique Elements
+</pre>
+
+But not sorted.
+
+Suppose you store:
+
+<pre>
+50
+20
+10
+40
+30
+</pre>
+
+You want:
+
+<pre>
+10
+20
+30
+40
+50
+</pre>
+
+automatically.
+
+TreeSet solves this problem.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Real World Analogy</summary>
+
+<div class="inner">
+
+Imagine a leaderboard.
+
+Requirements:
+
+<ul>
+
+<li>No duplicate ranks</li>
+
+<li>Always sorted</li>
+
+<li>Quick lookup</li>
+
+</ul>
+
+TreeSet behaves like a self-maintaining leaderboard.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Internal Architecture</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+TreeSet internally uses:
+
+<pre>
+TreeMap
+</pre>
+
+Source Concept:
+
+<pre>
+private transient NavigableMap<E,Object> m;
+</pre>
+
+Storage:
+
+<pre>
+Element -> PRESENT
+</pre>
+
+Exactly like:
+
+<pre>
+HashSet
+    ↓
+HashMap
+
+TreeSet
+    ↓
+TreeMap
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Memory Diagram</summary>
+
+<div class="inner">
+
+Insert:
+
+<pre>
+50
+20
+10
+40
+30
+</pre>
+
+Tree Structure:
+
+<pre>
+        30
+      /    \
+    20      50
+   /       /
+ 10      40
+</pre>
+
+Actual Red Black Tree is more complex,
+but conceptually this is how data is organized.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Why TreeSet Is Sorted</summary>
+
+<div class="inner">
+
+TreeSet stores elements inside:
+
+<pre>
+Red Black Tree
+</pre>
+
+Red Black Trees maintain order automatically.
+
+Therefore:
+
+<pre>
+set.add(50);
+set.add(20);
+set.add(10);
+</pre>
+
+Output:
+
+<pre>
+10
+20
+50
+</pre>
+
+without calling sort().
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. No Duplicates Allowed</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+TreeSet<Integer> set =
+        new TreeSet<>();
+
+set.add(10);
+set.add(10);
+set.add(10);
+</pre>
+
+Result:
+
+<pre>
+[10]
+</pre>
+
+Duplicates rejected.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Natural Ordering</summary>
+
+<div class="inner">
+
+By default TreeSet uses:
+
+<pre>
+Comparable
+</pre>
+
+Example:
+
+<pre>
+TreeSet<String> set =
+        new TreeSet<>();
+</pre>
+
+Output:
+
+<pre>
+Apple
+Banana
+Orange
+</pre>
+
+Alphabetical order.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Comparable Deep Dive</summary>
+
+<div class="inner">
+
+Interface:
+
+<pre>
+public interface Comparable<T>
+{
+    int compareTo(T o);
+}
+</pre>
+
+Example:
+
+<pre>
+class Student
+implements Comparable<Student>
+{
+    int marks;
+
+    @Override
+    public int compareTo(Student s)
+    {
+        return this.marks - s.marks;
+    }
+}
+</pre>
+
+Now TreeSet can sort Students.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Comparator Deep Dive</summary>
+
+<div class="inner">
+
+Comparator provides external sorting logic.
+
+Example:
+
+<pre>
+TreeSet<Integer> set =
+new TreeSet<>(
+(a,b)->b-a
+);
+</pre>
+
+Output:
+
+<pre>
+50
+40
+30
+20
+10
+</pre>
+
+Descending order.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Comparable vs Comparator</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Comparable</th>
+<th>Comparator</th>
+</tr>
+
+<tr>
+<td>Inside Class</td>
+<td>Outside Class</td>
+</tr>
+
+<tr>
+<td>Single Sorting Rule</td>
+<td>Multiple Sorting Rules</td>
+</tr>
+
+<tr>
+<td>compareTo()</td>
+<td>compare()</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. NavigableSet</summary>
+
+<div class="inner">
+
+TreeSet implements:
+
+<pre>
+NavigableSet
+</pre>
+
+Powerful operations:
+
+<pre>
+ceiling()
+
+floor()
+
+higher()
+
+lower()
+</pre>
+
+Frequently asked.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. ceiling()</summary>
+
+<div class="inner">
+
+Data:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Query:
+
+<pre>
+ceiling(25)
+</pre>
+
+Result:
+
+<pre>
+30
+</pre>
+
+Smallest element ≥ 25.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. floor()</summary>
+
+<div class="inner">
+
+Data:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Query:
+
+<pre>
+floor(25)
+</pre>
+
+Result:
+
+<pre>
+20
+</pre>
+
+Largest element ≤ 25.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. higher()</summary>
+
+<div class="inner">
+
+Data:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Query:
+
+<pre>
+higher(20)
+</pre>
+
+Result:
+
+<pre>
+30
+</pre>
+
+Strictly greater.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. lower()</summary>
+
+<div class="inner">
+
+Data:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Query:
+
+<pre>
+lower(20)
+</pre>
+
+Result:
+
+<pre>
+10
+</pre>
+
+Strictly smaller.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Time Complexity</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Complexity</th>
+</tr>
+
+<tr>
+<td>add()</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>contains()</td>
+<td>O(log n)</td>
+</tr>
+
+</table>
+
+Reason:
+
+<pre>
+Red Black Tree
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. HashSet vs TreeSet</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Feature</th>
+<th>HashSet</th>
+<th>TreeSet</th>
+</tr>
+
+<tr>
+<td>Order</td>
+<td>No</td>
+<td>Sorted</td>
+</tr>
+
+<tr>
+<td>Internal DS</td>
+<td>HashMap</td>
+<td>TreeMap</td>
+</tr>
+
+<tr>
+<td>add()</td>
+<td>O(1)</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>contains()</td>
+<td>O(1)</td>
+<td>O(log n)</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Expecting insertion order.</li>
+
+<li>Confusing TreeSet with LinkedHashSet.</li>
+
+<li>Using mutable comparison fields.</li>
+
+<li>Writing incorrect compareTo().</li>
+
+<li>Violating Comparator contract.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>How is TreeSet implemented internally?</li>
+
+<li>Why is TreeSet sorted?</li>
+
+<li>Difference between HashSet and TreeSet?</li>
+
+<li>Difference between Comparable and Comparator?</li>
+
+<li>What is a Red Black Tree?</li>
+
+<li>What is ceiling()?</li>
+
+<li>What is floor()?</li>
+
+<li>What is higher()?</li>
+
+<li>What is lower()?</li>
+
+<li>Why is add() O(log n)?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Use TreeSet when:
+
+<ul>
+
+<li>Ordering matters</li>
+
+<li>Range queries matter</li>
+
+<li>Need floor/ceiling operations</li>
+
+<li>Need sorted unique elements</li>
+
+</ul>
+
+Avoid TreeSet when:
+
+<ul>
+
+<li>You only need uniqueness</li>
+
+<li>HashSet can do the job</li>
+
+</ul>
+
+HashSet is usually faster.
+
+TreeSet provides more functionality.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="priorityqueue">
+
+<div class="section-head">
+    <h2>Chapter 9: PriorityQueue & Heap Internals</h2>
+
+    <p>
+        Binary Heaps, Min Heap, Max Heap,
+        Internal Array Representation,
+        Heapify, Top K Problems,
+        Scheduling Systems and Interview Questions.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Intuition</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Normal Queue:
+
+<pre>
+A → B → C
+</pre>
+
+First Come First Serve.
+
+But what if:
+
+<pre>
+VIP Customer arrives
+</pre>
+
+Should VIP wait?
+
+No.
+
+We need:
+
+<pre>
+Priority Based Processing
+</pre>
+
+That is exactly what PriorityQueue solves.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Real World Analogy</summary>
+
+<div class="inner">
+
+Hospital Emergency Room.
+
+Patients:
+
+<pre>
+Patient A - Minor Injury
+
+Patient B - Heart Attack
+
+Patient C - Fever
+</pre>
+
+Treatment Order:
+
+<pre>
+B
+C
+A
+</pre>
+
+Not arrival order.
+
+Priority decides.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. What Is PriorityQueue?</summary>
+
+<div class="inner">
+
+PriorityQueue is a Queue where:
+
+<pre>
+Highest Priority
+or
+Lowest Priority
+</pre>
+
+comes out first.
+
+Default Java implementation:
+
+<pre>
+Min Heap
+</pre>
+
+Example:
+
+<pre>
+PriorityQueue<Integer> pq =
+        new PriorityQueue<>();
+
+pq.add(30);
+pq.add(10);
+pq.add(20);
+</pre>
+
+Internally:
+
+<pre>
+10
+20
+30
+</pre>
+
+Smallest element has highest priority.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Internal Data Structure</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+PriorityQueue uses:
+
+<pre>
+Binary Heap
+</pre>
+
+Internally:
+
+<pre>
+Object[]
+</pre>
+
+array.
+
+Not:
+
+<pre>
+Tree Nodes
+</pre>
+
+Actual structure:
+
+<pre>
+Object[] queue;
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. What Is A Binary Heap?</summary>
+
+<div class="inner">
+
+Complete Binary Tree.
+
+Example:
+
+<pre>
+        10
+      /    \
+    20      30
+   /  \
+ 40   50
+</pre>
+
+Rules:
+
+Min Heap:
+
+<pre>
+Parent <= Children
+</pre>
+
+Max Heap:
+
+<pre>
+Parent >= Children
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Array Representation</summary>
+
+<div class="inner">
+
+Heap:
+
+<pre>
+        10
+      /    \
+    20      30
+   /  \
+ 40   50
+</pre>
+
+Stored as:
+
+<pre>
+Index:
+
+0  1  2  3  4
+
+Value:
+
+10 20 30 40 50
+</pre>
+
+No pointers needed.
+
+Very memory efficient.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Parent Child Formula</summary>
+
+<div class="inner">
+
+For node:
+
+<pre>
+index = i
+</pre>
+
+Parent:
+
+<pre>
+(i - 1) / 2
+</pre>
+
+Left Child:
+
+<pre>
+2*i + 1
+</pre>
+
+Right Child:
+
+<pre>
+2*i + 2
+</pre>
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. add() Operation</summary>
+
+<div class="inner">
+
+Insert:
+
+<pre>
+10
+20
+30
+</pre>
+
+Add:
+
+<pre>
+5
+</pre>
+
+Step 1:
+
+Insert at end.
+
+<pre>
+10 20 30 5
+</pre>
+
+Step 2:
+
+Heapify Up.
+
+Swap:
+
+<pre>
+10 5 30 20
+</pre>
+
+Swap again:
+
+<pre>
+5 10 30 20
+</pre>
+
+Heap restored.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Heapify Up Diagram</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+        10
+      /    \
+    20      30
+   /
+  5
+</pre>
+
+After:
+
+<pre>
+        5
+      /   \
+    10     30
+   /
+ 20
+</pre>
+
+New element bubbles upward.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. poll() Operation</summary>
+
+<div class="inner">
+
+Remove highest priority.
+
+Example:
+
+<pre>
+        5
+      /   \
+    10     30
+   /
+ 20
+</pre>
+
+Remove:
+
+<pre>
+5
+</pre>
+
+Move last node to root:
+
+<pre>
+       20
+      /  \
+    10   30
+</pre>
+
+Heapify Down.
+
+Result:
+
+<pre>
+       10
+      /  \
+    20   30
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. Heapify Down</summary>
+
+<div class="inner">
+
+Parent compared with children.
+
+Violation:
+
+<pre>
+20
+|
+10
+</pre>
+
+Swap.
+
+Continue until heap property restored.
+
+Complexity:
+
+<pre>
+O(log n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. peek()</summary>
+
+<div class="inner">
+
+Returns top element.
+
+Does not remove.
+
+<pre>
+pq.peek();
+</pre>
+
+Complexity:
+
+<pre>
+O(1)
+</pre>
+
+Most asked interview question.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Complexity Table</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Complexity</th>
+</tr>
+
+<tr>
+<td>add()</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>poll()</td>
+<td>O(log n)</td>
+</tr>
+
+<tr>
+<td>peek()</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>contains()</td>
+<td>O(n)</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Min Heap vs Max Heap</summary>
+
+<div class="inner">
+
+Min Heap:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+Top:
+
+<pre>
+10
+</pre>
+
+Max Heap:
+
+<pre>
+40
+30
+20
+10
+</pre>
+
+Top:
+
+<pre>
+40
+</pre>
+
+Java default:
+
+<pre>
+Min Heap
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Creating Max Heap</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+Code:
+
+<pre>
+PriorityQueue<Integer> maxHeap =
+new PriorityQueue<>(
+Collections.reverseOrder()
+);
+</pre>
+
+Now:
+
+<pre>
+Largest Element
+</pre>
+
+comes first.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Top K Largest Elements</summary>
+
+<div class="inner">
+
+Classic Interview Question.
+
+Array:
+
+<pre>
+3 2 1 5 6 4
+</pre>
+
+Find:
+
+<pre>
+Top 2 Largest
+</pre>
+
+Use:
+
+<pre>
+Min Heap
+</pre>
+
+Size:
+
+<pre>
+k
+</pre>
+
+Complexity:
+
+<pre>
+O(n log k)
+</pre>
+
+Important interview pattern.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Kth Largest Element</summary>
+
+<div class="inner">
+
+LeetCode Favorite.
+
+Maintain heap size:
+
+<pre>
+k
+</pre>
+
+After processing:
+
+<pre>
+heap.peek()
+</pre>
+
+is answer.
+
+Very common.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Dijkstra Algorithm Usage</summary>
+
+<div class="inner">
+
+PriorityQueue powers:
+
+<pre>
+Dijkstra
+</pre>
+
+Nodes processed by:
+
+<pre>
+Minimum Distance
+</pre>
+
+PriorityQueue always returns:
+
+<pre>
+Smallest Distance Node
+</pre>
+
+Efficient graph processing.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Production Use Cases</summary>
+
+<div class="inner">
+
+Used in:
+
+<ul>
+
+<li>Task Scheduling</li>
+
+<li>CPU Scheduling</li>
+
+<li>Event Processing</li>
+
+<li>Graph Algorithms</li>
+
+<li>Load Balancers</li>
+
+<li>Job Queues</li>
+
+<li>Rate Limiting</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Thinking PriorityQueue is sorted.</li>
+
+<li>Confusing Heap with BST.</li>
+
+<li>Using contains() frequently.</li>
+
+<li>Forgetting Java default is Min Heap.</li>
+
+<li>Expecting iteration order to be sorted.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is PriorityQueue?</li>
+
+<li>What data structure backs PriorityQueue?</li>
+
+<li>What is a Binary Heap?</li>
+
+<li>Difference between Min Heap and Max Heap?</li>
+
+<li>How does add() work?</li>
+
+<li>How does poll() work?</li>
+
+<li>Why is peek() O(1)?</li>
+
+<li>How do you create a Max Heap?</li>
+
+<li>What is Heapify?</li>
+
+<li>Where is PriorityQueue used?</li>
+
+<li>How do you solve Top K problems?</li>
+
+<li>How is Dijkstra related to PriorityQueue?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers understand:
+
+<ul>
+
+<li>PriorityQueue is a Heap, not a sorted list.</li>
+
+<li>Heap gives fast access to best candidate.</li>
+
+<li>Top K patterns appear constantly in interviews.</li>
+
+<li>PriorityQueue powers many scheduling systems.</li>
+
+<li>Heapify operations are the core of performance.</li>
+
+</ul>
+
+<div class="callout senior">
+
+Master PriorityQueue and Heap patterns,
+and a huge portion of medium/hard LeetCode
+problems become easier.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+
+
+<section id="concurrenthashmap">
+
+<div class="section-head">
+    <h2>Chapter 10: ConcurrentHashMap Deep Dive</h2>
+
+    <p>
+        Thread Safety, Race Conditions,
+        Java 7 vs Java 8 Internals,
+        CAS, Bucket Locking,
+        Concurrent Access and Backend Usage.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Why ConcurrentHashMap Exists</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Imagine 100 threads accessing:
+
+<pre>
+HashMap<Integer,String> map
+</pre>
+
+simultaneously.
+
+Thread A:
+
+<pre>
+put(1,"A")
+</pre>
+
+Thread B:
+
+<pre>
+put(2,"B")
+</pre>
+
+Thread C:
+
+<pre>
+remove(1)
+</pre>
+
+Thread D:
+
+<pre>
+resize()
+</pre>
+
+What happens?
+
+Possible:
+
+<ul>
+<li>Data Corruption</li>
+<li>Lost Updates</li>
+<li>Infinite Loops (old JDKs)</li>
+<li>Race Conditions</li>
+</ul>
+
+HashMap is NOT thread-safe.
+
+ConcurrentHashMap solves this.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Race Condition</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+balance = 100
+</pre>
+
+Thread A:
+
+<pre>
+balance = balance + 50
+</pre>
+
+Thread B:
+
+<pre>
+balance = balance + 20
+</pre>
+
+Expected:
+
+<pre>
+170
+</pre>
+
+Actual:
+
+<pre>
+120
+or
+150
+or
+170
+</pre>
+
+Unpredictable.
+
+This is:
+
+<pre>
+Race Condition
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Why HashMap Is Not Thread Safe</summary>
+
+<div class="inner">
+
+HashMap assumes:
+
+<pre>
+One Thread
+</pre>
+
+modifies data at a time.
+
+Multiple threads can:
+
+<ul>
+<li>Insert simultaneously</li>
+<li>Resize simultaneously</li>
+<li>Read stale values</li>
+</ul>
+
+Leading to corruption.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. First Attempt: Hashtable</summary>
+
+<div class="inner">
+
+Before ConcurrentHashMap:
+
+<pre>
+Hashtable
+</pre>
+
+was used.
+
+Internally:
+
+<pre>
+Every Method
+=
+synchronized
+</pre>
+
+Example:
+
+<pre>
+public synchronized V put(...)
+</pre>
+
+Problem:
+
+Only one thread can work at a time.
+
+Performance suffers.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Why Hashtable Is Slow</summary>
+
+<div class="inner">
+
+Imagine:
+
+100 threads.
+
+Thread A:
+
+<pre>
+get()
+</pre>
+
+Thread B:
+
+<pre>
+get()
+</pre>
+
+Thread C:
+
+<pre>
+put()
+</pre>
+
+All must wait.
+
+Diagram:
+
+<pre>
+Thread A
+     |
+Thread B
+     |
+Thread C
+     |
+Thread D
+</pre>
+
+Single lock.
+
+Heavy contention.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. ConcurrentHashMap Idea</summary>
+
+<div class="inner">
+
+Goal:
+
+<pre>
+High Concurrency
++
+Thread Safety
+</pre>
+
+Instead of:
+
+<pre>
+One Big Lock
+</pre>
+
+Use:
+
+<pre>
+Many Smaller Locks
+</pre>
+
+More threads can work simultaneously.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Java 7 Architecture</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+Java 7 used:
+
+<pre>
+Segment
+</pre>
+
+structure.
+
+Diagram:
+
+<pre>
+ConcurrentHashMap
+
+Segment 1
+Segment 2
+Segment 3
+Segment 4
+</pre>
+
+Each segment:
+
+<pre>
+Independent Lock
+</pre>
+
+Thread A:
+
+<pre>
+Segment 1
+</pre>
+
+Thread B:
+
+<pre>
+Segment 4
+</pre>
+
+Can work together.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Segment Diagram</summary>
+
+<div class="inner">
+
+<pre>
+ConcurrentHashMap
+
+ ├── Segment 1
+ │      ├ Bucket
+ │      ├ Bucket
+ │
+ ├── Segment 2
+ │      ├ Bucket
+ │
+ ├── Segment 3
+ │
+ └── Segment 4
+</pre>
+
+Concurrency improved greatly.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Java 8 Architecture</summary>
+
+<div class="inner">
+
+Huge Interview Question.
+
+Java 8 removed:
+
+<pre>
+Segments
+</pre>
+
+Now uses:
+
+<pre>
+Node[]
++
+CAS
++
+Synchronized Buckets
+</pre>
+
+More efficient.
+
+Less memory.
+
+Better scalability.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. CAS (Compare And Swap)</summary>
+
+<div class="inner">
+
+CAS is a CPU-level atomic operation.
+
+Concept:
+
+<pre>
+Expected = 10
+
+Current = 10
+
+Replace with 20
+</pre>
+
+Success.
+
+If Current ≠ Expected:
+
+<pre>
+Fail
+</pre>
+
+Retry.
+
+No heavy lock required.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. CAS Example</summary>
+
+<div class="inner">
+
+Thread A:
+
+<pre>
+value=10
+</pre>
+
+Wants:
+
+<pre>
+10 -> 20
+</pre>
+
+Thread B changes:
+
+<pre>
+10 -> 30
+</pre>
+
+CAS detects mismatch.
+
+Update rejected.
+
+Prevents corruption.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. Bucket-Level Locking</summary>
+
+<div class="inner">
+
+Instead of locking whole map:
+
+Java 8 locks only bucket.
+
+Diagram:
+
+<pre>
+Bucket 1 [LOCKED]
+
+Bucket 2 [FREE]
+
+Bucket 3 [FREE]
+</pre>
+
+Thread A:
+
+<pre>
+Bucket 1
+</pre>
+
+Thread B:
+
+<pre>
+Bucket 2
+</pre>
+
+Can proceed simultaneously.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Internal Node Structure</summary>
+
+<div class="inner">
+
+Similar to HashMap.
+
+<pre>
+static class Node<K,V>
+{
+    final int hash;
+
+    final K key;
+
+    volatile V value;
+
+    volatile Node<K,V> next;
+}
+</pre>
+
+Notice:
+
+<pre>
+volatile
+</pre>
+
+Ensures visibility across threads.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Why Volatile?</summary>
+
+<div class="inner">
+
+Without volatile:
+
+Thread A updates value.
+
+Thread B may not see update immediately.
+
+With:
+
+<pre>
+volatile
+</pre>
+
+Latest value visible.
+
+Important concurrency concept.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Concurrent Reads</summary>
+
+<div class="inner">
+
+Major advantage.
+
+Multiple threads can:
+
+<pre>
+get()
+</pre>
+
+simultaneously.
+
+No locking needed in most cases.
+
+Very fast.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. put() Internal Flow</summary>
+
+<div class="inner">
+
+Insert:
+
+<pre>
+put(K,V)
+</pre>
+
+Steps:
+
+<pre>
+Find Bucket
+
+↓
+
+CAS Attempt
+
+↓
+
+Success?
+</pre>
+
+Yes:
+
+<pre>
+Insert
+</pre>
+
+No:
+
+<pre>
+Lock Bucket
+
+↓
+
+Retry
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Resize Operation</summary>
+
+<div class="inner">
+
+ConcurrentHashMap also resizes.
+
+Difference:
+
+Multiple threads help.
+
+Diagram:
+
+<pre>
+Thread A
+Thread B
+Thread C
+
+all assist resize
+</pre>
+
+Faster than single-threaded resize.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. HashMap vs Hashtable vs ConcurrentHashMap</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Feature</th>
+<th>HashMap</th>
+<th>Hashtable</th>
+<th>ConcurrentHashMap</th>
+</tr>
+
+<tr>
+<td>Thread Safe</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Performance</td>
+<td>Fast</td>
+<td>Slow</td>
+<td>Fast</td>
+</tr>
+
+<tr>
+<td>Locking</td>
+<td>None</td>
+<td>Whole Table</td>
+<td>Bucket Level</td>
+</tr>
+
+<tr>
+<td>Null Key</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Why Null Is Not Allowed</summary>
+
+<div class="inner">
+
+Question:
+
+<pre>
+map.get(key)
+</pre>
+
+Returns:
+
+<pre>
+null
+</pre>
+
+Why?
+
+Two possibilities:
+
+<pre>
+Key Missing
+</pre>
+
+or
+
+<pre>
+Value Actually Null
+</pre>
+
+Concurrent environment causes ambiguity.
+
+Therefore:
+
+<pre>
+Null Keys
+❌
+
+Null Values
+❌
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Real Backend Usage</summary>
+
+<div class="inner">
+
+Used for:
+
+<ul>
+
+<li>User Sessions</li>
+
+<li>API Rate Limiting</li>
+
+<li>Cache Storage</li>
+
+<li>Microservice Metadata</li>
+
+<li>Connection Pools</li>
+
+<li>Metrics Storage</li>
+
+</ul>
+
+Extremely common.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Using HashMap in multithreaded code.</li>
+
+<li>Using Hashtable in modern applications.</li>
+
+<li>Ignoring race conditions.</li>
+
+<li>Thinking ConcurrentHashMap is lock-free.</li>
+
+<li>Expecting null keys to work.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Why is HashMap not thread-safe?</li>
+
+<li>What is ConcurrentHashMap?</li>
+
+<li>Difference between Hashtable and ConcurrentHashMap?</li>
+
+<li>What was Segment in Java 7?</li>
+
+<li>Why removed in Java 8?</li>
+
+<li>What is CAS?</li>
+
+<li>What is volatile?</li>
+
+<li>Why null keys aren't allowed?</li>
+
+<li>How does bucket locking work?</li>
+
+<li>How does ConcurrentHashMap resize?</li>
+
+<li>Can multiple threads call get() simultaneously?</li>
+
+<li>When should you use ConcurrentHashMap?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong backend engineers understand:
+
+<ul>
+
+<li>HashMap is dangerous in concurrent code.</li>
+
+<li>ConcurrentHashMap balances safety and performance.</li>
+
+<li>CAS reduces lock contention.</li>
+
+<li>Bucket-level locking increases scalability.</li>
+
+<li>ConcurrentHashMap appears constantly in production systems.</li>
+
+</ul>
+
+<div class="callout senior">
+
+If HashMap is the king of Collections,
+ConcurrentHashMap is the king of concurrent collections.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="vector">
+
+<div class="section-head">
+    <h2>Chapter 11: Vector, Stack & Legacy Collections</h2>
+
+    <p>
+        Legacy Collections, Synchronization,
+        Vector Internals, Stack Problems,
+        ArrayDeque Replacement and Interview Questions.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. What Are Legacy Collections?</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Legacy Collections are collection classes introduced before the modern Collections Framework.
+
+Examples:
+
+<pre>
+Vector
+Stack
+Hashtable
+Enumeration
+</pre>
+
+They still exist for backward compatibility.
+
+But modern Java rarely uses them directly.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Evolution of Java Collections</summary>
+
+<div class="inner">
+
+Timeline:
+
+<pre>
+JDK 1.0
+
+Vector
+Stack
+Hashtable
+Enumeration
+</pre>
+
+↓
+
+<pre>
+JDK 1.2
+
+Collections Framework
+
+ArrayList
+LinkedList
+HashMap
+HashSet
+</pre>
+
+↓
+
+<pre>
+Modern Java
+
+ConcurrentHashMap
+ArrayDeque
+CopyOnWriteArrayList
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. What Is Vector?</summary>
+
+<div class="inner">
+
+Vector is essentially:
+
+<pre>
+Thread Safe ArrayList
+</pre>
+
+Internally:
+
+<pre>
+Dynamic Array
+</pre>
+
+just like ArrayList.
+
+Example:
+
+<pre>
+Vector<Integer> v =
+        new Vector<>();
+
+v.add(10);
+v.add(20);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Vector Internal Structure</summary>
+
+<div class="inner">
+
+Internally:
+
+<pre>
+elementData[]
+</pre>
+
+similar to ArrayList.
+
+Memory:
+
+<pre>
+Index
+
+0 -> 10
+1 -> 20
+2 -> 30
+</pre>
+
+Contiguous memory.
+
+Random access:
+
+<pre>
+O(1)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Why Vector Is Thread Safe</summary>
+
+<div class="inner">
+
+Most methods:
+
+<pre>
+synchronized
+</pre>
+
+Example concept:
+
+<pre>
+public synchronized
+boolean add(E e)
+</pre>
+
+Only one thread may execute at a time.
+
+Safe.
+
+But expensive.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Why Vector Is Slower Than ArrayList</summary>
+
+<div class="inner">
+
+ArrayList:
+
+<pre>
+No Lock
+</pre>
+
+Vector:
+
+<pre>
+Lock Every Method
+</pre>
+
+Even when only one thread exists.
+
+Result:
+
+<pre>
+More Overhead
+</pre>
+
+Therefore:
+
+<pre>
+ArrayList
+>
+Vector
+</pre>
+
+for most applications.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. ArrayList vs Vector</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Feature</th>
+<th>ArrayList</th>
+<th>Vector</th>
+</tr>
+
+<tr>
+<td>Thread Safe</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Performance</td>
+<td>Fast</td>
+<td>Slower</td>
+</tr>
+
+<tr>
+<td>Synchronization</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Modern Usage</td>
+<td>Yes</td>
+<td>Rare</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. What Is Stack?</summary>
+
+<div class="inner">
+
+Stack follows:
+
+<pre>
+LIFO
+
+Last In
+First Out
+</pre>
+
+Example:
+
+<pre>
+Push A
+Push B
+Push C
+</pre>
+
+Memory:
+
+<pre>
+C
+B
+A
+</pre>
+
+Pop:
+
+<pre>
+C
+</pre>
+
+comes first.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Stack Operations</summary>
+
+<div class="inner">
+
+Push:
+
+<pre>
+stack.push(10);
+</pre>
+
+Pop:
+
+<pre>
+stack.pop();
+</pre>
+
+Peek:
+
+<pre>
+stack.peek();
+</pre>
+
+Example:
+
+<pre>
+Stack<Integer> s =
+        new Stack<>();
+
+s.push(10);
+s.push(20);
+s.push(30);
+</pre>
+
+Stack:
+
+<pre>
+30
+20
+10
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Internal Structure of Stack</summary>
+
+<div class="inner">
+
+Important Interview Fact:
+
+<pre>
+Stack
+extends
+Vector
+</pre>
+
+Actual hierarchy:
+
+<pre>
+Object
+  |
+Vector
+  |
+Stack
+</pre>
+
+Therefore Stack inherits all Vector issues.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. Why Stack Is Considered Legacy</summary>
+
+<div class="inner">
+
+Problems:
+
+<ul>
+
+<li>Extends Vector</li>
+
+<li>Unnecessary synchronization</li>
+
+<li>Old design</li>
+
+<li>Poor API choices</li>
+
+</ul>
+
+Modern Java prefers:
+
+<pre>
+ArrayDeque
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. ArrayDeque Replacement</summary>
+
+<div class="inner">
+
+Modern Stack:
+
+<pre>
+Deque<Integer> stack =
+        new ArrayDeque<>();
+</pre>
+
+Push:
+
+<pre>
+stack.push(10);
+</pre>
+
+Pop:
+
+<pre>
+stack.pop();
+</pre>
+
+Peek:
+
+<pre>
+stack.peek();
+</pre>
+
+Faster than Stack.
+
+Preferred by interviewers.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Why ArrayDeque Is Better</summary>
+
+<div class="inner">
+
+Advantages:
+
+<ul>
+
+<li>No synchronization overhead</li>
+
+<li>Faster</li>
+
+<li>Cleaner API</li>
+
+<li>Can work as Stack and Queue</li>
+
+</ul>
+
+Therefore:
+
+<pre>
+ArrayDeque
+>
+Stack
+</pre>
+
+in modern Java.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Queue Using ArrayDeque</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Deque<Integer> q =
+        new ArrayDeque<>();
+
+q.offer(10);
+q.offer(20);
+
+q.poll();
+</pre>
+
+Acts as queue.
+
+FIFO behavior.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Stack Using ArrayDeque</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Deque<Integer> s =
+        new ArrayDeque<>();
+
+s.push(10);
+s.push(20);
+
+s.pop();
+</pre>
+
+Acts as stack.
+
+LIFO behavior.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Enumeration</summary>
+
+<div class="inner">
+
+Before Iterator.
+
+Methods:
+
+<pre>
+hasMoreElements()
+
+nextElement()
+</pre>
+
+Example:
+
+<pre>
+Enumeration<Integer> e =
+v.elements();
+</pre>
+
+Legacy API.
+
+Rarely used today.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Iterator vs Enumeration</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Iterator</th>
+<th>Enumeration</th>
+</tr>
+
+<tr>
+<td>Modern</td>
+<td>Legacy</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>No remove()</td>
+</tr>
+
+<tr>
+<td>Collections Framework</td>
+<td>Old API</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Real Industry Usage</summary>
+
+<div class="inner">
+
+Today:
+
+<ul>
+
+<li>ArrayList preferred over Vector</li>
+
+<li>ArrayDeque preferred over Stack</li>
+
+<li>Iterator preferred over Enumeration</li>
+
+<li>ConcurrentHashMap preferred over Hashtable</li>
+
+</ul>
+
+Legacy classes mostly appear in:
+
+<ul>
+
+<li>Old enterprise code</li>
+
+<li>Banking systems</li>
+
+<li>Government software</li>
+
+<li>Maintenance projects</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Common Interview Traps</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Stack is NOT related to JVM Stack Memory.</li>
+
+<li>Vector is NOT obsolete but rarely used.</li>
+
+<li>Stack extends Vector.</li>
+
+<li>ArrayDeque is preferred.</li>
+
+<li>Enumeration came before Iterator.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Difference between ArrayList and Vector?</li>
+
+<li>Why is Vector thread-safe?</li>
+
+<li>Why is Vector slower?</li>
+
+<li>How is Stack implemented?</li>
+
+<li>Why is Stack considered legacy?</li>
+
+<li>Why use ArrayDeque instead of Stack?</li>
+
+<li>Difference between Iterator and Enumeration?</li>
+
+<li>Can ArrayDeque act as Stack?</li>
+
+<li>Can ArrayDeque act as Queue?</li>
+
+<li>What modern collections replace Hashtable and Vector?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers know:
+
+<ul>
+
+<li>Legacy collections still appear in old codebases.</li>
+
+<li>Modern Java prefers composition over inheritance-heavy APIs.</li>
+
+<li>ArrayDeque is one of the most underappreciated classes in Java.</li>
+
+<li>Understanding why Stack is discouraged demonstrates API design maturity.</li>
+
+</ul>
+
+<div class="callout senior">
+
+Interviewers often ask:
+
+"Why would you use ArrayDeque instead of Stack?"
+
+A strong answer immediately signals modern Java knowledge.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="iterators">
+
+<div class="section-head">
+    <h2>Chapter 12: Iterator, ListIterator, Fail-Fast & Fail-Safe Collections</h2>
+
+    <p>
+        Iterable, Iterator, ListIterator,
+        Enhanced For Loop Internals,
+        ConcurrentModificationException,
+        Fail-Fast and Fail-Safe Collections.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Why Iterators Exist</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Imagine:
+
+<pre>
+ArrayList
+LinkedList
+HashSet
+TreeSet
+</pre>
+
+All store data differently.
+
+Question:
+
+How can Java provide a common way to traverse them?
+
+Answer:
+
+<pre>
+Iterator
+</pre>
+
+Iterator gives a universal traversal mechanism.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Iterable Interface</summary>
+
+<div class="inner">
+
+Root Interface:
+
+<pre>
+Iterable
+</pre>
+
+Method:
+
+<pre>
+Iterator iterator();
+</pre>
+
+Diagram:
+
+<pre>
+Iterable
+    |
+Collection
+    |
+--------------------
+|         |        |
+List      Set     Queue
+</pre>
+
+Everything inherits traversal capability.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Iterator Interface</summary>
+
+<div class="inner">
+
+Core Methods:
+
+<pre>
+boolean hasNext()
+
+E next()
+
+void remove()
+</pre>
+
+Example:
+
+<pre>
+Iterator<String> it =
+        list.iterator();
+</pre>
+
+Traversal:
+
+<pre>
+while(it.hasNext())
+{
+    System.out.println(
+        it.next()
+    );
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Internal Working of Iterator</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+[A,B,C]
+</pre>
+
+Iterator maintains:
+
+<pre>
+cursor = 0
+</pre>
+
+Initially:
+
+<pre>
+cursor = 0
+</pre>
+
+Call:
+
+<pre>
+next()
+</pre>
+
+Returns:
+
+<pre>
+A
+</pre>
+
+Cursor becomes:
+
+<pre>
+1
+</pre>
+
+Next:
+
+<pre>
+B
+</pre>
+
+Cursor:
+
+<pre>
+2
+</pre>
+
+And so on.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. How For-Each Loop Works Internally</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+for(String s : list)
+{
+    System.out.println(s);
+}
+</pre>
+
+Compiler converts roughly to:
+
+<pre>
+Iterator<String> it =
+        list.iterator();
+
+while(it.hasNext())
+{
+    String s = it.next();
+
+    System.out.println(s);
+}
+</pre>
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Memory Diagram</summary>
+
+<div class="inner">
+
+List:
+
+<pre>
+[A][B][C][D]
+</pre>
+
+Iterator:
+
+<pre>
+cursor=0
+</pre>
+
+After:
+
+<pre>
+next()
+</pre>
+
+Cursor:
+
+<pre>
+cursor=1
+</pre>
+
+Iterator tracks position.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. remove() Using Iterator</summary>
+
+<div class="inner">
+
+Correct way:
+
+<pre>
+Iterator<Integer> it =
+        list.iterator();
+
+while(it.hasNext())
+{
+    Integer n = it.next();
+
+    if(n % 2 == 0)
+    {
+        it.remove();
+    }
+}
+</pre>
+
+Safe removal.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. ListIterator</summary>
+
+<div class="inner">
+
+Iterator limitation:
+
+Only forward traversal.
+
+ListIterator adds:
+
+<pre>
+previous()
+
+hasPrevious()
+
+add()
+
+set()
+</pre>
+
+Works only for:
+
+<pre>
+List
+</pre>
+
+implementations.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Bidirectional Traversal</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+ListIterator<String> it =
+        list.listIterator();
+</pre>
+
+Forward:
+
+<pre>
+A B C D
+</pre>
+
+Backward:
+
+<pre>
+D C B A
+</pre>
+
+Possible because ListIterator tracks both directions.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Iterator vs ListIterator</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Iterator</th>
+<th>ListIterator</th>
+</tr>
+
+<tr>
+<td>Forward Only</td>
+<td>Both Directions</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>remove()</td>
+</tr>
+
+<tr>
+<td>No add()</td>
+<td>add()</td>
+</tr>
+
+<tr>
+<td>No set()</td>
+<td>set()</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. ConcurrentModificationException</summary>
+
+<div class="inner">
+
+Extremely Important.
+
+Example:
+
+<pre>
+for(String s : list)
+{
+    list.add("X");
+}
+</pre>
+
+Exception:
+
+<pre>
+ConcurrentModificationException
+</pre>
+
+Why?
+
+Collection changed during iteration.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. modCount Internal Mechanism</summary>
+
+<div class="inner">
+
+Collections maintain:
+
+<pre>
+modCount
+</pre>
+
+Every structural change:
+
+<pre>
+add()
+remove()
+clear()
+</pre>
+
+increments modCount.
+
+Iterator stores:
+
+<pre>
+expectedModCount
+</pre>
+
+If:
+
+<pre>
+modCount != expectedModCount
+</pre>
+
+Exception thrown.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Fail-Fast Collections</summary>
+
+<div class="inner">
+
+Examples:
+
+<pre>
+ArrayList
+HashMap
+HashSet
+LinkedList
+TreeSet
+</pre>
+
+Behavior:
+
+Detect modification.
+
+Throw exception immediately.
+
+Diagram:
+
+<pre>
+Iterator
+
+↓
+
+Collection Modified
+
+↓
+
+Exception
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Why Fail-Fast Exists</summary>
+
+<div class="inner">
+
+Without fail-fast:
+
+<pre>
+Unpredictable Behavior
+</pre>
+
+Possible:
+
+<ul>
+
+<li>Skipped elements</li>
+
+<li>Duplicate processing</li>
+
+<li>Corrupted traversal</li>
+
+</ul>
+
+Fail-fast protects developers.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Fail-Safe Collections</summary>
+
+<div class="inner">
+
+Fail-safe collections work on a copy.
+
+Examples:
+
+<pre>
+CopyOnWriteArrayList
+ConcurrentHashMap
+</pre>
+
+Modification does not break iteration.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. CopyOnWriteArrayList</summary>
+
+<div class="inner">
+
+Concept:
+
+Whenever modification occurs:
+
+<pre>
+Create New Copy
+</pre>
+
+Old readers continue safely.
+
+Diagram:
+
+<pre>
+Thread A
+
+Old Copy
+
+Thread B
+
+New Copy
+</pre>
+
+Thread-safe.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Fail-Fast vs Fail-Safe</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Fail Fast</th>
+<th>Fail Safe</th>
+</tr>
+
+<tr>
+<td>Throws Exception</td>
+<td>No Exception</td>
+</tr>
+
+<tr>
+<td>Uses Original Collection</td>
+<td>Uses Copy</td>
+</tr>
+
+<tr>
+<td>Less Memory</td>
+<td>More Memory</td>
+</tr>
+
+<tr>
+<td>Faster</td>
+<td>Safer</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. ConcurrentHashMap Iteration</summary>
+
+<div class="inner">
+
+Unlike HashMap:
+
+<pre>
+ConcurrentHashMap
+</pre>
+
+supports concurrent traversal.
+
+Readers continue safely.
+
+No:
+
+<pre>
+ConcurrentModificationException
+</pre>
+
+in normal concurrent usage.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Spliterator</summary>
+
+<div class="inner">
+
+Introduced for Streams.
+
+Features:
+
+<pre>
+Split Traversal
+
+Parallel Processing
+</pre>
+
+Example:
+
+<pre>
+list.stream()
+</pre>
+
+internally benefits from Spliterator.
+
+Important for modern Java.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Iterator Interview Traps</summary>
+
+<div class="inner">
+
+Common mistakes:
+
+<ul>
+
+<li>Thinking foreach is special syntax.</li>
+
+<li>Not knowing foreach uses Iterator.</li>
+
+<li>Removing directly during iteration.</li>
+
+<li>Confusing fail-fast with thread safety.</li>
+
+<li>Thinking ConcurrentModificationException is always guaranteed.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Real Industry Usage</summary>
+
+<div class="inner">
+
+Iterators power:
+
+<ul>
+
+<li>Collection Traversal</li>
+
+<li>Streams</li>
+
+<li>Database Result Processing</li>
+
+<li>Batch Jobs</li>
+
+<li>Framework Internals</li>
+
+</ul>
+
+Used everywhere.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Iterator?</li>
+
+<li>How does Iterator work internally?</li>
+
+<li>What is Iterable?</li>
+
+<li>How does foreach work?</li>
+
+<li>Difference between Iterator and ListIterator?</li>
+
+<li>What is ConcurrentModificationException?</li>
+
+<li>What is modCount?</li>
+
+<li>What are fail-fast collections?</li>
+
+<li>What are fail-safe collections?</li>
+
+<li>Why is CopyOnWriteArrayList thread-safe?</li>
+
+<li>Difference between fail-fast and fail-safe?</li>
+
+<li>What is Spliterator?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers understand:
+
+<ul>
+
+<li>foreach is syntactic sugar over Iterator.</li>
+
+<li>Fail-fast is a debugging mechanism.</li>
+
+<li>ConcurrentModificationException is not thread safety.</li>
+
+<li>CopyOnWriteArrayList is excellent for read-heavy workloads.</li>
+
+<li>Spliterator enables efficient parallel stream processing.</li>
+
+</ul>
+
+<div class="callout senior">
+
+Understanding Iterator, modCount and fail-fast behavior is often what separates someone who uses collections from someone who understands collections.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="iterators">
+
+<div class="section-head">
+    <h2>Chapter 12: Iterator, ListIterator, Fail-Fast & Fail-Safe Collections</h2>
+
+    <p>
+        Iterable, Iterator, ListIterator,
+        Enhanced For Loop Internals,
+        ConcurrentModificationException,
+        Fail-Fast and Fail-Safe Collections.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>1. Why Iterators Exist</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Imagine:
+
+<pre>
+ArrayList
+LinkedList
+HashSet
+TreeSet
+</pre>
+
+All store data differently.
+
+Question:
+
+How can Java provide a common way to traverse them?
+
+Answer:
+
+<pre>
+Iterator
+</pre>
+
+Iterator gives a universal traversal mechanism.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Iterable Interface</summary>
+
+<div class="inner">
+
+Root Interface:
+
+<pre>
+Iterable
+</pre>
+
+Method:
+
+<pre>
+Iterator iterator();
+</pre>
+
+Diagram:
+
+<pre>
+Iterable
+    |
+Collection
+    |
+--------------------
+|         |        |
+List      Set     Queue
+</pre>
+
+Everything inherits traversal capability.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Iterator Interface</summary>
+
+<div class="inner">
+
+Core Methods:
+
+<pre>
+boolean hasNext()
+
+E next()
+
+void remove()
+</pre>
+
+Example:
+
+<pre>
+Iterator<String> it =
+        list.iterator();
+</pre>
+
+Traversal:
+
+<pre>
+while(it.hasNext())
+{
+    System.out.println(
+        it.next()
+    );
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Internal Working of Iterator</summary>
+
+<div class="inner">
+
+Suppose:
+
+<pre>
+[A,B,C]
+</pre>
+
+Iterator maintains:
+
+<pre>
+cursor = 0
+</pre>
+
+Initially:
+
+<pre>
+cursor = 0
+</pre>
+
+Call:
+
+<pre>
+next()
+</pre>
+
+Returns:
+
+<pre>
+A
+</pre>
+
+Cursor becomes:
+
+<pre>
+1
+</pre>
+
+Next:
+
+<pre>
+B
+</pre>
+
+Cursor:
+
+<pre>
+2
+</pre>
+
+And so on.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. How For-Each Loop Works Internally</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+for(String s : list)
+{
+    System.out.println(s);
+}
+</pre>
+
+Compiler converts roughly to:
+
+<pre>
+Iterator<String> it =
+        list.iterator();
+
+while(it.hasNext())
+{
+    String s = it.next();
+
+    System.out.println(s);
+}
+</pre>
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Memory Diagram</summary>
+
+<div class="inner">
+
+List:
+
+<pre>
+[A][B][C][D]
+</pre>
+
+Iterator:
+
+<pre>
+cursor=0
+</pre>
+
+After:
+
+<pre>
+next()
+</pre>
+
+Cursor:
+
+<pre>
+cursor=1
+</pre>
+
+Iterator tracks position.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. remove() Using Iterator</summary>
+
+<div class="inner">
+
+Correct way:
+
+<pre>
+Iterator<Integer> it =
+        list.iterator();
+
+while(it.hasNext())
+{
+    Integer n = it.next();
+
+    if(n % 2 == 0)
+    {
+        it.remove();
+    }
+}
+</pre>
+
+Safe removal.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. ListIterator</summary>
+
+<div class="inner">
+
+Iterator limitation:
+
+Only forward traversal.
+
+ListIterator adds:
+
+<pre>
+previous()
+
+hasPrevious()
+
+add()
+
+set()
+</pre>
+
+Works only for:
+
+<pre>
+List
+</pre>
+
+implementations.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Bidirectional Traversal</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+ListIterator<String> it =
+        list.listIterator();
+</pre>
+
+Forward:
+
+<pre>
+A B C D
+</pre>
+
+Backward:
+
+<pre>
+D C B A
+</pre>
+
+Possible because ListIterator tracks both directions.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Iterator vs ListIterator</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Iterator</th>
+<th>ListIterator</th>
+</tr>
+
+<tr>
+<td>Forward Only</td>
+<td>Both Directions</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>remove()</td>
+</tr>
+
+<tr>
+<td>No add()</td>
+<td>add()</td>
+</tr>
+
+<tr>
+<td>No set()</td>
+<td>set()</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. ConcurrentModificationException</summary>
+
+<div class="inner">
+
+Extremely Important.
+
+Example:
+
+<pre>
+for(String s : list)
+{
+    list.add("X");
+}
+</pre>
+
+Exception:
+
+<pre>
+ConcurrentModificationException
+</pre>
+
+Why?
+
+Collection changed during iteration.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. modCount Internal Mechanism</summary>
+
+<div class="inner">
+
+Collections maintain:
+
+<pre>
+modCount
+</pre>
+
+Every structural change:
+
+<pre>
+add()
+remove()
+clear()
+</pre>
+
+increments modCount.
+
+Iterator stores:
+
+<pre>
+expectedModCount
+</pre>
+
+If:
+
+<pre>
+modCount != expectedModCount
+</pre>
+
+Exception thrown.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Fail-Fast Collections</summary>
+
+<div class="inner">
+
+Examples:
+
+<pre>
+ArrayList
+HashMap
+HashSet
+LinkedList
+TreeSet
+</pre>
+
+Behavior:
+
+Detect modification.
+
+Throw exception immediately.
+
+Diagram:
+
+<pre>
+Iterator
+
+↓
+
+Collection Modified
+
+↓
+
+Exception
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Why Fail-Fast Exists</summary>
+
+<div class="inner">
+
+Without fail-fast:
+
+<pre>
+Unpredictable Behavior
+</pre>
+
+Possible:
+
+<ul>
+
+<li>Skipped elements</li>
+
+<li>Duplicate processing</li>
+
+<li>Corrupted traversal</li>
+
+</ul>
+
+Fail-fast protects developers.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Fail-Safe Collections</summary>
+
+<div class="inner">
+
+Fail-safe collections work on a copy.
+
+Examples:
+
+<pre>
+CopyOnWriteArrayList
+ConcurrentHashMap
+</pre>
+
+Modification does not break iteration.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. CopyOnWriteArrayList</summary>
+
+<div class="inner">
+
+Concept:
+
+Whenever modification occurs:
+
+<pre>
+Create New Copy
+</pre>
+
+Old readers continue safely.
+
+Diagram:
+
+<pre>
+Thread A
+
+Old Copy
+
+Thread B
+
+New Copy
+</pre>
+
+Thread-safe.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Fail-Fast vs Fail-Safe</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Fail Fast</th>
+<th>Fail Safe</th>
+</tr>
+
+<tr>
+<td>Throws Exception</td>
+<td>No Exception</td>
+</tr>
+
+<tr>
+<td>Uses Original Collection</td>
+<td>Uses Copy</td>
+</tr>
+
+<tr>
+<td>Less Memory</td>
+<td>More Memory</td>
+</tr>
+
+<tr>
+<td>Faster</td>
+<td>Safer</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. ConcurrentHashMap Iteration</summary>
+
+<div class="inner">
+
+Unlike HashMap:
+
+<pre>
+ConcurrentHashMap
+</pre>
+
+supports concurrent traversal.
+
+Readers continue safely.
+
+No:
+
+<pre>
+ConcurrentModificationException
+</pre>
+
+in normal concurrent usage.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Spliterator</summary>
+
+<div class="inner">
+
+Introduced for Streams.
+
+Features:
+
+<pre>
+Split Traversal
+
+Parallel Processing
+</pre>
+
+Example:
+
+<pre>
+list.stream()
+</pre>
+
+internally benefits from Spliterator.
+
+Important for modern Java.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Iterator Interview Traps</summary>
+
+<div class="inner">
+
+Common mistakes:
+
+<ul>
+
+<li>Thinking foreach is special syntax.</li>
+
+<li>Not knowing foreach uses Iterator.</li>
+
+<li>Removing directly during iteration.</li>
+
+<li>Confusing fail-fast with thread safety.</li>
+
+<li>Thinking ConcurrentModificationException is always guaranteed.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Real Industry Usage</summary>
+
+<div class="inner">
+
+Iterators power:
+
+<ul>
+
+<li>Collection Traversal</li>
+
+<li>Streams</li>
+
+<li>Database Result Processing</li>
+
+<li>Batch Jobs</li>
+
+<li>Framework Internals</li>
+
+</ul>
+
+Used everywhere.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is Iterator?</li>
+
+<li>How does Iterator work internally?</li>
+
+<li>What is Iterable?</li>
+
+<li>How does foreach work?</li>
+
+<li>Difference between Iterator and ListIterator?</li>
+
+<li>What is ConcurrentModificationException?</li>
+
+<li>What is modCount?</li>
+
+<li>What are fail-fast collections?</li>
+
+<li>What are fail-safe collections?</li>
+
+<li>Why is CopyOnWriteArrayList thread-safe?</li>
+
+<li>Difference between fail-fast and fail-safe?</li>
+
+<li>What is Spliterator?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers understand:
+
+<ul>
+
+<li>foreach is syntactic sugar over Iterator.</li>
+
+<li>Fail-fast is a debugging mechanism.</li>
+
+<li>ConcurrentModificationException is not thread safety.</li>
+
+<li>CopyOnWriteArrayList is excellent for read-heavy workloads.</li>
+
+<li>Spliterator enables efficient parallel stream processing.</li>
+
+</ul>
+
+<div class="callout senior">
+
+Understanding Iterator, modCount and fail-fast behavior is often what separates someone who uses collections from someone who understands collections.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="generics">
+
+<div class="section-head">
+<h2>Chapter 13: Generics Deep Dive</h2>
+
+<p>
+Type Safety, Compile-Time Checking,
+Wildcards, PECS, Type Erasure,
+Bridge Methods, Heap Pollution,
+and Advanced Interview Concepts.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. Why Generics Exist</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Before Java 5, collections stored everything as Object.
+
+This created three huge problems:
+
+<ul>
+<li>No type safety</li>
+<li>Manual casting everywhere</li>
+<li>Runtime ClassCastException</li>
+</ul>
+
+Generics solve these problems at compile time.
+
+</div>
+
+Example:
+
+<pre>
+ArrayList list = new ArrayList();
+
+list.add("Java");
+list.add(100);
+
+String s =
+(String) list.get(1);
+</pre>
+
+Runtime:
+
+<pre>
+ClassCastException
+</pre>
+
+Generics prevent this.
+
+</div>
+</details>
+
+<details>
+
+<summary>2. Real World Analogy</summary>
+
+<div class="inner">
+
+Imagine three storage boxes.
+
+<pre>
+Box 1 → Only Books
+
+Box 2 → Only Clothes
+
+Box 3 → Only Electronics
+</pre>
+
+Generics let you define:
+
+<pre>
+Box&lt;Book&gt;
+Box&lt;Clothes&gt;
+Box&lt;Laptop&gt;
+</pre>
+
+Wrong items cannot enter.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. First Generic Example</summary>
+
+<div class="inner">
+
+Without Generics:
+
+<pre>
+ArrayList list =
+new ArrayList();
+
+list.add("Java");
+list.add(100);
+</pre>
+
+With Generics:
+
+<pre>
+ArrayList&lt;String&gt; list =
+new ArrayList&lt;&gt;();
+
+list.add("Java");
+</pre>
+
+Compiler prevents:
+
+<pre>
+list.add(100);
+</pre>
+
+Compile Error.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. Compile-Time vs Runtime Safety</summary>
+
+<div class="inner">
+
+Without Generics:
+
+<pre>
+Error detected
+during execution
+</pre>
+
+With Generics:
+
+<pre>
+Error detected
+during compilation
+</pre>
+
+This is much safer.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Generic Class</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+class Box&lt;T&gt;
+{
+    private T value;
+
+    public void set(T value)
+    {
+        this.value = value;
+    }
+
+    public T get()
+    {
+        return value;
+    }
+}
+</pre>
+
+Usage:
+
+<pre>
+Box&lt;String&gt; box =
+new Box&lt;&gt;();
+
+box.set("Java");
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Memory Diagram</summary>
+
+<div class="inner">
+
+Conceptually:
+
+<pre>
+Box&lt;String&gt;
+
+     |
+     v
+
+   "Java"
+</pre>
+
+Compiler guarantees only String values.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Multiple Type Parameters</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+class Pair&lt;K,V&gt;
+{
+    K key;
+    V value;
+}
+</pre>
+
+Usage:
+
+<pre>
+Pair&lt;Integer,String&gt;
+</pre>
+
+Example:
+
+<pre>
+101 → Rahul
+</pre>
+
+HashMap uses similar ideas.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Generic Method</summary>
+
+<div class="inner">
+
+Generic classes aren't enough.
+
+Methods can also be generic.
+
+<pre>
+public static &lt;T&gt;
+void print(T value)
+{
+    System.out.println(value);
+}
+</pre>
+
+Usage:
+
+<pre>
+print("Java");
+
+print(100);
+
+print(true);
+</pre>
+
+Same method.
+
+Different types.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Generic Constructor</summary>
+
+<div class="inner">
+
+Less common but possible.
+
+<pre>
+class Demo
+{
+    &lt;T&gt; Demo(T value)
+    {
+        System.out.println(value);
+    }
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Bounded Type Parameters</summary>
+
+<div class="inner">
+
+Sometimes:
+
+<pre>
+Any Type
+</pre>
+
+is not acceptable.
+
+Example:
+
+<pre>
+&lt;T extends Number&gt;
+</pre>
+
+Allowed:
+
+<pre>
+Integer
+Double
+Float
+Long
+</pre>
+
+Not Allowed:
+
+<pre>
+String
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. Why Bounded Types Matter</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+public static
+&lt;T extends Number&gt;
+double square(T n)
+{
+    return
+    n.doubleValue()
+    *
+    n.doubleValue();
+}
+</pre>
+
+Compiler knows:
+
+<pre>
+doubleValue()
+</pre>
+
+exists.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. Wildcards</summary>
+
+<div class="inner">
+
+Most Interviewed Topic.
+
+Wildcard:
+
+<pre>
+?
+</pre>
+
+Means:
+
+<pre>
+Unknown Type
+</pre>
+
+Example:
+
+<pre>
+List&lt;?&gt;
+</pre>
+
+Accepts:
+
+<pre>
+List&lt;String&gt;
+
+List&lt;Integer&gt;
+
+List&lt;Double&gt;
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Why List&lt;Object&gt; Is Not Enough</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+Many beginners think:
+
+<pre>
+List&lt;Object&gt;
+</pre>
+
+should accept:
+
+<pre>
+List&lt;String&gt;
+</pre>
+
+It does NOT.
+
+Example:
+
+<pre>
+List&lt;String&gt;
+≠
+List&lt;Object&gt;
+</pre>
+
+Generics are invariant.
+
+Very important.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Upper Bound Wildcard</summary>
+
+<div class="inner">
+
+Syntax:
+
+<pre>
+List&lt;? extends Number&gt;
+</pre>
+
+Accepts:
+
+<pre>
+List&lt;Integer&gt;
+List&lt;Double&gt;
+List&lt;Float&gt;
+</pre>
+
+Not:
+
+<pre>
+List&lt;String&gt;
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Reading From ? extends</summary>
+
+<div class="inner">
+
+Safe:
+
+<pre>
+Number n =
+list.get(0);
+</pre>
+
+Unsafe:
+
+<pre>
+list.add(10);
+</pre>
+
+Compiler rejects.
+
+Reason:
+
+Actual type might be:
+
+<pre>
+List&lt;Double&gt;
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Lower Bound Wildcard</summary>
+
+<div class="inner">
+
+Syntax:
+
+<pre>
+List&lt;? super Integer&gt;
+</pre>
+
+Accepts:
+
+<pre>
+List&lt;Integer&gt;
+
+List&lt;Number&gt;
+
+List&lt;Object&gt;
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. Writing Into ? super</summary>
+
+<div class="inner">
+
+Safe:
+
+<pre>
+list.add(10);
+</pre>
+
+Compiler allows.
+
+Reading:
+
+<pre>
+Object obj =
+list.get(0);
+</pre>
+
+Only Object guaranteed.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. PECS Principle</summary>
+
+<div class="inner">
+
+Most Important Rule.
+
+PECS:
+
+<pre>
+Producer Extends
+
+Consumer Super
+</pre>
+
+Memory Trick:
+
+<pre>
+READ
+→ extends
+
+WRITE
+→ super
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. PECS Diagram</summary>
+
+<div class="inner">
+
+Producer:
+
+<pre>
+List&lt;? extends Number&gt;
+
+      |
+      v
+
+ Read Values
+</pre>
+
+Consumer:
+
+<pre>
+List&lt;? super Integer&gt;
+
+      ^
+      |
+
+ Insert Values
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Type Erasure</summary>
+
+<div class="inner">
+
+One of the most important interview topics.
+
+Compiler removes generic information.
+
+Example:
+
+<pre>
+List&lt;String&gt;
+</pre>
+
+becomes:
+
+<pre>
+List
+</pre>
+
+at runtime.
+
+Called:
+
+<pre>
+Type Erasure
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. Why Type Erasure Exists</summary>
+
+<div class="inner">
+
+Backward Compatibility.
+
+Old Java Code:
+
+<pre>
+ArrayList list
+</pre>
+
+must continue working.
+
+Therefore:
+
+<pre>
+Generic information
+removed after compile
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. Runtime Diagram</summary>
+
+<div class="inner">
+
+Compile Time:
+
+<pre>
+List&lt;String&gt;
+
+List&lt;Integer&gt;
+</pre>
+
+Runtime:
+
+<pre>
+List
+
+List
+</pre>
+
+Both become identical.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Heap Pollution</summary>
+
+<div class="inner">
+
+Advanced Topic.
+
+Example:
+
+<pre>
+List list =
+new ArrayList&lt;String&gt;();
+
+list.add(100);
+</pre>
+
+Now:
+
+<pre>
+List&lt;String&gt;
+</pre>
+
+contains Integer.
+
+Dangerous.
+
+Called:
+
+<pre>
+Heap Pollution
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>24. Raw Types</summary>
+
+<div class="inner">
+
+Bad Practice:
+
+<pre>
+List list =
+new ArrayList();
+</pre>
+
+Called:
+
+<pre>
+Raw Type
+</pre>
+
+Avoid in modern Java.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>25. Bridge Methods</summary>
+
+<div class="inner">
+
+Very Advanced.
+
+Because of Type Erasure,
+compiler sometimes creates methods automatically.
+
+Called:
+
+<pre>
+Bridge Methods
+</pre>
+
+Purpose:
+
+<pre>
+Maintain polymorphism
+after type erasure.
+</pre>
+
+Senior interview topic.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>26. Generic Restrictions</summary>
+
+<div class="inner">
+
+Invalid:
+
+<pre>
+new T()
+</pre>
+
+Invalid:
+
+<pre>
+T.class
+</pre>
+
+Invalid:
+
+<pre>
+static T value
+</pre>
+
+Reason:
+
+Type Erasure.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>27. Generics and Arrays</summary>
+
+<div class="inner">
+
+Illegal:
+
+<pre>
+new T[10]
+</pre>
+
+Because arrays know type at runtime.
+
+Generics do not.
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>28. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Using raw types.</li>
+<li>Not understanding PECS.</li>
+<li>Confusing extends with inheritance.</li>
+<li>Ignoring type erasure.</li>
+<li>Thinking generics exist at runtime.</li>
+<li>Using List&lt;Object&gt; incorrectly.</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>29. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Why were Generics introduced?</li>
+<li>What is Type Safety?</li>
+<li>What is Type Erasure?</li>
+<li>Why List&lt;String&gt; is not List&lt;Object&gt;?</li>
+<li>What is PECS?</li>
+<li>Difference between extends and super?</li>
+<li>What is Heap Pollution?</li>
+<li>Why can't we create new T()?</li>
+<li>Why can't we create generic arrays?</li>
+<li>What are Bridge Methods?</li>
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>30. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers understand:
+
+<ul>
+
+<li>Generics exist only at compile time.</li>
+<li>PECS is heavily used in framework APIs.</li>
+<li>Type Erasure explains most generic limitations.</li>
+<li>Generic API design is a major backend engineering skill.</li>
+<li>Improper use of raw types causes production bugs.</li>
+</ul>
+
+<div class="callout senior">
+
+If you understand:
+
+PECS +
+Type Erasure +
+Wildcards +
+Invariance
+
+you know more Generics than most Java developers.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="collections-utility">
+
+<div class="section-head">
+    <h2>Chapter 14: Collections Utility Class & Immutable Collections</h2>
+
+    <p>
+        Collections Utility Methods,
+        Immutable Collections,
+        Synchronized Collections,
+        Internal Working,
+        Best Practices,
+        and Interview Questions.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. Collection vs Collections</summary>
+
+<div class="inner">
+
+<div class="callout interview">
+
+Huge Interview Question.
+
+Many candidates confuse:
+
+<pre>
+Collection
+Collections
+</pre>
+
+</div>
+
+Collection:
+
+<pre>
+Interface
+</pre>
+
+Hierarchy:
+
+<pre>
+Collection
+|
++--- List
+|
++--- Set
+|
++--- Queue
+</pre>
+
+Collections:
+
+<pre>
+Utility Class
+</pre>
+
+Contains:
+
+<pre>
+sort()
+reverse()
+shuffle()
+binarySearch()
+min()
+max()
+frequency()
+unmodifiableList()
+synchronizedList()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Collections Architecture</summary>
+
+<div class="inner">
+
+Think of Collections as:
+
+<pre>
+Java Helper Toolkit
+</pre>
+
+Diagram:
+
+<pre>
+Collections
+
+|
++-- sort()
+
+|
++-- reverse()
+
+|
++-- shuffle()
+
+|
++-- binarySearch()
+
+|
++-- min()
+
+|
++-- max()
+
+|
++-- frequency()
+
+|
++-- unmodifiableXXX()
+
+|
++-- synchronizedXXX()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Collections.sort()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+List<Integer> list =
+Arrays.asList(
+50,10,30,20
+);
+
+Collections.sort(list);
+</pre>
+
+Output:
+
+<pre>
+10
+20
+30
+50
+</pre>
+
+Internally Java uses:
+
+<pre>
+TimSort
+</pre>
+
+Complexity:
+
+<pre>
+O(n log n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. What Is TimSort?</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+TimSort:
+
+<pre>
+Merge Sort
++
+Insertion Sort
+</pre>
+
+Advantages:
+
+<ul>
+<li>Stable</li>
+<li>Fast</li>
+<li>Optimized for real-world data</li>
+</ul>
+
+Used by:
+
+<pre>
+Collections.sort()
+
+List.sort()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Sorting Custom Objects</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+class Student
+{
+    int marks;
+}
+</pre>
+
+Sort using Comparator:
+
+<pre>
+Collections.sort(
+students,
+(a,b) ->
+a.marks - b.marks
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Reverse Order Sorting</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Collections.sort(
+list,
+Collections.reverseOrder()
+);
+</pre>
+
+Output:
+
+<pre>
+50
+30
+20
+10
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Collections.reverse()</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+After:
+
+<pre>
+Collections.reverse(list);
+</pre>
+
+Result:
+
+<pre>
+40
+30
+20
+10
+</pre>
+
+Complexity:
+
+<pre>
+O(n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Collections.shuffle()</summary>
+
+<div class="inner">
+
+Randomly rearranges elements.
+
+Before:
+
+<pre>
+1 2 3 4 5
+</pre>
+
+After:
+
+<pre>
+4 1 5 2 3
+</pre>
+
+Possible use cases:
+
+<ul>
+<li>Games</li>
+<li>Cards</li>
+<li>Randomized Testing</li>
+<li>Quiz Applications</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Collections.binarySearch()</summary>
+
+<div class="inner">
+
+Requirement:
+
+<pre>
+List MUST be sorted
+</pre>
+
+Example:
+
+<pre>
+List<Integer> list =
+Arrays.asList(
+10,20,30,40
+);
+
+Collections.binarySearch(
+list,30
+);
+</pre>
+
+Output:
+
+<pre>
+2
+</pre>
+
+Complexity:
+
+<pre>
+O(log n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Binary Search Dry Run</summary>
+
+<div class="inner">
+
+List:
+
+<pre>
+10 20 30 40 50
+</pre>
+
+Search:
+
+<pre>
+40
+</pre>
+
+Step 1:
+
+<pre>
+mid = 30
+</pre>
+
+40 > 30
+
+Move Right.
+
+Step 2:
+
+<pre>
+40 found
+</pre>
+
+Complexity:
+
+<pre>
+log₂(n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. Collections.min()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+[5,10,2,50]
+</pre>
+
+Result:
+
+<pre>
+Collections.min(list)
+
+= 2
+</pre>
+
+Complexity:
+
+<pre>
+O(n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. Collections.max()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+[5,10,2,50]
+</pre>
+
+Result:
+
+<pre>
+Collections.max(list)
+
+= 50
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Collections.frequency()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+[A,B,A,C,A]
+</pre>
+
+Code:
+
+<pre>
+Collections.frequency(
+list,
+"A"
+);
+</pre>
+
+Output:
+
+<pre>
+3
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Collections.swap()</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+10 20 30
+</pre>
+
+Swap:
+
+<pre>
+Collections.swap(
+list,
+0,
+2
+);
+</pre>
+
+After:
+
+<pre>
+30 20 10
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Immutable Collections</summary>
+
+<div class="inner">
+
+One of the most important backend concepts.
+
+Immutable means:
+
+<pre>
+Cannot Change
+</pre>
+
+After creation:
+
+<pre>
+No Add
+
+No Remove
+
+No Update
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Why Immutable Collections Matter</summary>
+
+<div class="inner">
+
+Benefits:
+
+<ul>
+
+<li>Thread Safety</li>
+
+<li>Defensive Programming</li>
+
+<li>Safe APIs</li>
+
+<li>No accidental modification</li>
+
+</ul>
+
+Used heavily in:
+
+<ul>
+
+<li>Spring</li>
+
+<li>Hibernate</li>
+
+<li>Microservices</li>
+
+<li>Framework Design</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. unmodifiableList()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+List<String> list =
+new ArrayList<>();
+
+list.add("Java");
+
+List<String> safe =
+Collections.unmodifiableList(
+list
+);
+</pre>
+
+Attempt:
+
+<pre>
+safe.add("Spring");
+</pre>
+
+Result:
+
+<pre>
+UnsupportedOperationException
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Memory Diagram</summary>
+
+<div class="inner">
+
+<pre>
+Original List
+
+|
+v
+
+[A,B,C]
+
+|
+v
+
+Unmodifiable View
+</pre>
+
+Important:
+
+Underlying list still exists.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Java 9 Immutable Collections</summary>
+
+<div class="inner">
+
+Modern way:
+
+<pre>
+List<String> list =
+List.of(
+"A",
+"B",
+"C"
+);
+</pre>
+
+Immutable immediately.
+
+Attempt:
+
+<pre>
+list.add("D");
+</pre>
+
+Exception.
+
+Preferred approach today.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Synchronized Collections</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+List<Integer> list =
+Collections
+.synchronizedList(
+new ArrayList<>()
+);
+</pre>
+
+Thread Safe.
+
+Internally:
+
+<pre>
+Every operation
+synchronized
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. synchronizedList() Internals</summary>
+
+<div class="inner">
+
+Wrapper Pattern.
+
+Diagram:
+
+<pre>
+ArrayList
+
+↓
+
+Synchronized Wrapper
+
+↓
+
+Thread Safe Access
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. synchronizedMap()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Map<Integer,String> map =
+Collections
+.synchronizedMap(
+new HashMap<>()
+);
+</pre>
+
+Thread Safe.
+
+But usually:
+
+<pre>
+ConcurrentHashMap
+</pre>
+
+is preferred.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Confusing Collection and Collections.</li>
+
+<li>Using binarySearch on unsorted data.</li>
+
+<li>Assuming unmodifiableList copies data.</li>
+
+<li>Using synchronizedList instead of Concurrent collections.</li>
+
+<li>Ignoring immutable collections.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>24. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Difference between Collection and Collections?</li>
+
+<li>What algorithm does Collections.sort use?</li>
+
+<li>What is TimSort?</li>
+
+<li>How does binarySearch work?</li>
+
+<li>What is immutable collection?</li>
+
+<li>Difference between List.of and unmodifiableList?</li>
+
+<li>What is synchronizedList?</li>
+
+<li>When should ConcurrentHashMap be preferred?</li>
+
+<li>What is UnsupportedOperationException?</li>
+
+<li>Why are immutable collections important?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>25. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers:
+
+<ul>
+
+<li>Prefer immutable collections whenever possible.</li>
+
+<li>Use ConcurrentHashMap over synchronizedMap.</li>
+
+<li>Know TimSort and binary search complexity.</li>
+
+<li>Understand wrappers vs actual implementations.</li>
+
+<li>Design APIs that return immutable collections.</li>
+
+</ul>
+
+<div class="callout senior">
+
+A large amount of backend engineering is choosing the correct collection and then preventing incorrect modification of that collection.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="collections-utility">
+
+<div class="section-head">
+    <h2>Chapter 14: Collections Utility Class & Immutable Collections</h2>
+
+    <p>
+        Collections Utility Methods,
+        Immutable Collections,
+        Synchronized Collections,
+        Internal Working,
+        Best Practices,
+        and Interview Questions.
+    </p>
+</div>
+
+<div class="content">
+
+<details open>
+<summary>1. Collection vs Collections</summary>
+
+<div class="inner">
+
+<div class="callout interview">
+
+Huge Interview Question.
+
+Many candidates confuse:
+
+<pre>
+Collection
+Collections
+</pre>
+
+</div>
+
+Collection:
+
+<pre>
+Interface
+</pre>
+
+Hierarchy:
+
+<pre>
+Collection
+|
++--- List
+|
++--- Set
+|
++--- Queue
+</pre>
+
+Collections:
+
+<pre>
+Utility Class
+</pre>
+
+Contains:
+
+<pre>
+sort()
+reverse()
+shuffle()
+binarySearch()
+min()
+max()
+frequency()
+unmodifiableList()
+synchronizedList()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>2. Collections Architecture</summary>
+
+<div class="inner">
+
+Think of Collections as:
+
+<pre>
+Java Helper Toolkit
+</pre>
+
+Diagram:
+
+<pre>
+Collections
+
+|
++-- sort()
+
+|
++-- reverse()
+
+|
++-- shuffle()
+
+|
++-- binarySearch()
+
+|
++-- min()
+
+|
++-- max()
+
+|
++-- frequency()
+
+|
++-- unmodifiableXXX()
+
+|
++-- synchronizedXXX()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>3. Collections.sort()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+List<Integer> list =
+Arrays.asList(
+50,10,30,20
+);
+
+Collections.sort(list);
+</pre>
+
+Output:
+
+<pre>
+10
+20
+30
+50
+</pre>
+
+Internally Java uses:
+
+<pre>
+TimSort
+</pre>
+
+Complexity:
+
+<pre>
+O(n log n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>4. What Is TimSort?</summary>
+
+<div class="inner">
+
+Interview Favorite.
+
+TimSort:
+
+<pre>
+Merge Sort
++
+Insertion Sort
+</pre>
+
+Advantages:
+
+<ul>
+<li>Stable</li>
+<li>Fast</li>
+<li>Optimized for real-world data</li>
+</ul>
+
+Used by:
+
+<pre>
+Collections.sort()
+
+List.sort()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>5. Sorting Custom Objects</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+class Student
+{
+    int marks;
+}
+</pre>
+
+Sort using Comparator:
+
+<pre>
+Collections.sort(
+students,
+(a,b) ->
+a.marks - b.marks
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>6. Reverse Order Sorting</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Collections.sort(
+list,
+Collections.reverseOrder()
+);
+</pre>
+
+Output:
+
+<pre>
+50
+30
+20
+10
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>7. Collections.reverse()</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+10
+20
+30
+40
+</pre>
+
+After:
+
+<pre>
+Collections.reverse(list);
+</pre>
+
+Result:
+
+<pre>
+40
+30
+20
+10
+</pre>
+
+Complexity:
+
+<pre>
+O(n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>8. Collections.shuffle()</summary>
+
+<div class="inner">
+
+Randomly rearranges elements.
+
+Before:
+
+<pre>
+1 2 3 4 5
+</pre>
+
+After:
+
+<pre>
+4 1 5 2 3
+</pre>
+
+Possible use cases:
+
+<ul>
+<li>Games</li>
+<li>Cards</li>
+<li>Randomized Testing</li>
+<li>Quiz Applications</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>9. Collections.binarySearch()</summary>
+
+<div class="inner">
+
+Requirement:
+
+<pre>
+List MUST be sorted
+</pre>
+
+Example:
+
+<pre>
+List<Integer> list =
+Arrays.asList(
+10,20,30,40
+);
+
+Collections.binarySearch(
+list,30
+);
+</pre>
+
+Output:
+
+<pre>
+2
+</pre>
+
+Complexity:
+
+<pre>
+O(log n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>10. Binary Search Dry Run</summary>
+
+<div class="inner">
+
+List:
+
+<pre>
+10 20 30 40 50
+</pre>
+
+Search:
+
+<pre>
+40
+</pre>
+
+Step 1:
+
+<pre>
+mid = 30
+</pre>
+
+40 > 30
+
+Move Right.
+
+Step 2:
+
+<pre>
+40 found
+</pre>
+
+Complexity:
+
+<pre>
+log₂(n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>11. Collections.min()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+[5,10,2,50]
+</pre>
+
+Result:
+
+<pre>
+Collections.min(list)
+
+= 2
+</pre>
+
+Complexity:
+
+<pre>
+O(n)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>12. Collections.max()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+[5,10,2,50]
+</pre>
+
+Result:
+
+<pre>
+Collections.max(list)
+
+= 50
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>13. Collections.frequency()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+[A,B,A,C,A]
+</pre>
+
+Code:
+
+<pre>
+Collections.frequency(
+list,
+"A"
+);
+</pre>
+
+Output:
+
+<pre>
+3
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>14. Collections.swap()</summary>
+
+<div class="inner">
+
+Before:
+
+<pre>
+10 20 30
+</pre>
+
+Swap:
+
+<pre>
+Collections.swap(
+list,
+0,
+2
+);
+</pre>
+
+After:
+
+<pre>
+30 20 10
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>15. Immutable Collections</summary>
+
+<div class="inner">
+
+One of the most important backend concepts.
+
+Immutable means:
+
+<pre>
+Cannot Change
+</pre>
+
+After creation:
+
+<pre>
+No Add
+
+No Remove
+
+No Update
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>16. Why Immutable Collections Matter</summary>
+
+<div class="inner">
+
+Benefits:
+
+<ul>
+
+<li>Thread Safety</li>
+
+<li>Defensive Programming</li>
+
+<li>Safe APIs</li>
+
+<li>No accidental modification</li>
+
+</ul>
+
+Used heavily in:
+
+<ul>
+
+<li>Spring</li>
+
+<li>Hibernate</li>
+
+<li>Microservices</li>
+
+<li>Framework Design</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>17. unmodifiableList()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+List<String> list =
+new ArrayList<>();
+
+list.add("Java");
+
+List<String> safe =
+Collections.unmodifiableList(
+list
+);
+</pre>
+
+Attempt:
+
+<pre>
+safe.add("Spring");
+</pre>
+
+Result:
+
+<pre>
+UnsupportedOperationException
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>18. Memory Diagram</summary>
+
+<div class="inner">
+
+<pre>
+Original List
+
+|
+v
+
+[A,B,C]
+
+|
+v
+
+Unmodifiable View
+</pre>
+
+Important:
+
+Underlying list still exists.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>19. Java 9 Immutable Collections</summary>
+
+<div class="inner">
+
+Modern way:
+
+<pre>
+List<String> list =
+List.of(
+"A",
+"B",
+"C"
+);
+</pre>
+
+Immutable immediately.
+
+Attempt:
+
+<pre>
+list.add("D");
+</pre>
+
+Exception.
+
+Preferred approach today.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>20. Synchronized Collections</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+List<Integer> list =
+Collections
+.synchronizedList(
+new ArrayList<>()
+);
+</pre>
+
+Thread Safe.
+
+Internally:
+
+<pre>
+Every operation
+synchronized
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>21. synchronizedList() Internals</summary>
+
+<div class="inner">
+
+Wrapper Pattern.
+
+Diagram:
+
+<pre>
+ArrayList
+
+↓
+
+Synchronized Wrapper
+
+↓
+
+Thread Safe Access
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>22. synchronizedMap()</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+Map<Integer,String> map =
+Collections
+.synchronizedMap(
+new HashMap<>()
+);
+</pre>
+
+Thread Safe.
+
+But usually:
+
+<pre>
+ConcurrentHashMap
+</pre>
+
+is preferred.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>23. Common Mistakes</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Confusing Collection and Collections.</li>
+
+<li>Using binarySearch on unsorted data.</li>
+
+<li>Assuming unmodifiableList copies data.</li>
+
+<li>Using synchronizedList instead of Concurrent collections.</li>
+
+<li>Ignoring immutable collections.</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>24. Interview Questions</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Difference between Collection and Collections?</li>
+
+<li>What algorithm does Collections.sort use?</li>
+
+<li>What is TimSort?</li>
+
+<li>How does binarySearch work?</li>
+
+<li>What is immutable collection?</li>
+
+<li>Difference between List.of and unmodifiableList?</li>
+
+<li>What is synchronizedList?</li>
+
+<li>When should ConcurrentHashMap be preferred?</li>
+
+<li>What is UnsupportedOperationException?</li>
+
+<li>Why are immutable collections important?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>25. Senior Engineer Notes</summary>
+
+<div class="inner">
+
+Strong engineers:
+
+<ul>
+
+<li>Prefer immutable collections whenever possible.</li>
+
+<li>Use ConcurrentHashMap over synchronizedMap.</li>
+
+<li>Know TimSort and binary search complexity.</li>
+
+<li>Understand wrappers vs actual implementations.</li>
+
+<li>Design APIs that return immutable collections.</li>
+
+</ul>
+
+<div class="callout senior">
+
+A large amount of backend engineering is choosing the correct collection and then preventing incorrect modification of that collection.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+
+
+        </main>
+
+    </div>
+
+    <div class="book-navigation">
+
+        <a href="volume1.html">
+            ← Volume 1
+        </a>
+
+        <a href="volume3.html">
+            Volume 3 →
+        </a>
+
+    </div>
+
+</div>
+
+<script src="../js/theme.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </main>
+
+    </div>
+
+    <div class="book-navigation">
+
+        <a href="volume1.html">
+            ← Volume 1
+        </a>
+
+        <a href="volume3.html">
+            Volume 3 →
+        </a>
+
+    </div>
+
+</div>
+
+<script src="../js/theme.js"></script>
+
+</body>
+</html>

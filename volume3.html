@@ -1,0 +1,8645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Volume 3 - Exception Handling & Multithreading
+</title>
+
+<link rel="stylesheet"
+href="../css/handbook.css">
+
+<script defer
+src="../js/theme.js">
+</script>
+
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<h3>
+TABLE OF CONTENTS
+</h3>
+
+<nav class="toc">
+
+<ul>
+
+<li>
+<a href="#exceptions">
+1. Exception Handling
+</a>
+</li>
+
+<li>
+<a href="#custom-exceptions">
+2. Custom Exceptions
+</a>
+</li>
+
+<li>
+<a href="#exception-best-practices">
+3. Exception Design
+</a>
+</li>
+
+<li>
+<a href="#program-process-thread">
+4. Program vs Process vs Thread
+</a>
+</li>
+
+<li>
+<a href="#thread-lifecycle">
+5. Thread Lifecycle
+</a>
+</li>
+
+<li>
+<a href="#creating-threads">
+6. Creating Threads
+</a>
+</li>
+
+<li>
+<a href="#thread-methods">
+7. Thread Methods
+</a>
+</li>
+
+<li>
+<a href="#synchronization">
+8. Synchronization
+</a>
+</li>
+
+<li>
+<a href="#deadlock">
+9. Deadlock
+</a>
+</li>
+
+<li>
+<a href="#reentrantlock">
+10. ReentrantLock
+</a>
+</li>
+
+<li>
+<a href="#executorservice">
+11. ExecutorService
+</a>
+</li>
+
+<li>
+<a href="#future-callable">
+12. Future & Callable
+</a>
+</li>
+
+<li>
+<a href="#completablefuture">
+13. CompletableFuture
+</a>
+</li>
+
+<li>
+<a href="#semaphore">
+14. Semaphore
+</a>
+</li>
+
+<li>
+<a href="#countdownlatch">
+15. CountDownLatch
+</a>
+</li>
+
+<li>
+<a href="#cyclicbarrier">
+16. CyclicBarrier
+</a>
+</li>
+
+<li>
+<a href="#phaser">
+17. Phaser
+</a>
+</li>
+
+<li>
+<a href="#volume3-revision">
+18. Revision Guide
+</a>
+</li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<main>
+
+<header class="hero">
+
+<div class="badge">
+
+Volume 3 · Exception Handling &
+Multithreading
+
+</div>
+
+<h1>
+
+Java Exception Handling &
+Concurrency Handbook
+
+</h1>
+
+<p>
+
+This volume covers exception handling,
+custom exceptions, multithreading,
+synchronization, locks, executor
+frameworks, concurrency utilities,
+and interview preparation.
+
+</p>
+
+</header>
+
+<section>
+
+<div class="callout success">
+
+Learning Order
+
+1. Exceptions
+
+2. Custom Exceptions
+
+3. Thread Fundamentals
+
+4. Synchronization
+
+5. Locks
+
+6. Executor Framework
+
+7. Concurrency Utilities
+
+8. Interview Revision
+
+</div>
+
+</section>
+
+<!-- PASTE CHAPTERS BELOW THIS -->
+
+
+
+<!-- END OF CHAPTERS -->
+
+<div class="footer">
+
+End of Volume 3
+
+</div>
+
+<hr>
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+margin-top:30px;
+">
+
+<a href="volume2.html">
+
+← Volume 2
+
+</a>
+
+<a href="volume4.html">
+
+Volume 4 →
+
+</a>
+</div>
+
+<!-- PASTE CHAPTERS BELOW THIS -->
+
+<section id="exceptions">
+
+<div class="section-head">
+
+<h2>
+Chapter 1: Exception Handling Deep Dive
+</h2>
+
+<p>
+Throwable, Error, Exception,
+Checked vs Unchecked Exceptions,
+try-catch-finally,
+throw vs throws,
+Stack Unwinding,
+try-with-resources,
+Exception Chaining,
+and Production Best Practices.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why Exception Handling Exists
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Imagine an ATM.
+
+Normal Flow:
+
+<pre>
+Insert Card
+   ↓
+Enter PIN
+   ↓
+Withdraw Money
+</pre>
+
+Unexpected situations:
+
+<pre>
+Network Failure
+Insufficient Balance
+Invalid PIN
+Cash Dispenser Error
+</pre>
+
+Without exception handling:
+
+<pre>
+Application Crashes
+</pre>
+
+Exception handling allows the application to:
+
+<pre>
+Detect Error
+Handle Error
+Recover Gracefully
+Continue Execution
+</pre>
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. What Is An Exception?
+</summary>
+
+<div class="inner">
+
+Definition:
+
+<pre>
+An exception is an event that
+interrupts the normal flow of
+program execution.
+</pre>
+
+Example:
+
+<pre>
+String s = null;
+
+System.out.println(
+s.length()
+);
+</pre>
+
+Output:
+
+<pre>
+NullPointerException
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Exception Flow Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Program Starts
+      |
+      v
+
+Normal Execution
+      |
+      v
+
+Exception Occurs
+      |
+      v
+
+Exception Object Created
+      |
+      v
+
+Search Catch Block
+      |
+      +---- Found ----+
+      |              |
+      v              |
+ Handle             Continue
+
+      |
+      +---- Not Found ----+
+                           |
+                           v
+
+                  JVM Terminates
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Throwable Hierarchy
+</summary>
+
+<div class="inner">
+
+Most Important Interview Diagram.
+
+<pre>
+
+Throwable
+|
++----------------------+
+|                      |
+Error               Exception
+                        |
+                 RuntimeException
+
+</pre>
+
+Everything originates from:
+
+<pre>
+Throwable
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Error vs Exception
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Error</th>
+<th>Exception</th>
+</tr>
+
+<tr>
+<td>JVM Problem</td>
+<td>Application Problem</td>
+</tr>
+
+<tr>
+<td>Usually Unrecoverable</td>
+<td>Usually Recoverable</td>
+</tr>
+
+<tr>
+<td>OutOfMemoryError</td>
+<td>IOException</td>
+</tr>
+
+<tr>
+<td>StackOverflowError</td>
+<td>SQLException</td>
+</tr>
+
+<tr>
+<td>Not Meant To Be Handled</td>
+<td>Usually Handled</td>
+</tr>
+
+</table>
+
+<div class="callout interview">
+
+Interview Question:
+
+Can we catch Error?
+
+Yes.
+
+Should we?
+
+Usually No.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Checked Exceptions
+</summary>
+
+<div class="inner">
+
+Compiler forces handling.
+
+Example:
+
+<pre>
+FileReader file =
+new FileReader(
+"data.txt"
+);
+</pre>
+
+Compiler:
+
+<pre>
+Unhandled Exception
+</pre>
+
+Must:
+
+<pre>
+Handle It
+OR
+Declare It
+</pre>
+
+Examples:
+
+<pre>
+IOException
+SQLException
+ClassNotFoundException
+ParseException
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Unchecked Exceptions
+</summary>
+
+<div class="inner">
+
+Compiler does not force handling.
+
+Examples:
+
+<pre>
+NullPointerException
+
+ArithmeticException
+
+IllegalArgumentException
+
+ArrayIndexOutOfBoundsException
+
+NumberFormatException
+</pre>
+
+All inherit:
+
+<pre>
+RuntimeException
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Checked vs Unchecked Comparison
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Feature</th>
+<th>Checked</th>
+<th>Unchecked</th>
+</tr>
+
+<tr>
+<td>Compile Time Check</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>Must Handle</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>Inheritance</td>
+<td>Exception</td>
+<td>RuntimeException</td>
+</tr>
+
+<tr>
+<td>Examples</td>
+<td>IOException</td>
+<td>NullPointerException</td>
+</tr>
+
+<tr>
+<td>Purpose</td>
+<td>Recoverable Problems</td>
+<td>Programming Mistakes</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. try Block Deep Dive
+</summary>
+
+<div class="inner">
+
+Risky code goes inside try.
+
+<pre>
+try
+{
+    int result =
+    10 / 0;
+}
+</pre>
+
+Good Practice:
+
+Only place risky statements inside.
+
+Bad:
+
+<pre>
+try
+{
+   500 lines
+}
+</pre>
+
+Hard to debug.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. catch Block Deep Dive
+</summary>
+
+<div class="inner">
+
+Used to handle exception.
+
+<pre>
+try
+{
+    int result =
+    10 / 0;
+}
+catch(Exception e)
+{
+    System.out.println(
+    e.getMessage()
+    );
+}
+</pre>
+
+Output:
+
+<pre>
+/ by zero
+</pre>
+
+Useful Methods:
+
+<pre>
+e.getMessage()
+
+e.printStackTrace()
+
+e.toString()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. finally Block Deep Dive
+</summary>
+
+<div class="inner">
+
+Runs almost always.
+
+<pre>
+try
+{
+   System.out.println(
+   "Try"
+   );
+}
+finally
+{
+   System.out.println(
+   "Finally"
+   );
+}
+</pre>
+
+Output:
+
+<pre>
+Try
+Finally
+</pre>
+
+Used For:
+
+<pre>
+Close Files
+
+Close DB Connections
+
+Release Resources
+
+Close Sockets
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+12. Return And Finally Interview Trap
+</summary>
+
+<div class="inner">
+
+Code:
+
+<pre>
+public int test()
+{
+   try
+   {
+      return 10;
+   }
+   finally
+   {
+      System.out.println(
+      "Finally"
+      );
+   }
+}
+</pre>
+
+Output:
+
+<pre>
+Finally
+</pre>
+
+Returned Value:
+
+<pre>
+10
+</pre>
+
+Explanation:
+
+Return value is prepared first.
+
+Finally executes before method exits.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+13. Multiple Catch Blocks
+</summary>
+
+<div class="inner">
+
+<pre>
+try
+{
+}
+catch(IOException e)
+{
+}
+catch(SQLException e)
+{
+}
+catch(Exception e)
+{
+}
+</pre>
+
+Rule:
+
+<pre>
+Most Specific First
+
+Most General Last
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+14. throw Keyword
+</summary>
+
+<div class="inner">
+
+Manually create exception.
+
+<pre>
+if(age < 18)
+{
+    throw new
+    RuntimeException(
+    "Age must be 18+"
+    );
+}
+</pre>
+
+Used for:
+
+Business validation.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+15. throws Keyword
+</summary>
+
+<div class="inner">
+
+Method declaration.
+
+<pre>
+public void readFile()
+throws IOException
+{
+}
+</pre>
+
+Meaning:
+
+<pre>
+Caller must handle it.
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+16. throw vs throws
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>throw</th>
+<th>throws</th>
+</tr>
+
+<tr>
+<td>Create Exception</td>
+<td>Declare Exception</td>
+</tr>
+
+<tr>
+<td>Method Body</td>
+<td>Method Signature</td>
+</tr>
+
+<tr>
+<td>Single Object</td>
+<td>Multiple Types</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+17. Stack Unwinding
+</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+main()
+ |
+A()
+ |
+B()
+ |
+Exception
+</pre>
+
+When exception occurs:
+
+<pre>
+B exits
+
+↓
+
+A exits
+
+↓
+
+main handles
+</pre>
+
+Called:
+
+<pre>
+Stack Unwinding
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+18. Exception Propagation
+</summary>
+
+<div class="inner">
+
+Example:
+
+<pre>
+main()
+{
+  A();
+}
+
+A()
+{
+  B();
+}
+
+B()
+{
+  throw exception;
+}
+</pre>
+
+Exception moves upward until handled.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+19. try-with-resources
+</summary>
+
+<div class="inner">
+
+Modern Java.
+
+<pre>
+try(
+BufferedReader br =
+new BufferedReader(
+new FileReader(
+"data.txt"
+))
+)
+{
+}
+</pre>
+
+Automatic cleanup.
+
+No need for finally.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+20. AutoCloseable
+</summary>
+
+<div class="inner">
+
+try-with-resources works because:
+
+<pre>
+AutoCloseable
+</pre>
+
+interface exists.
+
+<pre>
+public interface
+AutoCloseable
+{
+    void close();
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+21. Exception Chaining
+</summary>
+
+<div class="inner">
+
+Real systems wrap exceptions.
+
+<pre>
+try
+{
+   databaseCall();
+}
+catch(SQLException e)
+{
+   throw new
+   RuntimeException(
+   "Database Error",
+   e
+   );
+}
+</pre>
+
+Preserves original cause.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+22. Common Exceptions Every Developer Must Know
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Exception</th>
+<th>Reason</th>
+</tr>
+
+<tr>
+<td>NullPointerException</td>
+<td>Null Access</td>
+</tr>
+
+<tr>
+<td>ArithmeticException</td>
+<td>Divide By Zero</td>
+</tr>
+
+<tr>
+<td>NumberFormatException</td>
+<td>Invalid Conversion</td>
+</tr>
+
+<tr>
+<td>IOException</td>
+<td>File Problems</td>
+</tr>
+
+<tr>
+<td>SQLException</td>
+<td>Database Problems</td>
+</tr>
+
+<tr>
+<td>ClassCastException</td>
+<td>Wrong Cast</td>
+</tr>
+
+<tr>
+<td>ConcurrentModificationException</td>
+<td>Unsafe Collection Modification</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+23. Best Practices
+</summary>
+
+<div class="inner">
+
+✅ Catch Specific Exceptions
+
+✅ Use Meaningful Messages
+
+✅ Log Exceptions
+
+✅ Wrap Low Level Exceptions
+
+✅ Clean Resources
+
+❌ Empty Catch Blocks
+
+❌ Swallow Exceptions
+
+❌ Catch Exception Everywhere
+
+❌ Ignore Stack Traces
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+24. Top Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Difference between Error and Exception?</li>
+
+<li>Checked vs Unchecked?</li>
+
+<li>What is Throwable?</li>
+
+<li>What is stack unwinding?</li>
+
+<li>What is exception propagation?</li>
+
+<li>Difference between throw and throws?</li>
+
+<li>Can finally be skipped?</li>
+
+<li>Can we catch Error?</li>
+
+<li>Why RuntimeException is unchecked?</li>
+
+<li>What is try-with-resources?</li>
+
+<li>What is exception chaining?</li>
+
+<li>Why use custom exceptions?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+25. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Production Systems Care About:
+
+<pre>
+Logging
+
+Monitoring
+
+Tracing
+
+Retries
+
+Fallbacks
+
+Graceful Degradation
+</pre>
+
+A crash is not a bug.
+
+A crash without useful logs is.
+
+<div class="callout senior">
+
+Junior developers focus on fixing exceptions.
+
+Senior engineers focus on designing systems
+that remain observable and recoverable
+when exceptions occur.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="custom-exceptions">
+
+<div class="section-head">
+
+<h2>
+Chapter 2: Custom Exceptions Deep Dive
+</h2>
+
+<p>
+Creating Business Exceptions,
+Validation Exceptions,
+Exception Hierarchies,
+Exception Chaining,
+Enterprise Design Patterns,
+and Production Practices.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why Custom Exceptions Exist
+</summary>
+
+<div class="inner">
+
+<div class="callout intuit">
+
+Built-in exceptions are generic.
+
+Example:
+
+<pre>
+IllegalArgumentException
+</pre>
+
+works.
+
+But:
+
+<pre>
+UserAgeInvalidException
+</pre>
+
+is far more meaningful.
+
+Custom exceptions help us express
+business problems clearly.
+
+</div>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Real World Example
+</summary>
+
+<div class="inner">
+
+Banking System:
+
+<pre>
+Withdraw Money
+</pre>
+
+Possible problems:
+
+<pre>
+InsufficientFundsException
+
+AccountBlockedException
+
+DailyLimitExceededException
+</pre>
+
+These are business-specific exceptions.
+
+Java cannot provide them.
+
+We create them ourselves.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Creating First Custom Exception
+</summary>
+
+<div class="inner">
+
+<pre>
+class InvalidAgeException
+extends Exception
+{
+    public InvalidAgeException(
+    String message)
+    {
+        super(message);
+    }
+}
+</pre>
+
+Usage:
+
+<pre>
+if(age < 18)
+{
+   throw new
+   InvalidAgeException(
+   "Age must be 18+"
+   );
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Memory Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+throw
+
+↓
+
+new InvalidAgeException()
+
+↓
+
+Exception Object
+
+↓
+
+JVM Searches Catch Block
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Checked Custom Exception
+</summary>
+
+<div class="inner">
+
+Extends:
+
+<pre>
+Exception
+</pre>
+
+Compiler forces handling.
+
+<pre>
+class InvalidAgeException
+extends Exception
+{
+}
+</pre>
+
+Must:
+
+<pre>
+try-catch
+</pre>
+
+or
+
+<pre>
+throws
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Unchecked Custom Exception
+</summary>
+
+<div class="inner">
+
+Extends:
+
+<pre>
+RuntimeException
+</pre>
+
+Example:
+
+<pre>
+class InvalidAgeException
+extends RuntimeException
+{
+}
+</pre>
+
+Compiler does not force handling.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Checked vs Unchecked Custom Exceptions
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Checked</th>
+<th>Unchecked</th>
+</tr>
+
+<tr>
+<td>Extends Exception</td>
+<td>Extends RuntimeException</td>
+</tr>
+
+<tr>
+<td>Must Handle</td>
+<td>Optional</td>
+</tr>
+
+<tr>
+<td>Business Recovery</td>
+<td>Programming Error</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Custom Exception With Error Code
+</summary>
+
+<div class="inner">
+
+Production systems often store:
+
+<pre>
+Message
+
+Error Code
+
+Timestamp
+</pre>
+
+Example:
+
+<pre>
+class BusinessException
+extends RuntimeException
+{
+   private String code;
+
+   public BusinessException(
+   String code,
+   String msg)
+   {
+      super(msg);
+      this.code = code;
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. Exception Chaining Deep Dive
+</summary>
+
+<div class="inner">
+
+Suppose:
+
+Database layer fails.
+
+<pre>
+SQLException
+</pre>
+
+Service layer wraps it:
+
+<pre>
+throw new
+BusinessException(
+"Unable To Save User",
+e
+);
+</pre>
+
+Original cause preserved.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. Exception Chaining Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+SQLException
+
+↓
+
+UserServiceException
+
+↓
+
+ControllerException
+
+</pre>
+
+Cause chain maintained.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. getCause()
+</summary>
+
+<div class="inner">
+
+Retrieve original exception.
+
+<pre>
+Throwable cause =
+e.getCause();
+</pre>
+
+Useful during debugging.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+12. Custom Exception Hierarchy
+</summary>
+
+<div class="inner">
+
+Enterprise Systems:
+
+<pre>
+
+ApplicationException
+
+|
++-------------------+
+
+|
+
+ValidationException
+
+BusinessException
+
+DatabaseException
+
+SecurityException
+
+</pre>
+
+Cleaner architecture.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+13. Validation Exception Example
+</summary>
+
+<div class="inner">
+
+<pre>
+if(email == null)
+{
+   throw new
+   ValidationException(
+   "Email Required"
+   );
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+14. Business Exception Example
+</summary>
+
+<div class="inner">
+
+<pre>
+if(balance < amount)
+{
+   throw new
+   InsufficientFundsException(
+   "Not enough balance"
+   );
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+15. Common Mistakes
+</summary>
+
+<div class="inner">
+
+❌ Creating hundreds of exceptions
+
+❌ Naming exceptions poorly
+
+❌ Losing original cause
+
+❌ Catching and ignoring exceptions
+
+❌ Returning null instead of throwing
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="exception-best-practices">
+
+<div class="section-head">
+
+<h2>
+Chapter 3: Exception Design Patterns & Best Practices
+</h2>
+
+<p>
+Production Grade Exception Design,
+Logging,
+Monitoring,
+Error Handling Strategies,
+and Enterprise Architecture.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why Exception Design Matters
+</summary>
+
+<div class="inner">
+
+A crash is not the worst thing.
+
+A crash with:
+
+<pre>
+No Logs
+
+No Error Message
+
+No Monitoring
+</pre>
+
+is far worse.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Catch Specific Exceptions
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+catch(Exception e)
+{
+}
+</pre>
+
+Good:
+
+<pre>
+catch(IOException e)
+{
+}
+</pre>
+
+Specific exceptions provide better recovery.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Never Swallow Exceptions
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+catch(Exception e)
+{
+}
+</pre>
+
+Exception disappears.
+
+Debugging becomes impossible.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Logging Exceptions
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+System.out.println(e);
+</pre>
+
+Good:
+
+<pre>
+logger.error(
+"Database failed",
+e
+);
+</pre>
+
+Used in:
+
+<pre>
+Spring Boot
+
+Microservices
+
+Enterprise Systems
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Exception Translation Pattern
+</summary>
+
+<div class="inner">
+
+Low-Level:
+
+<pre>
+SQLException
+</pre>
+
+Translate:
+
+<pre>
+DatabaseException
+</pre>
+
+Service layer remains database-independent.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Fail Fast Principle
+</summary>
+
+<div class="inner">
+
+Detect problems early.
+
+Example:
+
+<pre>
+if(user == null)
+{
+   throw new
+   IllegalArgumentException();
+}
+</pre>
+
+Do not continue with invalid state.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Retry Pattern
+</summary>
+
+<div class="inner">
+
+Temporary failures:
+
+<pre>
+Network
+
+Database
+
+API Calls
+</pre>
+
+can be retried.
+
+Example:
+
+<pre>
+Attempt 1
+
+↓
+
+Attempt 2
+
+↓
+
+Attempt 3
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Fallback Pattern
+</summary>
+
+<div class="inner">
+
+Primary service fails.
+
+Use backup.
+
+Example:
+
+<pre>
+Redis Down
+
+↓
+
+Read From Database
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. Global Exception Handling
+</summary>
+
+<div class="inner">
+
+Spring Boot:
+
+<pre>
+@ControllerAdvice
+</pre>
+
+Centralized error handling.
+
+One place.
+
+Whole application.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Why create custom exceptions?</li>
+
+<li>Checked vs unchecked custom exception?</li>
+
+<li>What is exception chaining?</li>
+
+<li>What is getCause()?</li>
+
+<li>What is exception translation?</li>
+
+<li>What is fail-fast?</li>
+
+<li>Why log exceptions?</li>
+
+<li>What is global exception handling?</li>
+
+<li>What is fallback pattern?</li>
+
+<li>What is retry pattern?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. Senior Engineer Notes
+</summary>
+
+<div class="inner">
+
+Senior engineers focus on:
+
+<pre>
+Observability
+
+Monitoring
+
+Logging
+
+Tracing
+
+Recovery
+</pre>
+
+Not merely catching exceptions.
+
+A good system fails gracefully.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="program-process-thread">
+
+<div class="section-head">
+
+<h2>
+Chapter 4: Program vs Process vs Thread
+</h2>
+
+<p>
+Operating System Fundamentals,
+Memory Layout,
+Process Creation,
+Threads,
+Concurrency,
+Parallelism,
+and Interview Questions.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is A Program?
+</summary>
+
+<div class="inner">
+
+A Program is:
+
+<pre>
+Passive Code
+Stored On Disk
+</pre>
+
+Examples:
+
+<pre>
+chrome.exe
+
+java.exe
+
+spotify.exe
+</pre>
+
+Before execution:
+
+<pre>
+Program
+=
+Instructions
+Only
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Program Analogy
+</summary>
+
+<div class="inner">
+
+Recipe Book.
+
+A recipe itself does nothing.
+
+Only when a chef starts cooking:
+
+<pre>
+Program
+
+↓
+
+Execution
+
+↓
+
+Process
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. What Is A Process?
+</summary>
+
+<div class="inner">
+
+Process:
+
+<pre>
+Program In Execution
+</pre>
+
+When JVM starts:
+
+<pre>
+java Main
+</pre>
+
+OS creates:
+
+<pre>
+Java Process
+</pre>
+
+Resources allocated:
+
+<ul>
+
+<li>Memory</li>
+
+<li>CPU Time</li>
+
+<li>Files</li>
+
+<li>Network Resources</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Process Memory Layout
+</summary>
+
+<div class="inner">
+
+<pre>
+
++------------------+
+
+| Code Segment |
+
++------------------+
+
+| Data Segment |
+
++------------------+
+
+| Heap |
+
++------------------+
+
+| Stack |
+
++------------------+
+
+</pre>
+
+Each process gets its own memory.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. What Is A Thread?
+</summary>
+
+<div class="inner">
+
+Thread:
+
+<pre>
+Smallest Unit Of Execution
+</pre>
+
+Inside one process:
+
+<pre>
+Process
+
+|
++-- Thread 1
+
+|
++-- Thread 2
+
+|
++-- Thread 3
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Thread Memory Model
+</summary>
+
+<div class="inner">
+
+Threads share:
+
+<pre>
+Heap
+
+Method Area
+</pre>
+
+Each thread gets:
+
+<pre>
+Own Stack
+
+Own PC Register
+</pre>
+
+Diagram:
+
+<pre>
+
+Thread A Stack
+
+Thread B Stack
+
+Thread C Stack
+
+↓
+
+Shared Heap
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Process vs Thread
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Process</th>
+<th>Thread</th>
+</tr>
+
+<tr>
+<td>Heavyweight</td>
+<td>Lightweight</td>
+</tr>
+
+<tr>
+<td>Own Memory</td>
+<td>Shared Memory</td>
+</tr>
+
+<tr>
+<td>Slow Creation</td>
+<td>Fast Creation</td>
+</tr>
+
+<tr>
+<td>Expensive Context Switch</td>
+<td>Cheaper Context Switch</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Why Threads Exist
+</summary>
+
+<div class="inner">
+
+Without threads:
+
+<pre>
+Download File
+
+↓
+
+Wait
+
+↓
+
+UI Frozen
+</pre>
+
+With threads:
+
+<pre>
+UI Thread
+
+↓
+
+Responsive
+
++
+
+Background Thread
+
+↓
+
+Download
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. Concurrency vs Parallelism
+</summary>
+
+<div class="inner">
+
+Most Asked Interview Question.
+
+Concurrency:
+
+<pre>
+Multiple Tasks
+Making Progress
+</pre>
+
+Parallelism:
+
+<pre>
+Multiple Tasks
+Running Simultaneously
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. Concurrency Diagram
+</summary>
+
+<div class="inner">
+
+Single CPU:
+
+<pre>
+
+Task A
+
+↓
+
+Task B
+
+↓
+
+Task A
+
+↓
+
+Task B
+
+</pre>
+
+Rapid switching.
+
+Appears simultaneous.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. Parallelism Diagram
+</summary>
+
+<div class="inner">
+
+Multiple CPUs:
+
+<pre>
+
+CPU1 → Task A
+
+CPU2 → Task B
+
+CPU3 → Task C
+
+</pre>
+
+Actually simultaneous.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+12. Context Switching
+</summary>
+
+<div class="inner">
+
+CPU switches between threads.
+
+Steps:
+
+<pre>
+
+Save State
+
+↓
+
+Load New State
+
+↓
+
+Execute
+
+</pre>
+
+Called:
+
+<pre>
+Context Switch
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+13. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Program vs Process?</li>
+
+<li>Process vs Thread?</li>
+
+<li>Why threads?</li>
+
+<li>What memory do threads share?</li>
+
+<li>What is context switching?</li>
+
+<li>Concurrency vs Parallelism?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="thread-lifecycle">
+
+<div class="section-head">
+
+<h2>
+Chapter 5: Thread Lifecycle
+</h2>
+
+<p>
+Thread States,
+State Transitions,
+Scheduler Behavior,
+and JVM Internals.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Lifecycle Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+NEW
+
+↓
+
+RUNNABLE
+
+↓
+
+RUNNING
+
+↓
+
+BLOCKED
+
+↓
+
+WAITING
+
+↓
+
+TIMED_WAITING
+
+↓
+
+TERMINATED
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. NEW State
+</summary>
+
+<div class="inner">
+
+Thread created.
+
+Not started.
+
+<pre>
+Thread t =
+new Thread();
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. RUNNABLE State
+</summary>
+
+<div class="inner">
+
+After:
+
+<pre>
+t.start();
+</pre>
+
+Thread eligible for CPU.
+
+Not necessarily executing.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. RUNNING State
+</summary>
+
+<div class="inner">
+
+CPU assigned.
+
+Instructions executing.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. BLOCKED State
+</summary>
+
+<div class="inner">
+
+Waiting for monitor lock.
+
+Example:
+
+<pre>
+synchronized
+</pre>
+
+lock already held.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. WAITING State
+</summary>
+
+<div class="inner">
+
+Waiting indefinitely.
+
+Methods:
+
+<pre>
+wait()
+
+join()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. TIMED_WAITING
+</summary>
+
+<div class="inner">
+
+Waiting for specific time.
+
+Example:
+
+<pre>
+sleep(5000)
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. TERMINATED
+</summary>
+
+<div class="inner">
+
+run() finished.
+
+Thread ends.
+
+Cannot restart.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="creating-threads">
+
+<div class="section-head">
+
+<h2>
+Chapter 6: Creating Threads & Thread Methods
+</h2>
+
+<p>
+Thread Class,
+Runnable Interface,
+Thread APIs,
+Daemon Threads,
+Interruptions,
+and Interview Questions.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Creating Thread Using Thread Class
+</summary>
+
+<div class="inner">
+
+<pre>
+class MyThread
+extends Thread
+{
+    public void run()
+    {
+        System.out.println(
+        "Running"
+        );
+    }
+}
+</pre>
+
+Usage:
+
+<pre>
+MyThread t =
+new MyThread();
+
+t.start();
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Why start() Instead Of run()
+</summary>
+
+<div class="inner">
+
+Wrong:
+
+<pre>
+t.run();
+</pre>
+
+Normal method call.
+
+No new thread.
+
+Correct:
+
+<pre>
+t.start();
+</pre>
+
+JVM creates new thread.
+
+Then calls:
+
+<pre>
+run()
+</pre>
+
+internally.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Runnable Interface
+</summary>
+
+<div class="inner">
+
+Preferred approach.
+
+<pre>
+class Task
+implements Runnable
+{
+   public void run()
+   {
+      System.out.println(
+      "Task Running"
+      );
+   }
+}
+</pre>
+
+Usage:
+
+<pre>
+Thread t =
+new Thread(
+new Task()
+);
+
+t.start();
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Why Runnable Is Preferred
+</summary>
+
+<div class="inner">
+
+Advantages:
+
+<ul>
+
+<li>Supports inheritance</li>
+
+<li>Better design</li>
+
+<li>Task separated from thread</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Lambda Runnable
+</summary>
+
+<div class="inner">
+
+Modern Java:
+
+<pre>
+Thread t =
+new Thread(
+() ->
+{
+   System.out.println(
+   "Running"
+   );
+}
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Thread Methods
+</summary>
+
+<div class="inner">
+
+Important Methods:
+
+<pre>
+
+start()
+
+run()
+
+sleep()
+
+join()
+
+yield()
+
+interrupt()
+
+setPriority()
+
+setDaemon()
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. sleep()
+</summary>
+
+<div class="inner">
+
+Pause thread.
+
+<pre>
+Thread.sleep(
+3000
+);
+</pre>
+
+State:
+
+<pre>
+TIMED_WAITING
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. join()
+</summary>
+
+<div class="inner">
+
+Wait for thread completion.
+
+<pre>
+t.join();
+</pre>
+
+Current thread pauses.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. yield()
+</summary>
+
+<div class="inner">
+
+Hint to scheduler:
+
+<pre>
+You may run
+another thread.
+</pre>
+
+Not guaranteed.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. interrupt()
+</summary>
+
+<div class="inner">
+
+Request thread stop waiting.
+
+Sets:
+
+<pre>
+Interrupt Flag
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. Daemon Thread
+</summary>
+
+<div class="inner">
+
+Background thread.
+
+Example:
+
+<pre>
+Garbage Collector
+</pre>
+
+Create:
+
+<pre>
+t.setDaemon(true);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+12. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Thread vs Runnable?</li>
+
+<li>Why start() not run()?</li>
+
+<li>What is join()?</li>
+
+<li>What is sleep()?</li>
+
+<li>What is interrupt()?</li>
+
+<li>What is daemon thread?</li>
+
+<li>Can a thread be restarted?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="synchronization">
+
+<div class="section-head">
+
+<h2>
+Chapter 7: Race Condition & Thread Safety
+</h2>
+
+<p>
+Shared Resources,
+Race Conditions,
+Critical Sections,
+Atomicity,
+Visibility,
+and Thread Safety Fundamentals.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is A Race Condition?
+</summary>
+
+<div class="inner">
+
+A race condition occurs when:
+
+<pre>
+Multiple Threads
+
+↓
+
+Access Same Data
+
+↓
+
+At Same Time
+
+↓
+
+Incorrect Result
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Real World Analogy</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+Bank Account
+
+Balance = 1000
+</pre>
+
+Two threads:
+
+<pre>
+Thread A Withdraws 500
+
+Thread B Withdraws 700
+</pre>
+
+Expected:
+
+<pre>
+Impossible
+</pre>
+
+Actual:
+
+<pre>
+Balance Corruption
+</pre>
+
+Race Condition.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Race Condition Example
+</summary>
+
+<div class="inner">
+
+<pre>
+class Counter
+{
+    int count = 0;
+
+    void increment()
+    {
+        count++;
+    }
+}
+</pre>
+
+Looks harmless.
+
+Actually dangerous.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. count++ Is NOT Atomic
+</summary>
+
+<div class="inner">
+
+Many beginners think:
+
+<pre>
+count++
+</pre>
+
+is one operation.
+
+Actually:
+
+<pre>
+Read count
+
+↓
+
+Add 1
+
+↓
+
+Write count
+</pre>
+
+Three operations.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Race Condition Dry Run
+</summary>
+
+<div class="inner">
+
+Initial:
+
+<pre>
+count = 0
+</pre>
+
+Thread A:
+
+<pre>
+Read 0
+</pre>
+
+Thread B:
+
+<pre>
+Read 0
+</pre>
+
+Thread A:
+
+<pre>
+Write 1
+</pre>
+
+Thread B:
+
+<pre>
+Write 1
+</pre>
+
+Expected:
+
+<pre>
+2
+</pre>
+
+Actual:
+
+<pre>
+1
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Shared Resource
+</summary>
+
+<div class="inner">
+
+Shared Resource:
+
+<pre>
+Data accessed by
+multiple threads.
+</pre>
+
+Examples:
+
+<ul>
+
+<li>Bank Account</li>
+
+<li>Counter</li>
+
+<li>HashMap</li>
+
+<li>Queue</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Critical Section
+</summary>
+
+<div class="inner">
+
+Critical Section:
+
+<pre>
+Code that accesses
+shared resource.
+</pre>
+
+Example:
+
+<pre>
+count++;
+</pre>
+
+Must be protected.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Thread Safety
+</summary>
+
+<div class="inner">
+
+Thread Safe:
+
+<pre>
+Multiple Threads
+
+↓
+
+Correct Results
+
+↓
+
+No Corruption
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. Thread Safe Example
+</summary>
+
+<div class="inner">
+
+<pre>
+AtomicInteger count =
+new AtomicInteger();
+
+count.incrementAndGet();
+</pre>
+
+Safe.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="monitor-lock">
+
+<div class="section-head">
+
+<h2>
+Chapter 8: synchronized Keyword & Monitor Locks
+</h2>
+
+<p>
+Intrinsic Locks,
+Monitor Locks,
+Method Synchronization,
+Block Synchronization,
+and JVM Locking Mechanism.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why synchronized Exists
+</summary>
+
+<div class="inner">
+
+Problem:
+
+<pre>
+Race Condition
+</pre>
+
+Solution:
+
+<pre>
+Only One Thread
+At A Time
+</pre>
+
+Java keyword:
+
+<pre>
+synchronized
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Synchronized Method
+</summary>
+
+<div class="inner">
+
+<pre>
+class Counter
+{
+   private int count;
+
+   public synchronized
+   void increment()
+   {
+      count++;
+   }
+}
+</pre>
+
+Only one thread enters.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Memory Diagram
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Thread A
+
+↓
+
+LOCK ACQUIRED
+
+↓
+
+Critical Section
+
+↓
+
+LOCK RELEASED
+
+
+Thread B Waits
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Synchronized Block
+</summary>
+
+<div class="inner">
+
+Better than locking whole method.
+
+<pre>
+synchronized(this)
+{
+   count++;
+}
+</pre>
+
+Only critical code protected.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. What Is Monitor Lock?
+</summary>
+
+<div class="inner">
+
+Every Java object has:
+
+<pre>
+Monitor Lock
+</pre>
+
+Diagram:
+
+<pre>
+
+Object
+
+|
++-- Data
+
+|
++-- Monitor Lock
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Intrinsic Lock
+</summary>
+
+<div class="inner">
+
+Monitor Lock and Intrinsic Lock
+mean the same thing.
+
+JVM automatically manages it.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Static Synchronization
+</summary>
+
+<div class="inner">
+
+Locks:
+
+<pre>
+Class Object
+</pre>
+
+instead of:
+
+<pre>
+Instance Object
+</pre>
+
+Example:
+
+<pre>
+public static
+synchronized
+void test()
+{
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Visibility Guarantee
+</summary>
+
+<div class="inner">
+
+synchronized provides:
+
+<pre>
+Mutual Exclusion
+
++
+
+Visibility
+</pre>
+
+Changes become visible to
+other threads.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="deadlock">
+
+<div class="section-head">
+
+<h2>
+Chapter 9: Deadlock, Starvation & Livelock
+</h2>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Deadlock
+</summary>
+
+<div class="inner">
+
+Two threads waiting forever.
+
+Diagram:
+
+<pre>
+
+Thread A
+
+Lock 1
+
+↓
+
+Waiting Lock 2
+
+
+Thread B
+
+Lock 2
+
+↓
+
+Waiting Lock 1
+
+</pre>
+
+Nobody proceeds.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Deadlock Example
+</summary>
+
+<div class="inner">
+
+<pre>
+synchronized(lock1)
+{
+   synchronized(lock2)
+   {
+   }
+}
+</pre>
+
+Thread B:
+
+<pre>
+synchronized(lock2)
+{
+   synchronized(lock1)
+   {
+   }
+}
+</pre>
+
+Deadlock.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Four Conditions For Deadlock
+</summary>
+
+<div class="inner">
+
+Must have:
+
+<pre>
+
+Mutual Exclusion
+
+Hold And Wait
+
+No Preemption
+
+Circular Wait
+
+</pre>
+
+Remove one.
+
+Deadlock disappears.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Deadlock Prevention
+</summary>
+
+<div class="inner">
+
+Technique:
+
+<pre>
+Always Acquire
+Locks In Same Order
+</pre>
+
+Example:
+
+<pre>
+Lock A
+
+↓
+
+Lock B
+</pre>
+
+Everywhere.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Starvation
+</summary>
+
+<div class="inner">
+
+Thread never gets CPU.
+
+Example:
+
+<pre>
+High Priority Thread
+
+always runs
+</pre>
+
+Low priority waits forever.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Livelock
+</summary>
+
+<div class="inner">
+
+Threads active.
+
+But no progress.
+
+Example:
+
+<pre>
+Person A Moves Left
+
+Person B Moves Right
+
+Person A Moves Right
+
+Person B Moves Left
+</pre>
+
+Forever.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Deadlock vs Starvation vs Livelock
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Problem</th>
+<th>Reason</th>
+</tr>
+
+<tr>
+<td>Deadlock</td>
+<td>Waiting Forever</td>
+</tr>
+
+<tr>
+<td>Starvation</td>
+<td>Never Scheduled</td>
+</tr>
+
+<tr>
+<td>Livelock</td>
+<td>Always Active</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="reentrantlock">
+
+<div class="section-head">
+
+<h2>
+Chapter 10: ReentrantLock Deep Dive
+</h2>
+
+<p>
+Explicit Locking,
+Lock Interface,
+tryLock(),
+lockInterruptibly(),
+Fair Locks,
+and Advanced Synchronization.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why ReentrantLock Exists
+</summary>
+
+<div class="inner">
+
+Problems with synchronized:
+
+<ul>
+
+<li>No timeout</li>
+
+<li>No fairness</li>
+
+<li>No interruptible waiting</li>
+
+<li>No lock status inspection</li>
+
+</ul>
+
+Solution:
+
+<pre>
+ReentrantLock
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Basic Usage
+</summary>
+
+<div class="inner">
+
+<pre>
+Lock lock =
+new ReentrantLock();
+
+lock.lock();
+
+try
+{
+   critical section
+}
+finally
+{
+   lock.unlock();
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Why finally Is Mandatory
+</summary>
+
+<div class="inner">
+
+Without:
+
+<pre>
+unlock()
+</pre>
+
+Lock may never release.
+
+Application hangs.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Reentrancy
+</summary>
+
+<div class="inner">
+
+Same thread can acquire
+same lock multiple times.
+
+Example:
+
+<pre>
+methodA()
+
+↓
+
+methodB()
+
+↓
+
+same lock
+</pre>
+
+Allowed.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. tryLock()
+</summary>
+
+<div class="inner">
+
+Instead of waiting forever:
+
+<pre>
+if(lock.tryLock())
+{
+   try
+   {
+   }
+   finally
+   {
+      lock.unlock();
+   }
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Fair Lock
+</summary>
+
+<div class="inner">
+
+FIFO lock.
+
+<pre>
+new ReentrantLock(true)
+</pre>
+
+Oldest waiting thread wins.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. synchronized vs ReentrantLock
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>synchronized</th>
+<th>ReentrantLock</th>
+</tr>
+
+<tr>
+<td>Keyword</td>
+<td>Class</td>
+</tr>
+
+<tr>
+<td>Automatic Unlock</td>
+<td>Manual Unlock</td>
+</tr>
+
+<tr>
+<td>No Timeout</td>
+<td>tryLock()</td>
+</tr>
+
+<tr>
+<td>No Fairness</td>
+<td>Fair Lock</td>
+</tr>
+
+<tr>
+<td>Simpler</td>
+<td>More Powerful</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="readwritelock">
+
+<div class="section-head">
+
+<h2>
+Chapter 11: ReadWriteLock
+</h2>
+
+<p>
+Reader Writer Problem,
+Read Locks,
+Write Locks,
+Performance Optimization,
+and Backend Use Cases.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why ReadWriteLock Exists
+</summary>
+
+<div class="inner">
+
+Problem:
+
+<pre>
+synchronized
+</pre>
+
+allows:
+
+<pre>
+ONE Thread
+At A Time
+</pre>
+
+Even when:
+
+<pre>
+100 Threads
+Only Reading Data
+</pre>
+
+This wastes performance.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Reader Writer Problem
+</summary>
+
+<div class="inner">
+
+Imagine:
+
+<pre>
+User Profile Cache
+</pre>
+
+Thousands of users:
+
+<pre>
+Read Profile
+Read Profile
+Read Profile
+</pre>
+
+Very few:
+
+<pre>
+Update Profile
+</pre>
+
+Allowing all readers together
+is much faster.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. ReadWriteLock Concept
+</summary>
+
+<div class="inner">
+
+Rules:
+
+<pre>
+Many Readers
+Allowed
+
+One Writer
+Allowed
+
+Reader + Writer
+Not Allowed
+</pre>
+
+Diagram:
+
+<pre>
+
+Reader A ✓
+
+Reader B ✓
+
+Reader C ✓
+
+Writer X ✗
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Basic Example
+</summary>
+
+<div class="inner">
+
+<pre>
+ReadWriteLock lock =
+new ReentrantReadWriteLock();
+
+Lock readLock =
+lock.readLock();
+
+Lock writeLock =
+lock.writeLock();
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Read Lock Example
+</summary>
+
+<div class="inner">
+
+<pre>
+readLock.lock();
+
+try
+{
+   readData();
+}
+finally
+{
+   readLock.unlock();
+}
+</pre>
+
+Multiple threads can execute.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Write Lock Example
+</summary>
+
+<div class="inner">
+
+<pre>
+writeLock.lock();
+
+try
+{
+   updateData();
+}
+finally
+{
+   writeLock.unlock();
+}
+</pre>
+
+Exclusive access.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Industry Use Cases
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>Caching Systems</li>
+
+<li>Configuration Storage</li>
+
+<li>User Profiles</li>
+
+<li>Read Heavy APIs</li>
+
+<li>Metadata Services</li>
+
+</ul>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="stampedlock">
+
+<div class="section-head">
+
+<h2>
+Chapter 12: StampedLock
+</h2>
+
+<p>
+Optimistic Locking,
+Read Performance,
+Modern Concurrency,
+and High Throughput Systems.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why StampedLock Exists
+</summary>
+
+<div class="inner">
+
+Even ReadWriteLock
+can become expensive.
+
+Java 8 introduced:
+
+<pre>
+StampedLock
+</pre>
+
+For:
+
+<pre>
+High Read
+Low Write
+</pre>
+
+systems.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Three Lock Modes
+</summary>
+
+<div class="inner">
+
+<pre>
+Read Lock
+
+Write Lock
+
+Optimistic Read
+</pre>
+
+Most important:
+
+<pre>
+Optimistic Read
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Optimistic Read
+</summary>
+
+<div class="inner">
+
+Idea:
+
+<pre>
+Assume
+No Writer Exists
+</pre>
+
+Read without locking.
+
+Then verify.
+
+Huge performance gain.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Example
+</summary>
+
+<div class="inner">
+
+<pre>
+long stamp =
+lock.tryOptimisticRead();
+
+int value = data;
+
+if(
+!lock.validate(stamp)
+)
+{
+   // fallback
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Why Faster?
+</summary>
+
+<div class="inner">
+
+No lock acquisition.
+
+No thread blocking.
+
+Very low overhead.
+
+Perfect for:
+
+<pre>
+95% Reads
+
+5% Writes
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Industry Use Cases
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>In-memory Databases</li>
+
+<li>Trading Systems</li>
+
+<li>Search Engines</li>
+
+<li>Analytics Platforms</li>
+
+</ul>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="stampedlock">
+
+<div class="section-head">
+
+<h2>
+Chapter 12: StampedLock
+</h2>
+
+<p>
+Optimistic Locking,
+Read Performance,
+Modern Concurrency,
+and High Throughput Systems.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why StampedLock Exists
+</summary>
+
+<div class="inner">
+
+Even ReadWriteLock
+can become expensive.
+
+Java 8 introduced:
+
+<pre>
+StampedLock
+</pre>
+
+For:
+
+<pre>
+High Read
+Low Write
+</pre>
+
+systems.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Three Lock Modes
+</summary>
+
+<div class="inner">
+
+<pre>
+Read Lock
+
+Write Lock
+
+Optimistic Read
+</pre>
+
+Most important:
+
+<pre>
+Optimistic Read
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Optimistic Read
+</summary>
+
+<div class="inner">
+
+Idea:
+
+<pre>
+Assume
+No Writer Exists
+</pre>
+
+Read without locking.
+
+Then verify.
+
+Huge performance gain.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Example
+</summary>
+
+<div class="inner">
+
+<pre>
+long stamp =
+lock.tryOptimisticRead();
+
+int value = data;
+
+if(
+!lock.validate(stamp)
+)
+{
+   // fallback
+}
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Why Faster?
+</summary>
+
+<div class="inner">
+
+No lock acquisition.
+
+No thread blocking.
+
+Very low overhead.
+
+Perfect for:
+
+<pre>
+95% Reads
+
+5% Writes
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Industry Use Cases
+</summary>
+
+<div class="inner">
+
+<ul>
+
+<li>In-memory Databases</li>
+
+<li>Trading Systems</li>
+
+<li>Search Engines</li>
+
+<li>Analytics Platforms</li>
+
+</ul>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="executorservice">
+
+<div class="section-head">
+
+<h2>
+Chapter 14: ExecutorService
+</h2>
+
+<p>
+Thread Pools,
+Task Execution,
+Concurrency Management,
+and Production Systems.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Problem With Manual Threads
+</summary>
+
+<div class="inner">
+
+Bad:
+
+<pre>
+new Thread()
+
+new Thread()
+
+new Thread()
+
+new Thread()
+</pre>
+
+Creating threads repeatedly is expensive.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Thread Creation Cost
+</summary>
+
+<div class="inner">
+
+Each thread requires:
+
+<ul>
+
+<li>Memory</li>
+
+<li>Stack</li>
+
+<li>Scheduling</li>
+
+<li>Context Switching</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Thread Pool Concept
+</summary>
+
+<div class="inner">
+
+Instead of creating:
+
+<pre>
+1000 Threads
+</pre>
+
+Create:
+
+<pre>
+10 Threads
+</pre>
+
+Reuse them.
+
+Diagram:
+
+<pre>
+
+Tasks
+
+↓
+
+Queue
+
+↓
+
+Worker Threads
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Creating ExecutorService
+</summary>
+
+<div class="inner">
+
+<pre>
+ExecutorService service =
+Executors.newFixedThreadPool(5);
+</pre>
+
+Creates:
+
+<pre>
+5 Worker Threads
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Submit Task
+</summary>
+
+<div class="inner">
+
+<pre>
+service.submit(
+() ->
+{
+   System.out.println(
+   "Task"
+   );
+}
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Shutdown
+</summary>
+
+<div class="inner">
+
+Always:
+
+<pre>
+service.shutdown();
+</pre>
+
+Otherwise JVM may not exit.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. ExecutorService Lifecycle
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Created
+
+↓
+
+Running
+
+↓
+
+Shutdown
+
+↓
+
+Terminated
+
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="threadpoolexecutor">
+
+<div class="section-head">
+
+<h2>
+Chapter 15: ThreadPoolExecutor
+</h2>
+
+<p>
+Internal Working,
+Queues,
+Worker Threads,
+Rejection Policies,
+and Advanced Interview Concepts.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. ExecutorService vs ThreadPoolExecutor
+</summary>
+
+<div class="inner">
+
+Most people use:
+
+<pre>
+Executors
+</pre>
+
+Internally:
+
+<pre>
+ThreadPoolExecutor
+</pre>
+
+does the actual work.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Internal Architecture
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Tasks
+
+↓
+
+Blocking Queue
+
+↓
+
+Worker Threads
+
+↓
+
+Execution
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Constructor Parameters
+</summary>
+
+<div class="inner">
+
+Important:
+
+<pre>
+corePoolSize
+
+maximumPoolSize
+
+keepAliveTime
+
+workQueue
+</pre>
+
+Interview favorite.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Rejection Policies
+</summary>
+
+<div class="inner">
+
+Queue full.
+
+Threads full.
+
+Now what?
+
+Options:
+
+<pre>
+AbortPolicy
+
+CallerRunsPolicy
+
+DiscardPolicy
+
+DiscardOldestPolicy
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Production Example
+</summary>
+
+<div class="inner">
+
+E-commerce:
+
+<pre>
+Order Requests
+
+↓
+
+Thread Pool
+
+↓
+
+Worker Threads
+
+↓
+
+Database
+</pre>
+
+Prevents server overload.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Why use ExecutorService?</li>
+
+<li>Why not create threads manually?</li>
+
+<li>What is thread pooling?</li>
+
+<li>What is ThreadPoolExecutor?</li>
+
+<li>What are rejection policies?</li>
+
+<li>Difference between submit and execute?</li>
+
+<li>Why shutdown()?</li>
+
+<li>What is optimistic locking?</li>
+
+<li>ReadWriteLock vs StampedLock?</li>
+
+<li>Condition vs wait/notify?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="callable">
+
+<div class="section-head">
+
+<h2>
+Chapter 16: Callable
+</h2>
+
+<p>
+Returning Values From Threads,
+Checked Exceptions,
+Task-Based Concurrency,
+and Executor Integration.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Problem With Runnable
+</summary>
+
+<div class="inner">
+
+Runnable:
+
+<pre>
+public interface Runnable
+{
+    void run();
+}
+</pre>
+
+Problems:
+
+<pre>
+Cannot Return Value
+
+Cannot Throw Checked Exception
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Why Callable Exists
+</summary>
+
+<div class="inner">
+
+Callable solves both problems.
+
+<pre>
+public interface Callable<V>
+{
+    V call()
+    throws Exception;
+}
+</pre>
+
+Features:
+
+<ul>
+<li>Returns Value</li>
+<li>Throws Exception</li>
+<li>Works With ExecutorService</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. First Callable Example
+</summary>
+
+<div class="inner">
+
+<pre>
+Callable<Integer> task =
+() ->
+{
+    return 100;
+};
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Real World Example
+</summary>
+
+<div class="inner">
+
+Backend Service:
+
+<pre>
+Fetch User
+
+↓
+
+Fetch Orders
+
+↓
+
+Fetch Payments
+</pre>
+
+Each task returns data.
+
+Runnable is insufficient.
+
+Callable is preferred.
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+
+
+
+<section id="future-callable">
+
+<div class="section-head">
+
+<h2>
+Chapter 17: Future
+</h2>
+
+<p>
+Asynchronous Results,
+Task Completion,
+Cancellation,
+and Polling.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. What Is Future?
+</summary>
+
+<div class="inner">
+
+Future represents:
+
+<pre>
+Result Available Later
+</pre>
+
+Analogy:
+
+<pre>
+Pizza Order Token
+
+↓
+
+Food Ready Later
+
+↓
+
+Collect Result
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Future Example
+</summary>
+
+<div class="inner">
+
+<pre>
+ExecutorService service =
+Executors.newFixedThreadPool(2);
+
+Future<Integer> future =
+service.submit(
+() -> 100
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Getting Result
+</summary>
+
+<div class="inner">
+
+<pre>
+Integer result =
+future.get();
+</pre>
+
+Important:
+
+<pre>
+get()
+BLOCKS
+</pre>
+
+Current thread waits.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. Future Lifecycle
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Submitted
+
+↓
+
+Running
+
+↓
+
+Completed
+
+↓
+
+Result Available
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. isDone()
+</summary>
+
+<div class="inner">
+
+<pre>
+if(future.isDone())
+{
+   System.out.println(
+   future.get()
+   );
+}
+</pre>
+
+Non-blocking status check.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. cancel()
+</summary>
+
+<div class="inner">
+
+<pre>
+future.cancel(true);
+</pre>
+
+Attempts cancellation.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. Problem With Future
+</summary>
+
+<div class="inner">
+
+Future supports:
+
+<pre>
+Get Result
+</pre>
+
+But does NOT support:
+
+<pre>
+Task Chaining
+
+Callbacks
+
+Composition
+</pre>
+
+This led to:
+
+<pre>
+CompletableFuture
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+<section id="completablefuture">
+
+<div class="section-head">
+
+<h2>
+Chapter 18: CompletableFuture Deep Dive
+</h2>
+
+<p>
+Async Programming,
+Task Composition,
+Callbacks,
+Pipelines,
+Parallel Execution,
+and Modern Backend Development.
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Why CompletableFuture Exists
+</summary>
+
+<div class="inner">
+
+Problem:
+
+<pre>
+Future.get()
+
+↓
+
+Blocks Thread
+</pre>
+
+Modern systems need:
+
+<pre>
+Non Blocking
+
+Composable
+
+Async
+</pre>
+
+Solution:
+
+<pre>
+CompletableFuture
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. First CompletableFuture
+</summary>
+
+<div class="inner">
+
+<pre>
+CompletableFuture<String>
+future =
+CompletableFuture
+.supplyAsync(
+() -> "Hello"
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. supplyAsync()
+</summary>
+
+<div class="inner">
+
+Used when:
+
+<pre>
+Task Returns Value
+</pre>
+
+Example:
+
+<pre>
+CompletableFuture<Integer>
+future =
+CompletableFuture
+.supplyAsync(
+() -> 100
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. runAsync()
+</summary>
+
+<div class="inner">
+
+Used when:
+
+<pre>
+No Return Value
+</pre>
+
+Example:
+
+<pre>
+CompletableFuture
+.runAsync(
+() ->
+System.out.println(
+"Running"
+)
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. thenApply()
+</summary>
+
+<div class="inner">
+
+Transforms result.
+
+<pre>
+CompletableFuture
+.supplyAsync(
+() -> 10
+)
+.thenApply(
+x -> x * 2
+);
+</pre>
+
+Flow:
+
+<pre>
+
+10
+
+↓
+
+20
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+6. thenAccept()
+</summary>
+
+<div class="inner">
+
+Consumes result.
+
+<pre>
+future.thenAccept(
+System.out::println
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+7. thenRun()
+</summary>
+
+<div class="inner">
+
+Runs next task.
+
+No input.
+
+No output.
+
+<pre>
+future.thenRun(
+() ->
+System.out.println(
+"Done"
+)
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+8. Chaining Pipeline
+</summary>
+
+<div class="inner">
+
+<pre>
+CompletableFuture
+.supplyAsync(
+() -> 10
+)
+.thenApply(
+x -> x * 2
+)
+.thenApply(
+x -> x + 5
+)
+.thenAccept(
+System.out::println
+);
+</pre>
+
+Flow:
+
+<pre>
+
+10
+
+↓
+
+20
+
+↓
+
+25
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+9. Combining Futures
+</summary>
+
+<div class="inner">
+
+<pre>
+userFuture
+
++
+
+orderFuture
+
+↓
+
+combine
+</pre>
+
+Using:
+
+<pre>
+thenCombine()
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+10. thenCombine()
+</summary>
+
+<div class="inner">
+
+<pre>
+future1.thenCombine(
+future2,
+(a,b) -> a + b
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+11. allOf()
+</summary>
+
+<div class="inner">
+
+Wait for all tasks.
+
+<pre>
+CompletableFuture
+.allOf(
+f1,
+f2,
+f3
+);
+</pre>
+
+Use Case:
+
+<pre>
+Fetch User
+
+Fetch Orders
+
+Fetch Payments
+</pre>
+
+Parallel.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+12. anyOf()
+</summary>
+
+<div class="inner">
+
+Return first completed task.
+
+<pre>
+CompletableFuture
+.anyOf(
+f1,
+f2,
+f3
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+13. Exception Handling
+</summary>
+
+<div class="inner">
+
+<pre>
+future.exceptionally(
+e -> 0
+);
+</pre>
+
+Fallback value.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+14. handle()
+</summary>
+
+<div class="inner">
+
+Handles:
+
+<pre>
+Success
+
+OR
+
+Failure
+</pre>
+
+<pre>
+future.handle(
+(result,error) ->
+{
+}
+);
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+15. Backend Example
+</summary>
+
+<div class="inner">
+
+Traditional:
+
+<pre>
+Fetch User
+
+↓
+
+Fetch Orders
+
+↓
+
+Fetch Payments
+</pre>
+
+Total:
+
+<pre>
+3 Seconds
+</pre>
+
+CompletableFuture:
+
+<pre>
+
+Fetch User
+
+||
+
+Fetch Orders
+
+||
+
+Fetch Payments
+
+</pre>
+
+Total:
+
+<pre>
+1 Second
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+16. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Future vs CompletableFuture?</li>
+
+<li>thenApply vs thenAccept?</li>
+
+<li>runAsync vs supplyAsync?</li>
+
+<li>allOf vs anyOf?</li>
+
+<li>How exceptions are handled?</li>
+
+<li>Why CompletableFuture is preferred?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="forkjoinpool">
+
+<div class="section-head">
+
+<h2>
+Chapter 19: ForkJoinPool
+</h2>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Divide And Conquer
+</summary>
+
+<div class="inner">
+
+Idea:
+
+<pre>
+
+Big Task
+
+↓
+
+Split
+
+↓
+
+Small Tasks
+
+↓
+
+Combine Results
+
+</pre>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Work Stealing
+</summary>
+
+<div class="inner">
+
+Idle thread steals work
+from busy thread.
+
+Improves CPU utilization.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. RecursiveTask
+</summary>
+
+<div class="inner">
+
+Returns value.
+
+<pre>
+class SumTask
+extends RecursiveTask<Integer>
+{
+}
+</pre>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="parallel-streams">
+
+<div class="section-head">
+
+<h2>
+Chapter 20: Parallel Streams
+</h2>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Sequential Stream
+</summary>
+
+<div class="inner">
+
+<pre>
+list.stream()
+</pre>
+
+One thread.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+2. Parallel Stream
+</summary>
+
+<div class="inner">
+
+<pre>
+list.parallelStream()
+</pre>
+
+Uses:
+
+<pre>
+ForkJoinPool
+</pre>
+
+automatically.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+3. Example
+</summary>
+
+<div class="inner">
+
+<pre>
+list.parallelStream()
+.forEach(
+System.out::println
+);
+</pre>
+
+Multiple threads process data.
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+4. When To Use
+</summary>
+
+<div class="inner">
+
+Good:
+
+<ul>
+<li>CPU Intensive</li>
+<li>Large Data Sets</li>
+</ul>
+
+Bad:
+
+<ul>
+<li>Small Collections</li>
+<li>I/O Heavy Tasks</li>
+</ul>
+
+</div>
+
+</details>
+
+<details>
+
+<summary>
+5. Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>What is ForkJoinPool?</li>
+
+<li>What is work stealing?</li>
+
+<li>What are parallel streams?</li>
+
+<li>When should they be avoided?</li>
+
+<li>How does CompletableFuture use thread pools?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+<section id="concurrency-utilities">
+
+<div class="section-head">
+
+<h2>
+Chapters 21-27:
+Concurrency Utilities, Atomic Variables,
+Volatile & Java Memory Model
+</h2>
+
+<p>
+
+Semaphore,
+CountDownLatch,
+CyclicBarrier,
+Phaser,
+Atomic Variables,
+volatile Keyword,
+and Java Memory Model (JMM)
+
+</p>
+
+</div>
+
+<div class="content">
+
+<!-- ======================================================= -->
+<!-- CHAPTER 21 -->
+<!-- ======================================================= -->
+
+<details open>
+
+<summary>
+Chapter 21: Semaphore
+</summary>
+
+<div class="inner">
+
+<h3>What Is Semaphore?</h3>
+
+<p>
+
+Semaphore controls how many threads
+can access a resource simultaneously.
+
+</p>
+
+<h3>Real World Analogy</h3>
+
+<pre>
+
+Parking Lot
+
+5 Parking Spaces
+
+↓
+
+Only 5 Cars Allowed
+
+</pre>
+
+<h3>Diagram</h3>
+
+<pre>
+
+Semaphore(3)
+
+Permit 1
+
+Permit 2
+
+Permit 3
+
+Thread 4 Waits
+
+</pre>
+
+<h3>Code Example</h3>
+
+<pre>
+Semaphore semaphore =
+new Semaphore(3);
+
+semaphore.acquire();
+
+try
+{
+    System.out.println(
+    "Using Resource"
+    );
+}
+finally
+{
+    semaphore.release();
+}
+</pre>
+
+<h3>Important Methods</h3>
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>acquire()</td>
+<td>Get Permit</td>
+</tr>
+
+<tr>
+<td>release()</td>
+<td>Return Permit</td>
+</tr>
+
+<tr>
+<td>availablePermits()</td>
+<td>Remaining Permits</td>
+</tr>
+
+</table>
+
+<h3>Interview Point</h3>
+
+<pre>
+Lock → One Thread
+
+Semaphore → Multiple Threads
+</pre>
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- CHAPTER 22 -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Chapter 22: CountDownLatch
+</summary>
+
+<div class="inner">
+
+<h3>Purpose</h3>
+
+<p>
+
+Allows one thread to wait until
+other threads finish.
+
+</p>
+
+<h3>Analogy</h3>
+
+<pre>
+
+Exam Starts
+
+↓
+
+Wait For 3 Invigilators
+
+↓
+
+All Arrive
+
+↓
+
+Start Exam
+
+</pre>
+
+<h3>Diagram</h3>
+
+<pre>
+
+Count = 3
+
+↓
+
+2
+
+↓
+
+1
+
+↓
+
+0
+
+↓
+
+Continue
+
+</pre>
+
+<h3>Code Example</h3>
+
+<pre>
+CountDownLatch latch =
+new CountDownLatch(3);
+
+latch.countDown();
+
+latch.await();
+</pre>
+
+<h3>Important Methods</h3>
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>await()</td>
+<td>Wait</td>
+</tr>
+
+<tr>
+<td>countDown()</td>
+<td>Decrease Count</td>
+</tr>
+
+<tr>
+<td>getCount()</td>
+<td>Current Count</td>
+</tr>
+
+</table>
+
+<h3>Interview Point</h3>
+
+<pre>
+One Time Use
+</pre>
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- CHAPTER 23 -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Chapter 23: CyclicBarrier
+</summary>
+
+<div class="inner">
+
+<h3>Purpose</h3>
+
+<p>
+
+Multiple threads wait for each other.
+
+</p>
+
+<h3>Analogy</h3>
+
+<pre>
+
+4 Friends
+
+↓
+
+Reach Meeting Point
+
+↓
+
+All Arrive
+
+↓
+
+Continue Together
+
+</pre>
+
+<h3>Diagram</h3>
+
+<pre>
+
+Thread A Waiting
+
+Thread B Waiting
+
+Thread C Waiting
+
+Thread D Waiting
+
+↓
+
+Barrier Opens
+
+↓
+
+Continue
+
+</pre>
+
+<h3>Code Example</h3>
+
+<pre>
+CyclicBarrier barrier =
+new CyclicBarrier(4);
+
+barrier.await();
+</pre>
+
+<h3>Interview Point</h3>
+
+<pre>
+
+CountDownLatch
+
+↓
+
+One Time
+
+CyclicBarrier
+
+↓
+
+Reusable
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- CHAPTER 24 -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Chapter 24: Phaser
+</summary>
+
+<div class="inner">
+
+<h3>What Is Phaser?</h3>
+
+<p>
+
+Advanced version of
+CountDownLatch and CyclicBarrier.
+
+</p>
+
+<h3>Supports Multiple Stages</h3>
+
+<pre>
+
+Phase 1
+
+↓
+
+Phase 2
+
+↓
+
+Phase 3
+
+↓
+
+Finish
+
+</pre>
+
+<h3>Example</h3>
+
+<pre>
+Phaser phaser =
+new Phaser(3);
+
+phaser.arriveAndAwaitAdvance();
+</pre>
+
+<h3>Why Use It?</h3>
+
+<ul>
+
+<li>Dynamic participants</li>
+
+<li>Multiple phases</li>
+
+<li>More flexible</li>
+
+</ul>
+
+<h3>Interview Point</h3>
+
+<pre>
+
+CountDownLatch
+
+↓
+
+Single Stage
+
+Phaser
+
+↓
+
+Multiple Stages
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- CHAPTER 25 -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Chapter 25: Atomic Variables
+</summary>
+
+<div class="inner">
+
+<h3>Problem</h3>
+
+<p>
+
+This looks safe:
+
+</p>
+
+<pre>
+count++;
+</pre>
+
+Actually:
+
+<pre>
+
+Read
+
+↓
+
+Increment
+
+↓
+
+Write
+
+</pre>
+
+Three operations.
+
+Race condition possible.
+
+<h3>Solution</h3>
+
+<pre>
+AtomicInteger count =
+new AtomicInteger();
+</pre>
+
+<h3>Increment</h3>
+
+<pre>
+count.incrementAndGet();
+</pre>
+
+<h3>Other Atomic Classes</h3>
+
+<pre>
+
+AtomicInteger
+
+AtomicLong
+
+AtomicBoolean
+
+AtomicReference
+
+</pre>
+
+<h3>CAS (Very Important)</h3>
+
+<pre>
+
+Compare
+
+↓
+
+Verify
+
+↓
+
+Swap
+
+</pre>
+
+Called:
+
+<pre>
+Compare And Swap
+</pre>
+
+<h3>Benefits</h3>
+
+<ul>
+
+<li>No synchronized</li>
+
+<li>Very Fast</li>
+
+<li>Thread Safe</li>
+
+</ul>
+
+<h3>Interview Question</h3>
+
+<pre>
+
+AtomicInteger
+
+vs
+
+synchronized
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- CHAPTER 26 -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Chapter 26: volatile Keyword
+</summary>
+
+<div class="inner">
+
+<h3>The Problem</h3>
+
+<pre>
+
+Thread A Updates Value
+
+↓
+
+Thread B Cannot See Change
+
+</pre>
+
+Reason:
+
+<pre>
+CPU Cache
+</pre>
+
+<h3>Solution</h3>
+
+<pre>
+private volatile
+boolean running;
+</pre>
+
+<h3>What volatile Guarantees</h3>
+
+<ul>
+
+<li>Visibility</li>
+
+<li>Latest Value</li>
+
+</ul>
+
+<h3>What volatile Does NOT Guarantee</h3>
+
+<ul>
+
+<li>Atomicity</li>
+
+<li>Thread Safety</li>
+
+</ul>
+
+Example:
+
+<pre>
+volatile int count;
+
+count++;
+</pre>
+
+Still unsafe.
+
+<h3>volatile vs synchronized</h3>
+
+<table>
+
+<tr>
+<th>volatile</th>
+<th>synchronized</th>
+</tr>
+
+<tr>
+<td>Visibility</td>
+<td>Visibility</td>
+</tr>
+
+<tr>
+<td>No Lock</td>
+<td>Locking</td>
+</tr>
+
+<tr>
+<td>No Atomicity</td>
+<td>Atomicity</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- CHAPTER 27 -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Chapter 27: Java Memory Model (JMM)
+</summary>
+
+<div class="inner">
+
+<h3>Why JMM Exists</h3>
+
+<p>
+
+Defines how threads interact with memory.
+
+</p>
+
+<h3>Main Components</h3>
+
+<pre>
+
+Main Memory
+
+↓
+
+Thread Working Memory
+
+↓
+
+CPU Registers
+
+</pre>
+
+<h3>Diagram</h3>
+
+<pre>
+
+Main Memory
+
+      |
+
+-------------------
+
+|                 |
+
+Thread A Cache
+
+Thread B Cache
+
+</pre>
+
+<h3>The Problem</h3>
+
+<pre>
+
+Thread A
+
+Updates Value
+
+↓
+
+Thread B
+
+Still Sees Old Value
+
+</pre>
+
+<h3>Solutions</h3>
+
+<pre>
+
+volatile
+
+synchronized
+
+Locks
+
+Atomic Classes
+
+</pre>
+
+<h3>What You Need To Remember</h3>
+
+<div class="callout success">
+
+For Interviews:
+
+1. Each thread has its own working memory.
+
+2. Data originates in main memory.
+
+3. Visibility issues happen because of caching.
+
+4. volatile fixes visibility.
+
+5. synchronized fixes visibility and atomicity.
+
+6. Atomic classes use CAS.
+
+</div>
+
+<h3>Beginner Mental Model</h3>
+
+<pre>
+
+Main Memory
+
+↓
+
+Copy To Thread
+
+↓
+
+Thread Works
+
+↓
+
+Write Back
+
+</pre>
+
+Understanding this model is enough for
+most SDE-1 interviews.
+
+</div>
+
+</details>
+
+<!-- ======================================================= -->
+<!-- FINAL REVISION -->
+<!-- ======================================================= -->
+
+<details>
+
+<summary>
+Final Revision Sheet
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Concept</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Semaphore</td>
+<td>Limit Concurrent Access</td>
+</tr>
+
+<tr>
+<td>CountDownLatch</td>
+<td>Wait For Tasks</td>
+</tr>
+
+<tr>
+<td>CyclicBarrier</td>
+<td>Meet At Barrier</td>
+</tr>
+
+<tr>
+<td>Phaser</td>
+<td>Multiple Phases</td>
+</tr>
+
+<tr>
+<td>AtomicInteger</td>
+<td>Thread Safe Counter</td>
+</tr>
+
+<tr>
+<td>volatile</td>
+<td>Visibility</td>
+</tr>
+
+<tr>
+<td>JMM</td>
+<td>Thread Memory Rules</td>
+</tr>
+
+</table>
+
+<div class="callout senior">
+
+If you understand:
+
+Semaphore +
+CountDownLatch +
+AtomicInteger +
+volatile +
+JMM
+
+You already know more Java concurrency
+than most fresh graduates.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+<section id="volume3-revision">
+
+<div class="section-head">
+
+<h2>
+Chapter 28: Volume 3 Interview Revision Handbook
+</h2>
+
+<p>
+
+Complete Revision Guide For:
+
+Exception Handling,
+Multithreading,
+Synchronization,
+Locks,
+Executor Framework,
+CompletableFuture,
+Concurrency Utilities,
+Atomic Variables,
+volatile,
+and Java Memory Model.
+
+</p>
+
+</div>
+
+<div class="content">
+
+<details open>
+
+<summary>
+1. Volume 3 Big Picture
+</summary>
+
+<div class="inner">
+
+<pre>
+
+Exception Handling
+
+↓
+
+Multithreading
+
+↓
+
+Synchronization
+
+↓
+
+Locks
+
+↓
+
+Thread Pools
+
+↓
+
+Async Programming
+
+↓
+
+Concurrency Utilities
+
+↓
+
+JMM
+
+</pre>
+
+Everything in this volume builds on
+the previous topic.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+2. Exception Handling Revision Sheet
+</summary>
+
+<div class="inner">
+
+<h3>Throwable Hierarchy</h3>
+
+<pre>
+
+Throwable
+
+|
++------------------+
+
+|
+
+Error
+
+Exception
+
+|
+
+RuntimeException
+
+</pre>
+
+<h3>Checked Exceptions</h3>
+
+<pre>
+
+IOException
+
+SQLException
+
+ClassNotFoundException
+
+</pre>
+
+Must Handle.
+
+<h3>Unchecked Exceptions</h3>
+
+<pre>
+
+NullPointerException
+
+ArithmeticException
+
+IllegalArgumentException
+
+NumberFormatException
+
+</pre>
+
+Compiler does not force handling.
+
+<h3>Interview Questions</h3>
+
+<ul>
+
+<li>Error vs Exception</li>
+
+<li>Checked vs Unchecked</li>
+
+<li>throw vs throws</li>
+
+<li>finally block behavior</li>
+
+<li>Stack unwinding</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+3. Custom Exception Revision
+</summary>
+
+<div class="inner">
+
+Why?
+
+<pre>
+
+Meaningful Errors
+
+Business Logic
+
+Validation Rules
+
+</pre>
+
+Example:
+
+<pre>
+InvalidAgeException
+
+InsufficientFundsException
+
+OrderNotFoundException
+</pre>
+
+Rule:
+
+<pre>
+
+Business Error
+
+↓
+
+Custom Exception
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+4. Program vs Process vs Thread
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Concept</th>
+<th>Meaning</th>
+</tr>
+
+<tr>
+<td>Program</td>
+<td>Code On Disk</td>
+</tr>
+
+<tr>
+<td>Process</td>
+<td>Program In Execution</td>
+</tr>
+
+<tr>
+<td>Thread</td>
+<td>Smallest Unit Of Execution</td>
+</tr>
+
+</table>
+
+<h3>Memory</h3>
+
+<pre>
+
+Process
+
+↓
+
+Heap Shared
+
+↓
+
+Threads
+
+↓
+
+Own Stack
+
+</pre>
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+5. Thread Lifecycle Revision
+</summary>
+
+<div class="inner">
+
+<pre>
+
+NEW
+
+↓
+
+RUNNABLE
+
+↓
+
+RUNNING
+
+↓
+
+BLOCKED
+
+↓
+
+WAITING
+
+↓
+
+TIMED_WAITING
+
+↓
+
+TERMINATED
+
+</pre>
+
+Know each state.
+
+Very frequently asked.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+6. Creating Threads Revision
+</summary>
+
+<div class="inner">
+
+Method 1:
+
+<pre>
+extends Thread
+</pre>
+
+Method 2:
+
+<pre>
+implements Runnable
+</pre>
+
+Method 3:
+
+<pre>
+Callable
+</pre>
+
+Preferred:
+
+<pre>
+Runnable
+
+Callable
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+7. Thread Methods Cheat Sheet
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>start()</td>
+<td>Start Thread</td>
+</tr>
+
+<tr>
+<td>run()</td>
+<td>Thread Logic</td>
+</tr>
+
+<tr>
+<td>sleep()</td>
+<td>Pause Thread</td>
+</tr>
+
+<tr>
+<td>join()</td>
+<td>Wait For Completion</td>
+</tr>
+
+<tr>
+<td>yield()</td>
+<td>Hint Scheduler</td>
+</tr>
+
+<tr>
+<td>interrupt()</td>
+<td>Interrupt Thread</td>
+</tr>
+
+<tr>
+<td>setDaemon()</td>
+<td>Background Thread</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+8. Race Condition Revision
+</summary>
+
+<div class="inner">
+
+Problem:
+
+<pre>
+
+Thread A
+
+↓
+
+count++
+
+↓
+
+Thread B
+
+↓
+
+count++
+
+</pre>
+
+Result:
+
+Wrong value.
+
+Reason:
+
+<pre>
+count++
+</pre>
+
+is not atomic.
+
+Actually:
+
+<pre>
+
+Read
+
+↓
+
+Modify
+
+↓
+
+Write
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+9. Synchronization Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+One Thread
+
+At A Time
+
+</pre>
+
+Keyword:
+
+<pre>
+synchronized
+</pre>
+
+Provides:
+
+<ul>
+
+<li>Mutual Exclusion</li>
+
+<li>Visibility</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+10. Monitor Lock Revision
+</summary>
+
+<div class="inner">
+
+Every Java object contains:
+
+<pre>
+
+Object
+
+↓
+
+Monitor Lock
+
+</pre>
+
+Also called:
+
+<pre>
+Intrinsic Lock
+</pre>
+
+Used by:
+
+<pre>
+synchronized
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+11. Deadlock Revision
+</summary>
+
+<div class="inner">
+
+Definition:
+
+<pre>
+
+Thread A
+
+Waiting Thread B
+
+Thread B
+
+Waiting Thread A
+
+</pre>
+
+Forever.
+
+Four Conditions:
+
+<pre>
+
+Mutual Exclusion
+
+Hold And Wait
+
+No Preemption
+
+Circular Wait
+
+</pre>
+
+Interview Favorite.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+12. ReentrantLock Revision
+</summary>
+
+<div class="inner">
+
+Advantages over synchronized:
+
+<ul>
+
+<li>Fair Lock</li>
+
+<li>tryLock()</li>
+
+<li>Interruptible Locking</li>
+
+<li>Manual Control</li>
+
+</ul>
+
+Rule:
+
+<pre>
+
+lock()
+
+↓
+
+try
+
+↓
+
+finally
+
+↓
+
+unlock()
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+13. ReadWriteLock Revision
+</summary>
+
+<div class="inner">
+
+Rule:
+
+<pre>
+
+Many Readers
+
+One Writer
+
+</pre>
+
+Use Case:
+
+<pre>
+
+Cache
+
+Configurations
+
+Read Heavy Systems
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+14. StampedLock Revision
+</summary>
+
+<div class="inner">
+
+Special Feature:
+
+<pre>
+
+Optimistic Read
+
+</pre>
+
+Idea:
+
+<pre>
+
+Assume No Writer
+
+↓
+
+Read
+
+↓
+
+Validate
+
+</pre>
+
+Faster than ReadWriteLock.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+15. Condition Interface Revision
+</summary>
+
+<div class="inner">
+
+Replacement for:
+
+<pre>
+
+wait()
+
+notify()
+
+notifyAll()
+
+</pre>
+
+Methods:
+
+<pre>
+
+await()
+
+signal()
+
+signalAll()
+
+</pre>
+
+Used with:
+
+<pre>
+ReentrantLock
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+16. ExecutorService Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Thread Pool
+
+↓
+
+Reuse Threads
+
+</pre>
+
+Create:
+
+<pre>
+Executors
+.newFixedThreadPool(5);
+</pre>
+
+Always:
+
+<pre>
+shutdown();
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+17. ThreadPoolExecutor Revision
+</summary>
+
+<div class="inner">
+
+Core Concepts:
+
+<pre>
+
+Core Pool Size
+
+Maximum Pool Size
+
+Queue
+
+Worker Threads
+
+</pre>
+
+Interview Questions:
+
+<ul>
+
+<li>Why thread pools?</li>
+
+<li>What is rejection policy?</li>
+
+<li>How tasks are scheduled?</li>
+
+</ul>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+18. Callable vs Runnable
+</summary>
+
+<div class="inner">
+
+<table>
+
+<tr>
+<th>Runnable</th>
+<th>Callable</th>
+</tr>
+
+<tr>
+<td>No Return</td>
+<td>Returns Value</td>
+</tr>
+
+<tr>
+<td>No Checked Exception</td>
+<td>Can Throw</td>
+</tr>
+
+<tr>
+<td>run()</td>
+<td>call()</td>
+</tr>
+
+</table>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+19. Future Revision
+</summary>
+
+<div class="inner">
+
+Represents:
+
+<pre>
+
+Result Later
+
+</pre>
+
+Methods:
+
+<pre>
+
+get()
+
+isDone()
+
+cancel()
+
+</pre>
+
+Problem:
+
+<pre>
+
+get()
+
+↓
+
+Blocking
+
+</pre>
+
+Led to CompletableFuture.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+20. CompletableFuture Revision
+</summary>
+
+<div class="inner">
+
+Most Important Modern Topic.
+
+Methods:
+
+<pre>
+
+supplyAsync()
+
+runAsync()
+
+thenApply()
+
+thenAccept()
+
+thenCombine()
+
+allOf()
+
+anyOf()
+
+exceptionally()
+
+</pre>
+
+Interview Question:
+
+<pre>
+
+Future
+
+vs
+
+CompletableFuture
+
+</pre>
+
+Answer:
+
+<pre>
+
+Future
+
+↓
+
+Blocking
+
+CompletableFuture
+
+↓
+
+Composable + Async
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+21. Semaphore Revision
+</summary>
+
+<div class="inner">
+
+Concept:
+
+<pre>
+
+Permit Counter
+
+</pre>
+
+Example:
+
+<pre>
+
+Parking Lot
+
+5 Slots
+
+</pre>
+
+Rule:
+
+<pre>
+
+Lock
+
+↓
+
+1 Thread
+
+Semaphore
+
+↓
+
+N Threads
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+22. CountDownLatch Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Wait Until Tasks Finish
+
+</pre>
+
+One Time Use.
+
+Methods:
+
+<pre>
+
+await()
+
+countDown()
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+23. CyclicBarrier Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Meet Here
+
+↓
+
+Continue Together
+
+</pre>
+
+Reusable.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+24. Phaser Revision
+</summary>
+
+<div class="inner">
+
+Purpose:
+
+<pre>
+
+Multiple Phases
+
+</pre>
+
+Think:
+
+<pre>
+
+Advanced Barrier
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+25. Atomic Variables Revision
+</summary>
+
+<div class="inner">
+
+Classes:
+
+<pre>
+
+AtomicInteger
+
+AtomicLong
+
+AtomicBoolean
+
+AtomicReference
+
+</pre>
+
+Uses:
+
+<pre>
+
+CAS
+
+Compare And Swap
+
+</pre>
+
+Alternative to:
+
+<pre>
+synchronized
+</pre>
+
+for simple operations.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+26. volatile Revision
+</summary>
+
+<div class="inner">
+
+Provides:
+
+<pre>
+
+Visibility
+
+</pre>
+
+Does NOT Provide:
+
+<pre>
+
+Atomicity
+
+</pre>
+
+Interview Trap:
+
+<pre>
+
+volatile int count;
+
+count++;
+
+</pre>
+
+Still unsafe.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+27. Java Memory Model Revision
+</summary>
+
+<div class="inner">
+
+Diagram:
+
+<pre>
+
+Main Memory
+
+↓
+
+Thread Cache
+
+↓
+
+CPU
+
+</pre>
+
+Problems:
+
+<pre>
+
+Visibility
+
+Reordering
+
+Caching
+
+</pre>
+
+Solutions:
+
+<pre>
+
+volatile
+
+synchronized
+
+Locks
+
+Atomic Classes
+
+</pre>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+28. Top 50 Interview Questions
+</summary>
+
+<div class="inner">
+
+<ol>
+
+<li>Process vs Thread?</li>
+<li>What is context switching?</li>
+<li>Thread lifecycle?</li>
+<li>Why Runnable over Thread?</li>
+<li>What is race condition?</li>
+<li>What is thread safety?</li>
+<li>How synchronized works internally?</li>
+<li>What is monitor lock?</li>
+<li>What is deadlock?</li>
+<li>How prevent deadlock?</li>
+<li>ReentrantLock vs synchronized?</li>
+<li>ReadWriteLock vs ReentrantLock?</li>
+<li>What is optimistic locking?</li>
+<li>What is StampedLock?</li>
+<li>Callable vs Runnable?</li>
+<li>Future vs CompletableFuture?</li>
+<li>thenApply vs thenAccept?</li>
+<li>allOf vs anyOf?</li>
+<li>What is thread pool?</li>
+<li>What is CAS?</li>
+<li>What is AtomicInteger?</li>
+<li>volatile vs synchronized?</li>
+<li>What is JMM?</li>
+<li>Semaphore vs Lock?</li>
+<li>CountDownLatch vs CyclicBarrier?</li>
+
+</ol>
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+29. Senior Engineer Discussion Points
+</summary>
+
+<div class="inner">
+
+When designing concurrent systems:
+
+<pre>
+
+Correctness
+
+↓
+
+Safety
+
+↓
+
+Performance
+
+↓
+
+Scalability
+
+</pre>
+
+Never optimize before ensuring
+thread safety.
+
+Common Production Tools:
+
+<pre>
+
+ExecutorService
+
+CompletableFuture
+
+ConcurrentHashMap
+
+AtomicInteger
+
+ReentrantLock
+
+</pre>
+
+These are used far more often than
+advanced concurrency utilities.
+
+</div>
+
+</details>
+
+<!-- ================================= -->
+
+<details>
+
+<summary>
+30. Volume 3 Completion Checklist
+</summary>
+
+<div class="inner">
+
+✓ Exception Handling
+
+✓ Custom Exceptions
+
+✓ Process vs Thread
+
+✓ Thread Lifecycle
+
+✓ Runnable
+
+✓ Callable
+
+✓ Future
+
+✓ CompletableFuture
+
+✓ Synchronization
+
+✓ Deadlock
+
+✓ ReentrantLock
+
+✓ ReadWriteLock
+
+✓ StampedLock
+
+✓ Condition
+
+✓ ExecutorService
+
+✓ ThreadPoolExecutor
+
+✓ Semaphore
+
+✓ CountDownLatch
+
+✓ CyclicBarrier
+
+✓ Phaser
+
+✓ Atomic Variables
+
+✓ volatile
+
+✓ Java Memory Model
+
+<div class="callout success">
+
+Volume 3 Complete.
+
+You now have enough Java Core +
+Collections +
+Concurrency knowledge to begin:
+
+Volume 4:
+SOLID Principles,
+Design Patterns,
+and Low-Level Design.
+
+</div>
+
+</div>
+
+</details>
+
+</div>
+
+</section>
+
+
+
+
+<!-- END OF CHAPTERS -->
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+</main>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
